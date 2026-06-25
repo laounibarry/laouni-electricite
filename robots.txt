@@ -1,0 +1,45 @@
+# robots.txt — Laouni Electricité Moderne
+# https://laouni-electricite-moderne.com/
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://laouni-electricite-moderne.com/sitemap.xml
+
+# Autoriser tous les bots IA et moteurs de recherche
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: TikTokBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
