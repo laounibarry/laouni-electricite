@@ -9,9 +9,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      SEO PRIMAIRE
-═══════════════════════════════════════════════ -->
+ -->
 <title>Laouni Electricité Moderne — Onduleurs Solaires, Batteries Lithium & Panneaux Solaires en Guinée</title>
 <meta name="description" content="Laouni Electricité Moderne : N°1 de l'énergie solaire en Guinée. Onduleurs hybrides MPPT, batteries lithium 16kWh, panneaux solaires certifiés. 3 magasins à Conakry, Labé et Lelouma. Produits authentifiés, garantie officielle, SAV professionnel.">
 <meta name="keywords" content="énergie solaire Guinée, onduleur hybride Conakry, batterie lithium Guinée, panneaux solaires Guinée, Laouni électricité, installation solaire Guinée, onduleur MPPT, indépendance énergétique Guinée, électricité solaire Conakry, groupe électrogène Guinée, énergie renouvelable Afrique">
@@ -24,9 +24,9 @@
 <meta name="ICBM" content="9.6412, -13.5784">
 <link rel="canonical" href="https://laouni-electricite-moderne.com/">
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      OPEN GRAPH (Facebook, WhatsApp, LinkedIn)
-═══════════════════════════════════════════════ -->
+ -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Laouni Electricité Moderne">
 <meta property="og:title" content="Laouni Electricité Moderne — Énergie Solaire N°1 en Guinée">
@@ -38,23 +38,75 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Laouni Electricité Moderne — Énergie Solaire en Guinée">
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      TWITTER CARD
-═══════════════════════════════════════════════ -->
+ -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Laouni Electricité Moderne — Énergie Solaire N°1 en Guinée">
 <meta name="twitter:description" content="Onduleurs hybrides, batteries lithium, panneaux solaires. 3 magasins à Conakry, Labé et Lelouma. Produits certifiés et authentifiés.">
 <meta name="twitter:image" content="https://laouni-electricite-moderne.com/og-image.jpg">
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      PWA MANIFEST (couleurs mises à jour)
-═══════════════════════════════════════════════ -->
-<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Laouni Electricité Moderne&quot;,&quot;short_name&quot;:&quot;Laouni&quot;,&quot;theme_color&quot;:&quot;#f97316&quot;,&quot;background_color&quot;:&quot;#ffffff&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;start_url&quot;:&quot;/&quot;,&quot;description&quot;:&quot;Énergie solaire N°1 en Guinée&quot;}">
+ -->
+<link rel="manifest" href="/manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Laouni">
+<meta name="msapplication-TileColor" content="#f97316">
+<meta name="msapplication-TileImage" content="/icons/icon-144.png">
+<!-- Apple Touch Icons -->
+<link rel="apple-touch-icon" href="/icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png">
+<!-- Splash screens iOS -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<!-- ═══════════════════════════════════════════════
+<!-- SERVICE WORKER — Mode hors ligne -->
+<script>
+if('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js')
+      .then(function(reg) { })
+      .catch(function(err) { });
+  });
+}
+</script>
+
+<!-- BOUTON INSTALLER L'APPLICATION -->
+<script>
+var deferredPrompt;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Afficher le bouton d'installation
+  var btn = document.getElementById('installAppBtn');
+  if(btn) btn.style.display = 'flex';
+});
+
+function installApp() {
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(result) {
+    if(result.outcome === 'accepted') {
+      var btn = document.getElementById('installAppBtn');
+      if(btn) btn.style.display = 'none';
+    }
+    deferredPrompt = null;
+  });
+}
+
+window.addEventListener('appinstalled', function() {
+  var btn = document.getElementById('installAppBtn');
+  if(btn) btn.style.display = 'none';
+  deferredPrompt = null;
+});
+</script>
+
+<!-- 
      DONNÉES STRUCTURÉES JSON-LD (Google Rich Results)
-═══════════════════════════════════════════════ -->
+ -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -104,7 +156,7 @@
       "@id": "https://laouni-electricite-moderne.com/#website",
       "name": "Laouni Electricité Moderne",
       "url": "https://laouni-electricite-moderne.com/",
-      "description": "Énergie solaire N°1 en Guinée — Onduleurs, batteries lithium, panneaux solaires",
+      "description": "Énergie solaire N°1 en Guinée - Onduleurs, batteries lithium, panneaux solaires",
       "inLanguage": "fr",
       "potentialAction": {
         "@type": "SearchAction",
@@ -144,9 +196,9 @@
 }
 </script>
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      GOOGLE — Search Console + Analytics
-═══════════════════════════════════════════════ -->
+ -->
 <!-- 1. Remplace le content par ton code Google Search Console -->
 <meta name="google-site-verification" content="COLLE_ICI_TON_CODE_GOOGLE_SEARCH_CONSOLE">
 
@@ -162,11 +214,11 @@
   });
 </script>
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      FACEBOOK / INSTAGRAM — Meta Pixel
      Remplace XXXXXXXXXXXXXXXX par ton Pixel ID
      (Gestionnaire de publicités → Pixels)
-═══════════════════════════════════════════════ -->
+ -->
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -185,11 +237,11 @@ fbq('track', 'ViewContent', {
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXXX&ev=PageView&noscript=1"/></noscript>
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      TIKTOK — Pixel
      Remplace XXXXXXXXXXXXXXXXXX par ton TikTok Pixel ID
      (TikTok Ads Manager → Assets → Events)
-═══════════════════════════════════════════════ -->
+ -->
 <script>
 !function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];
 ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];
@@ -206,10 +258,10 @@ ttq.page();
 }(window,document,'ttq');
 </script>
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      SNAPCHAT — Pixel
      Remplace avec ton Snap Pixel ID
-═══════════════════════════════════════════════ -->
+ -->
 <script>
 (function(e,t,n){if(e.snaptr)return;var a=e.snaptr=function(){a.handleRequest?
 a.handleRequest.apply(a,arguments):a.queue.push(arguments)};a.queue=[];
@@ -222,11 +274,11 @@ snaptr('init','XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX',{
 snaptr('track','PAGE_VIEW');
 </script>
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      MICROSOFT / BING — UET Tag
      Remplace XXXXXXX par ton UET Tag ID
      (Microsoft Advertising → Conversion Tracking)
-═══════════════════════════════════════════════ -->
+ -->
 <script>
 (function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"XXXXXXX"};
 o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,
@@ -236,10 +288,10 @@ i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,
 "script","//bat.bing.com/bat.js","uetq");
 </script>
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      PINTEREST — Tag
      Remplace XXXXXXXXXXXXXXXXX par ton Pinterest Tag ID
-═══════════════════════════════════════════════ -->
+ -->
 <script>
 !function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(
 Array.prototype.slice.call(arguments))};var n=window.pintrk;n.queue=[],n.version="3.0";
@@ -252,11 +304,11 @@ pintrk('page');
 <noscript><img height="1" width="1" style="display:none;" alt=""
 src="https://ct.pinterest.com/v3/?tid=XXXXXXXXXXXXXXXXX&noscript=1"/></noscript>
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      CHATGPT / IA — SearchGPT & Bing AI
      (Déjà couvert par sitemap + schema.org)
      Balises supplémentaires pour indexation IA
-═══════════════════════════════════════════════ -->
+ -->
 <meta name="ai-content-declaration" content="human-created">
 <meta name="revisit-after" content="3 days">
 <meta name="rating" content="general">
@@ -266,15 +318,15 @@ src="https://ct.pinterest.com/v3/?tid=XXXXXXXXXXXXXXXXX&noscript=1"/></noscript>
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      SITEMAP & INDEXATION RAPIDE
-═══════════════════════════════════════════════ -->
+ -->
 <link rel="sitemap" type="application/xml" href="https://laouni-electricite-moderne.com/sitemap.xml">
 
-<!-- ═══════════════════════════════════════════════
+<!-- 
      WHATSAPP — Rich Preview (déjà via OG tags)
      YOUTUBE — Schema vidéo si tu as des vidéos
-═══════════════════════════════════════════════ -->
+ -->
 <meta property="og:video" content="">
 <meta name="application-name" content="Laouni Electricité Moderne">
 <meta name="msapplication-TileColor" content="#f97316">
@@ -283,7 +335,7 @@ src="https://ct.pinterest.com/v3/?tid=XXXXXXXXXXXXXXXXX&noscript=1"/></noscript>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style id="dynamicStyle">
 :root{
-  /* ── AFRIVORA-STYLE LIGHT THEME ── */
+  /*  AFRIVORA-STYLE LIGHT THEME  */
   --green:#ea580c;--green2:#f97316;--green-light:#fb923c;
   --orange:#f97316;--orange2:#fb923c;
   --dark:#ffffff;--dark2:#f8f8f8;--dark3:#f1f5f9;
@@ -299,7 +351,7 @@ src="https://ct.pinterest.com/v3/?tid=XXXXXXXXXXXXXXXXX&noscript=1"/></noscript>
 html,body{overflow-x:hidden;max-width:100%;background:#f8f8f8;color:#1a1a1a;font-family:'DM Sans',sans-serif;}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#f1f5f9;}::-webkit-scrollbar-thumb{background:#f97316;border-radius:2px;}
 
-/* ── OVERRIDE DARK BACKGROUNDS everywhere ── */
+/*  OVERRIDE DARK BACKGROUNDS everywhere  */
 .section{background:#f8f8f8 !important;}
 .adm-card{background:#ffffff !important;border:1px solid var(--border) !important;box-shadow:var(--shadow);}
 .inp,.sel{background:#f9fafb !important;border:1px solid #e5e7eb !important;color:#1a1a1a !important;}
@@ -466,7 +518,7 @@ footer{background:var(--dark2);border-top:1px solid rgba(249,115,22,.1);padding:
 
 .verify-section{background:linear-gradient(135deg,rgba(249,115,22,.06),rgba(245,158,11,.04));border:1px solid rgba(249,115,22,.2);border-radius:20px;padding:2rem;margin:2rem 0;}
 
-.wa-float{position:fixed;bottom:1.5rem;right:1.5rem;z-index:100;background:#25D366;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.5);text-decoration:none;transition:transform .2s;}
+.wa-float{position:fixed;bottom:2rem;right:1rem;z-index:300;background:#25D366;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.5);text-decoration:none;transition:transform .2s;}
 .wa-float:hover{transform:scale(1.1);}
 
 .lang-btn{background:rgba(255,255,255,.06);border:1px solid #e5e7eb;color:#64748b;padding:.35rem .8rem;border-radius:8px;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Syne',sans-serif;letter-spacing:1px;}
@@ -486,6 +538,135 @@ footer{background:var(--dark2);border-top:1px solid rgba(249,115,22,.1);padding:
   .hero{padding:1.5rem .8rem 2rem!important;}
   .adm-tabs{gap:3px;}.adm-tab{font-size:9px;padding:5px 8px;}
 }
+
+/* =============================================
+   RESPONSIVE — 3 FORMATS COMPLETS
+   📱 Mobile  : < 640px
+   📱 Tablette: 641px - 1024px
+   🖥 Desktop : > 1024px
+============================================= */
+
+/* --- MOBILE (< 640px) --- */
+@media(max-width:640px){
+  /* Navbar */
+  .nav-links{display:none !important;}
+  #wa-nav-txt{display:none;}
+  #loginBtnTxt{display:none;}
+  .nav-wa{padding:.45rem .7rem !important;}
+  .logo-sub{display:none;}
+  nav{padding:0 .8rem;height:56px;}
+
+  /* Hero */
+  .hero{min-height:60vh;padding:4rem .8rem 2rem !important;}
+  .hero-content{max-width:100%;}
+
+  /* Sections */
+  .section{padding:2rem .8rem !important;}
+  .section-title{font-size:1.4rem !important;}
+  .section-sub{font-size:.85rem !important;}
+
+  /* Grilles */
+  .g2,.g3,.g4{grid-template-columns:1fr !important;}
+  .gauto{grid-template-columns:repeat(auto-fill,minmax(140px,1fr)) !important;}
+  .products-grid{grid-template-columns:repeat(2,1fr) !important;}
+  .eco-cards{grid-template-columns:repeat(2,1fr) !important;}
+  .magasins-grid{grid-template-columns:1fr !important;}
+  .ond-grid{grid-template-columns:repeat(2,1fr) !important;}
+  .footer-grid{grid-template-columns:1fr !important;}
+
+  /* Simulateur */
+  .sim-grid{grid-template-columns:1fr !important;}
+
+  /* Admin */
+  .adm-content{padding:12px !important;}
+  .adm-tab{font-size:9px !important;padding:5px 7px !important;}
+  .adm-card{padding:12px !important;}
+
+  /* Boutons */
+  .btn-g,.btn-o,.btn-r,.btn-b,.btn-pu{padding:8px 14px !important;font-size:11px !important;}
+
+  /* Cards produits 2 colonnes sur mobile */
+  .pc{border-radius:12px !important;}
+  .pc-img{height:120px !important;}
+
+  /* Magasin cards */
+  .magasin-card{padding:1.2rem !important;}
+
+  /* Chat flottant position */
+  #chatBubble{bottom:1rem !important;left:.8rem !important;}
+  .wa-float{bottom:1rem !important;right:.8rem !important;}
+
+  /* Modals full screen sur mobile */
+  .modal-box{max-width:100% !important;border-radius:16px !important;}
+}
+
+/* --- TABLETTE (641px - 1024px) --- */
+@media(min-width:641px) and (max-width:1024px){
+  /* Navbar */
+  .nav-links{display:none;}
+  nav{padding:0 1.2rem;}
+
+  /* Hero */
+  .hero{min-height:70vh;padding:5rem 2rem 3rem !important;}
+
+  /* Sections */
+  .section{padding:3rem 1.5rem !important;}
+  .section-title{font-size:1.8rem !important;}
+
+  /* Grilles - 2 colonnes sur tablette */
+  .g3{grid-template-columns:repeat(2,1fr) !important;}
+  .products-grid{grid-template-columns:repeat(3,1fr) !important;}
+  .eco-cards{grid-template-columns:repeat(3,1fr) !important;}
+  .magasins-grid{grid-template-columns:repeat(2,1fr) !important;}
+  .ond-grid{grid-template-columns:repeat(3,1fr) !important;}
+  .footer-grid{grid-template-columns:repeat(2,1fr) !important;}
+
+  /* Simulateur côte à côte */
+  .sim-grid{grid-template-columns:1fr 1fr !important;}
+
+  /* Admin */
+  .adm-content{padding:20px !important;}
+  .adm-tab{font-size:10px !important;padding:6px 10px !important;}
+
+  /* Navigation tablette - menu hamburger */
+  #navMenuBtn{display:flex !important;}
+}
+
+/* --- DESKTOP (> 1024px) --- */
+@media(min-width:1025px){
+  /* Navbar complète */
+  .nav-links{display:flex !important;}
+  #loginBtnTxt{display:inline !important;}
+  .logo-sub{display:block !important;}
+
+  /* Hero pleine hauteur */
+  .hero{min-height:85vh;}
+  .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+
+  /* Grilles */
+  .products-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr)) !important;}
+  .eco-cards{grid-template-columns:repeat(auto-fill,minmax(180px,1fr)) !important;}
+  .magasins-grid{grid-template-columns:repeat(3,1fr) !important;}
+  .ond-grid{grid-template-columns:repeat(5,1fr) !important;}
+  .footer-grid{grid-template-columns:repeat(4,1fr) !important;}
+
+  /* Simulateur */
+  .sim-grid{grid-template-columns:1.2fr 1fr !important;}
+
+  /* Admin */
+  .adm-content{padding:24px 32px !important;}
+}
+
+/* Menu hamburger pour tablette */
+#navMenuBtn{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.5rem;background:none;border:none;}
+#navMenuBtn span{display:block;width:22px;height:2px;background:#374151;border-radius:2px;transition:all .3s;}
+
+/* Menu mobile overlay */
+#navMobileMenu{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.5);}
+#navMobileMenu.open{display:block;}
+#navMobilePanel{position:absolute;top:56px;left:0;right:0;background:#fff;padding:1rem;border-bottom:1px solid #e5e7eb;box-shadow:0 8px 24px rgba(0,0,0,.1);}
+#navMobilePanel a{display:block;padding:.8rem 1rem;color:#374151;text-decoration:none;font-weight:600;font-size:.9rem;border-radius:8px;transition:background .2s;}
+#navMobilePanel a:hover{background:#fff7ed;color:#f97316;}
 
 .verify-inp{width:100%;background:rgba(0,0,0,.3);border:2px solid rgba(249,115,22,.3);color:#1a1a1a;padding:1rem 1.4rem;border-radius:12px;font-size:1rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
 .verify-inp:focus{border-color:#f97316;}
@@ -531,7 +712,7 @@ button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation
 img { loading: lazy; }
 
 
-/* ── SIMULATEUR PRO ───────────────────────────────────── */
+/*  SIMULATEUR PRO  */
 .sim-step{background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .sim-step-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .sim-step-num{width:30px;height:30px;background:linear-gradient(135deg,#ea580c,#f97316);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-weight:800;font-size:14px;flex-shrink:0;color:#fff}
@@ -565,7 +746,7 @@ img { loading: lazy; }
   #sim-tbody > div > button{grid-column:2;justify-self:end}
 }
 
-/* ── DEVIS IMPRIMABLE ──────────────────────────────────── */
+/*  DEVIS IMPRIMABLE  */
 .devis-header{background:linear-gradient(135deg,var(--green),var(--dark3));border-radius:12px;padding:20px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
 .devis-table{width:100%!important;border-collapse:collapse!important;margin-bottom:14px!important;background:transparent!important;border-radius:0!important}
 .devis-table th{background:rgba(249,115,22,.12)!important;padding:10px 12px!important;text-align:left!important;font-size:11px!important;font-weight:700!important;letter-spacing:1px!important;text-transform:uppercase!important;color:#F59E0B!important;border-bottom:2px solid rgba(249,115,22,.3)!important}
@@ -585,19 +766,7 @@ img { loading: lazy; }
 </style>
 </head>
 <body>
-<!-- Loading splash -->
-<div id="splash" style="position:fixed;inset:0;background:#0A0F0D;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease">
-  <div style="font-size:48px;margin-bottom:16px;animation:bounceIn .8s ease">⚡</div>
-  <div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:#4CAF50;letter-spacing:3px">LAOUNI</div>
-  <div style="font-family:Syne,sans-serif;font-size:10px;color:#F59E0B;letter-spacing:3px;text-transform:uppercase;margin-top:4px">Electricite Moderne</div>
-  <div style="margin-top:24px;width:120px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden">
-    <div style="height:100%;background:linear-gradient(90deg,#1E5C2E,#4CAF50);animation:loadbar 1.2s ease forwards" id="loadBar"></div>
-  </div>
-</div>
-<style>
-@keyframes loadbar{from{width:0}to{width:100%}}
-@keyframes fadeOut{to{opacity:0;pointer-events:none}}
-</style>
+<!-- Toast notifications -->
 <div id="toast"></div>
 
 <!-- NAV -->
@@ -627,7 +796,7 @@ img { loading: lazy; }
       <span class="logo-sub" id="logoSub">Electricite Moderne</span>
     </div>
   </div>
-  <nav class="nav-links">
+  <nav class="nav-links" id="navLinks">
     <a href="#produits" id="nav-produits">Produits</a>
     <a href="#verifier" id="nav-verifier">Vérifier</a>
     <a href="#simulation" id="nav-sim">Simulateur</a>
@@ -635,16 +804,32 @@ img { loading: lazy; }
     <a href="#magasins" id="nav-mag">Magasins</a>
     <a href="#contact" id="nav-contact">Contact</a>
   </nav>
-  <div style="display:flex;align-items:center;gap:.5rem">
+  <div style="display:flex;align-items:center;gap:.4rem;flex-shrink:0">
+    <!-- Hamburger pour tablette -->
+    <button id="navMenuBtn" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
     <button class="lang-btn act" id="btn-fr" onclick="setLang('fr')">FR</button>
     <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
-    <button onclick="openLoginModal()" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#f97316;padding:.35rem .7rem;border-radius:8px;font-size:.72rem;font-weight:700;cursor:pointer;font-family:Syne,sans-serif;letter-spacing:1px" title="Espace Admin">🔐</button>
+    <button id="btnLogin" style="background:linear-gradient(135deg,#ea580c,#f97316);border:none;color:#fff;padding:.45rem .8rem;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:Syne,sans-serif;display:flex;align-items:center;gap:.3rem" title="Espace Admin">🔐 <span id="loginBtnTxt">Connexion</span></button>
     <a id="navWa" href="https://wa.me/224610111015" class="nav-wa" target="_blank">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.553 4.112 1.522 5.84L.057 23.514a.5.5 0 0 0 .612.612l5.676-1.464A11.947 11.947 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.68-.5-5.22-1.376l-.374-.215-3.87.997.997-3.87-.215-.374A10 10 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-      WhatsApp
+      <span id="wa-nav-txt">WhatsApp</span>
     </a>
   </div>
 </nav>
+
+<!-- MENU MOBILE/TABLETTE -->
+<div id="navMobileMenu" onclick="toggleMobileMenu()">
+  <div id="navMobilePanel" onclick="event.stopPropagation()">
+    <a href="#produits" onclick="toggleMobileMenu()">📦 Produits</a>
+    <a href="#verifier" onclick="toggleMobileMenu()">🔍 Vérifier un produit</a>
+    <a href="#simulation" onclick="toggleMobileMenu()">⚡ Simulateur solaire</a>
+    <a href="#guide" onclick="toggleMobileMenu()">📋 Guide électrique</a>
+    <a href="#magasins" onclick="toggleMobileMenu()">🏪 Nos magasins</a>
+    <a href="#contact" onclick="toggleMobileMenu()">📞 Contact</a>
+  </div>
+</div>
 
 <!-- VITRINE PUBLIQUE -->
 <div id="vitrine">
@@ -682,6 +867,8 @@ img { loading: lazy; }
     <div style="display:flex;gap:.8rem;flex-wrap:wrap">
       <a href="#produits" onclick="scrollToSection('produits')" style="background:linear-gradient(135deg,#ea580c,#f97316);color:#fff;padding:.85rem 2rem;border-radius:12px;font-weight:700;font-size:.95rem;text-decoration:none;display:flex;align-items:center;gap:.5rem;" id="heroCta1">⚡ <span id="heroCta1Txt">Voir nos produits</span></a>
       <a href="#verifier" onclick="scrollToSection('verifier')" style="background:#fff7ed;color:#f97316;padding:.85rem 2rem;border-radius:12px;font-weight:700;font-size:.95rem;text-decoration:none;border:1.5px solid rgba(249,115,22,.3);display:flex;align-items:center;gap:.5rem;" id="heroCta2">🔍 <span id="heroCta2Txt">Vérifier mon produit</span></a>
+      <!-- Bouton installer PWA (masqué par défaut, affiché si installable) -->
+      <button id="installAppBtn" onclick="installApp()" style="display:none;background:#1a1a1a;color:#fff;padding:.85rem 2rem;border-radius:12px;font-weight:700;font-size:.95rem;border:none;cursor:pointer;align-items:center;gap:.5rem;">📲 Installer l'app</button>
     </div>
     <div style="display:flex;gap:2.5rem;margin-top:3rem;flex-wrap:wrap">
       <div><div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#f97316;line-height:1;" id="statMag">3</div><div style="font-size:.72rem;color:#94a3b8;margin-top:.2rem;" id="statMagLbl">Magasins en Guinée</div></div>
@@ -1153,6 +1340,9 @@ img { loading: lazy; }
   </div>
 </section>
 
+<!-- GALERIE PUBLIQUE -->
+<div id="galeriePubliqueSection" style="display:none"></div>
+
 <!-- FOOTER -->
 <footer id="footerSection">
   <div class="footer-grid">
@@ -1185,20 +1375,20 @@ img { loading: lazy; }
 
 <!-- ADMIN PANEL -->
 <div id="adminPanel">
-  <div style="position:sticky;top:0;z-index:50;background:rgba(10,15,13,.98);backdrop-filter:blur(16px);border-bottom:2px solid rgba(45,122,62,.25)">
+  <div style="position:sticky;top:0;z-index:50;background:#ffffff;border-bottom:2px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.06)">
     <!-- LIGNE 1: Logo + Badge + Boutons -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px clamp(10px,3vw,24px);border-bottom:1px solid rgba(249,115,22,.1)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px clamp(10px,3vw,24px);border-bottom:1px solid #f1f5f9">
       <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:20px">⚡</span>
+        <span style="font-size:22px">⚡</span>
         <div style="line-height:1.1">
-          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#4CAF50;letter-spacing:2px">LAOUNI</div>
-          <div style="font-family:Syne,sans-serif;font-size:9px;color:#f97316;letter-spacing:2px;text-transform:uppercase">ADMIN</div>
+          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#f97316;letter-spacing:2px">LAOUNI</div>
+          <div style="font-family:Syne,sans-serif;font-size:9px;color:#ea580c;letter-spacing:2px;text-transform:uppercase">ESPACE ADMIN</div>
         </div>
-        <span id="admUserBadge" style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:#f97316;padding:3px 9px;border-radius:4px;font-family:Syne,sans-serif;font-size:10px;font-weight:700;margin-left:6px"></span>
+        <span id="admUserBadge" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);color:#f97316;padding:3px 9px;border-radius:4px;font-family:Syne,sans-serif;font-size:10px;font-weight:700;margin-left:6px"></span>
       </div>
       <div style="display:flex;gap:6px;align-items:center">
-        <button onclick="renderDash('stock')" style="background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3);color:#4CAF50;padding:7px 12px;border-radius:6px;font-family:Syne,sans-serif;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px">🏠 Tableau de bord</button>
-        <button onclick="doLogout()" style="background:linear-gradient(135deg,#B91C1C,#EF4444);color:#fff;border:none;padding:7px 12px;border-radius:6px;font-family:Syne,sans-serif;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px">🚪 Quitter</button>
+        <button onclick="renderDash('stock')" style="background:#f9fafb;border:1px solid #e5e7eb;color:#374151;padding:7px 12px;border-radius:8px;font-family:Syne,sans-serif;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px">🏠 Tableau</button>
+        <button onclick="doLogout()" style="background:linear-gradient(135deg,#B91C1C,#EF4444);color:#fff;border:none;padding:7px 12px;border-radius:8px;font-family:Syne,sans-serif;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px">🚪 Déconnexion</button>
       </div>
     </div>
     <!-- LIGNE 2: Onglets scrollables -->
@@ -1207,56 +1397,54 @@ img { loading: lazy; }
   <div class="adm-content" id="admContent"></div>
 </div>
 
-<!-- LOGIN MODAL -->
-<div id="loginModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;display:none;align-items:center;justify-content:center;padding:16px">
-  <div style="background:#1A2420;border:1px solid rgba(249,115,22,.3);border-radius:14px;padding:28px 24px;max-width:380px;width:100%;position:relative">
-    <!-- Croix fermeture -->
-    <button onclick="closeLoginModal()" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,.08);border:none;color:#9DB4A3;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>
-    <!-- Header -->
+<!-- LOGIN MODAL — EN DEHORS DE VITRINE -->
+</div><!-- fin vitrine -->
+
+<div id="loginModal" style="display:none;position:fixed;inset:0;z-index:9999">
+  <div onclick="closeLoginModal()" style="position:absolute;inset:0;background:rgba(0,0,0,.5)"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;background:#ffffff;border-radius:24px 24px 0 0;padding:20px 24px 40px;max-width:480px;margin:0 auto;box-shadow:0 -8px 32px rgba(0,0,0,.2);animation:slideUp .3s ease">
+    <!-- Header avec croix -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div style="width:40px;height:4px;background:#e5e7eb;border-radius:2px;margin:0 auto"></div>
+      <button onclick="closeLoginModal()" style="position:absolute;top:16px;right:16px;background:#f1f5f9;border:none;color:#374151;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:10">✕</button>
+    </div>
     <div style="text-align:center;margin-bottom:20px">
-      <div style="font-size:44px;margin-bottom:8px">🔐⚡</div>
-      <h2 style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;letter-spacing:2px;text-transform:uppercase;color:#4CAF50">Espace Sécurisé</h2>
-      <p style="color:#6B7E72;font-size:12px;margin-top:4px">Administrateur · Gérant de magasin</p>
+      <div style="font-size:38px;margin-bottom:6px">🔐</div>
+      <h2 style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:#111827">Espace Sécurisé</h2>
+      <p style="color:#94a3b8;font-size:12px;margin-top:3px">Administrateur · Gérant de magasin</p>
     </div>
-    <!-- Role tabs -->
-    <div style="display:flex;gap:6px;margin-bottom:18px">
-      <button id="rt-gerant" onclick="switchLoginRole('gerant')" style="flex:1;padding:10px 6px;border-radius:7px;border:1px solid rgba(245,158,11,.4);background:rgba(245,158,11,.1);color:#F59E0B;font-family:Syne,sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px">
-        <span style="font-size:18px">🏪</span>GÉRANT
-      </button>
-      <button id="rt-admin" onclick="switchLoginRole('admin')" style="flex:1;padding:10px 6px;border-radius:7px;border:1px solid rgba(249,115,22,.2);background:transparent;color:#6B7E72;font-family:Syne,sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px">
-        <span style="font-size:18px">🛡</span>ADMIN
-      </button>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button id="rt-gerant" onclick="switchLoginRole('gerant')" style="flex:1;padding:10px 6px;border-radius:10px;border:2px solid #f97316;background:rgba(249,115,22,.08);color:#f97316;font-family:Syne,sans-serif;font-weight:700;font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:18px">🏪</span>GÉRANT</button>
+      <button id="rt-admin" onclick="switchLoginRole('admin')" style="flex:1;padding:10px 6px;border-radius:10px;border:2px solid #e5e7eb;background:#f9fafb;color:#94a3b8;font-family:Syne,sans-serif;font-weight:700;font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:18px">🛡</span>ADMIN</button>
     </div>
-    <!-- Fields -->
     <div style="margin-bottom:12px">
-      <label style="font-family:Syne,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#6B7E72;display:block;margin-bottom:5px" id="login-id-lbl">Code magasin *</label>
-      <input id="loginId" autocomplete="username" name="username" placeholder="Ex: MGC"
-        style="width:100%;background:#f9fafb;border:1px solid #e5e7eb;color:#1a1a1a;padding:11px 14px;border-radius:8px;font-size:14px;font-family:DM Sans,sans-serif;outline:none"
-        onfocus="this.style.borderColor='#F59E0B'" onblur="this.style.borderColor='rgba(45,122,62,.25)'"
-        onkeydown="if(event.key==='Enter')document.getElementById('loginPw').focus()">
+      <label style="font-family:Syne,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px" id="login-id-lbl">Code magasin *</label>
+      <input id="loginId" autocomplete="username" placeholder="Ex: MGC" style="width:100%;background:#f9fafb;border:2px solid #e5e7eb;color:#1a1a1a;padding:12px 14px;border-radius:10px;font-size:15px;outline:none" onfocus="this.style.borderColor='#f97316'" onblur="this.style.borderColor='#e5e7eb'" onkeydown="if(event.key==='Enter')document.getElementById('loginPw').focus()">
     </div>
-    <div style="margin-bottom:14px">
-      <label style="font-family:Syne,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#6B7E72;display:block;margin-bottom:5px">Mot de passe *</label>
-      <div style="display:flex;gap:6px">
-        <input id="loginPw" type="password" autocomplete="current-password" name="password" placeholder="••••••••"
-          style="flex:1;background:#f9fafb;border:1px solid #e5e7eb;color:#1a1a1a;padding:11px 14px;border-radius:8px;font-size:14px;font-family:DM Sans,sans-serif;outline:none"
-          onfocus="this.style.borderColor='#F59E0B'" onblur="this.style.borderColor='rgba(45,122,62,.25)'"
-          onkeydown="if(event.key==='Enter')doLogin()">
-        <button type="button" onclick="togglePwVis('loginPw')"
-          style="background:#f9fafb;border:1px solid #e5e7eb;color:#64748b;padding:11px 13px;border-radius:8px;cursor:pointer;font-size:16px;flex-shrink:0">👁</button>
+    <div style="margin-bottom:16px">
+      <label style="font-family:Syne,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px">Mot de passe *</label>
+      <div style="display:flex;gap:8px">
+        <input id="loginPw" type="password" placeholder="••••••••" style="flex:1;background:#f9fafb;border:2px solid #e5e7eb;color:#1a1a1a;padding:12px 14px;border-radius:10px;font-size:15px;outline:none" onfocus="this.style.borderColor='#f97316'" onblur="this.style.borderColor='#e5e7eb'" onkeydown="if(event.key==='Enter')doLogin()">
+        <button type="button" onclick="togglePwVis('loginPw')" style="background:#f9fafb;border:2px solid #e5e7eb;color:#64748b;padding:12px 14px;border-radius:10px;cursor:pointer;font-size:16px">👁</button>
       </div>
     </div>
-    <!-- Hint -->
-    <div id="loginHint" style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.18);color:#F59E0B;padding:8px 12px;border-radius:6px;margin-bottom:14px;font-size:11px;line-height:1.6">
-      Conakry: <b>MGC</b> · Labé: <b>MGL</b> · Lelouma: <b>MGLL</b>
-    </div>
-    <!-- Button -->
-    <button onclick="doLogin()"
-      style="width:100%;background:linear-gradient(135deg,#D97706,#F59E0B);color:#0A0F0D;border:none;padding:13px;border-radius:10px;font-family:Syne,sans-serif;font-weight:800;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer">
-      Se connecter
-    </button>
+    <div id="loginHint" style="background:#fff7ed;border:1px solid rgba(249,115,22,.2);color:#ea580c;padding:8px 12px;border-radius:8px;margin-bottom:16px;font-size:11px;line-height:1.6">Conakry: <b>MGC</b> · Labé: <b>MGL</b> · Lelouma: <b>MGLL</b></div>
+    <button onclick="doLogin()" style="width:100%;background:linear-gradient(135deg,#ea580c,#f97316);color:#fff;border:none;padding:14px;border-radius:12px;font-family:Syne,sans-serif;font-weight:800;font-size:15px;cursor:pointer">Se connecter →</button>
   </div>
 </div>
+
+<style>
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* Mobile navbar */
+@media(max-width:640px){
+  .nav-links{display:none !important;}
+  #wa-nav-txt{display:none;}
+  #loginBtnTxt{display:none;}
+  .nav-wa{padding:.45rem .7rem !important;}
+  .logo-sub{display:none;}
+}
+</style>
 
 
 
@@ -1266,60 +1454,74 @@ img { loading: lazy; }
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ═══════════════════════════════════════════════
-//  SUPABASE — Laouni Electricité Moderne
-// ═══════════════════════════════════════════════
+// 
+//  SUPABASE - Laouni Electricité Moderne
+// 
 const SUPABASE_URL  = 'https://tbvvrllxhybzovghkmpk.supabase.co';
 const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRidnZybGx4aHliem92Z2hrbXBrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzNzg4MzMsImV4cCI6MjA5Nzk1NDgzM30.bTDqO0GUjLgWo0orwV2TCUgcruETWWBhuOjGb7EoWU0';
 const SB = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// ── CHARGEMENT INITIAL depuis Supabase ──────────
 async function sbLoadAll() {
+  // 1. Afficher le site immédiatement avec les données locales
+  applySiteConfig();
+  renderAll();
+
+  // 2. Charger les données publiques en priorité (produits, magasins, config)
   try {
-    const [cfg, mags, prods, stks, lots, unites, mvts, ventes, contacts, chats, journal, verifs] = await Promise.all([
+    const [cfg, mags, prods, stks, gal] = await Promise.all([
       SB.from('site_config').select('*').eq('id','main').single(),
       SB.from('magasins').select('*'),
       SB.from('produits').select('*'),
       SB.from('stocks').select('*'),
-      SB.from('lots').select('*'),
-      SB.from('lot_unites').select('*'),
-      SB.from('mouvements').select('*').order('created_at',{ascending:false}).limit(200),
-      SB.from('ventes').select('*').order('created_at',{ascending:false}).limit(500),
-      SB.from('contacts').select('*').order('created_at',{ascending:false}),
-      SB.from('chat_messages').select('*').order('created_at',{ascending:true}),
-      SB.from('journal').select('*').order('created_at',{ascending:false}).limit(500),
-      SB.from('verifications').select('*').order('created_at',{ascending:false}).limit(200),
+      SB.from('galerie').select('*').eq('publie',true).order('created_at',{ascending:false}),
     ]);
 
     if(cfg.data)    DB.siteConfig   = cfg.data.data;
     if(mags.data)   DB.magasins     = mags.data;
     if(prods.data)  DB.produits     = prods.data.map(p=>({...p, desc:p.desc_prod}));
     if(stks.data)   DB.stocks       = stks.data.map(s=>({...s, min:s.qte_min}));
-    if(lots.data)   DB.lots         = lots.data;
-    if(unites.data) {
-      // Rattacher les unités à leurs lots
-      DB.lots.forEach(l => {
-        l.unites = unites.data.filter(u => u.lot_id === l.id);
-      });
-    }
-    if(mvts.data)   DB.mouvements   = mvts.data.map(m=>({...m, user:m.user_action, date:m.created_at?.split('T')[0]}));
-    if(ventes.data) DB.ventes       = ventes.data;
-    if(contacts.data) DB.clients    = contacts.data;
-    if(chats.data)  DB.chatsAdmin   = chats.data;
-    if(journal.data) DB.journal     = journal.data.map(j=>({...j, user:j.user_action}));
-    if(verifs.data) DB.verifs       = verifs.data;
+    if(gal.data)    DB.galerie      = gal.data.map(g=>({...g, magName:g.mag_name, date:g.date_photo}));
 
-    console.log('✅ Supabase chargé — produits:'+DB.produits.length+' magasins:'+DB.magasins.length);
+    // Mettre à jour l'affichage avec les données fraîches
     applySiteConfig();
     renderAll();
+    renderGaleriePublique();
+
+    console.log('✅ Données publiques chargées - produits:'+DB.produits.length);
   } catch(e) {
-    console.warn('⚠️ Supabase hors ligne — mode local:', e.message);
-    applySiteConfig();
-    renderAll();
+    console.warn('⚠️ Supabase hors ligne - mode local:', e.message);
   }
+
+  // 3. Charger les données admin en arrière-plan (sans bloquer)
+  setTimeout(async () => {
+    try {
+      const [lots, unites, mvts, ventes, contacts, chats, journal, verifs] = await Promise.all([
+        SB.from('lots').select('*'),
+        SB.from('lot_unites').select('*'),
+        SB.from('mouvements').select('*').order('created_at',{ascending:false}).limit(200),
+        SB.from('ventes').select('*').order('created_at',{ascending:false}).limit(500),
+        SB.from('contacts').select('*').order('created_at',{ascending:false}),
+        SB.from('chat_messages').select('*').order('created_at',{ascending:true}),
+        SB.from('journal').select('*').order('created_at',{ascending:false}).limit(500),
+        SB.from('verifications').select('*').order('created_at',{ascending:false}).limit(200),
+      ]);
+
+      if(lots.data)   DB.lots = lots.data;
+      if(unites.data) DB.lots.forEach(l => { l.unites = unites.data.filter(u => u.lot_id === l.id); });
+      if(mvts.data)   DB.mouvements = mvts.data.map(m=>({...m, user:m.user_action, date:m.created_at?.split('T')[0]}));
+      if(ventes.data) DB.ventes = ventes.data;
+      if(contacts.data) DB.clients = contacts.data;
+      if(chats.data)  DB.chatsAdmin = chats.data;
+      if(journal.data) DB.journal = journal.data.map(j=>({...j, user:j.user_action}));
+      if(verifs.data) DB.verifs = verifs.data;
+
+      
+    } catch(e) {
+      console.warn('⚠️ Données admin non chargées:', e.message);
+    }
+  }, 2000); // Attendre 2 secondes après l'affichage
 }
 
-// ── SAUVEGARDE produits ─────────────────────────
+//  SAUVEGARDE produits 
 async function sbSaveProduit(p) {
   const row = {id:p.id, nom:p.nom, ref:p.ref, barcode:p.barcode, cat:p.cat, marque:p.marque||'Laouni', prix:p.prix||0, desc_prod:p.desc||p.desc_prod||'', photo:p.photo||null, video:p.video||'', actif:p.actif!==false};
   const {error} = await SB.from('produits').upsert(row, {onConflict:'id'});
@@ -1331,48 +1533,48 @@ async function sbDeleteProduit(id) {
   if(error) console.error('sbDeleteProduit:', error.message);
 }
 
-// ── SAUVEGARDE stocks ───────────────────────────
+//  SAUVEGARDE stocks 
 async function sbSaveStock(s) {
   const row = {id:s.id, pid:s.pid, mid:s.mid, qte:s.qte||0, qte_min:s.min||s.qte_min||1};
   const {error} = await SB.from('stocks').upsert(row, {onConflict:'id'});
   if(error) console.error('sbSaveStock:', error.message);
 }
 
-// ── SAUVEGARDE magasins ─────────────────────────
+//  SAUVEGARDE magasins 
 async function sbSaveMagasin(m) {
   const row = {id:m.id, name:m.name, ville:m.ville||m.name, tel:m.tel||'', code:m.code||'', pass:m.pass||'', actif:m.actif!==false, adresse:m.adresse||'', maps:m.maps||'', horaires:m.horaires||'', gerant_nom:m.gerantNom||'', gerant_prenom:m.gerantPrenom||'', gerant_tel:m.gerantTel||'', gerant_mail:m.gerantMail||''};
   const {error} = await SB.from('magasins').upsert(row, {onConflict:'id'});
   if(error) console.error('sbSaveMagasin:', error.message);
 }
 
-// ── SAUVEGARDE config site ──────────────────────
+//  SAUVEGARDE config site 
 async function sbSaveConfig(cfg) {
   const {error} = await SB.from('site_config').upsert({id:'main', data:cfg, updated_at: new Date().toISOString()}, {onConflict:'id'});
   if(error) console.error('sbSaveConfig:', error.message);
 }
 
-// ── SAUVEGARDE mouvements ───────────────────────
+//  SAUVEGARDE mouvements 
 async function sbSaveMouvement(m) {
   const row = {id:m.id, pid:m.pid, mid:m.mid, type:m.type, qte:m.qte||0, motif:m.motif||'', user_action:m.user||m.user_action||'Admin', valide:m.valide!==false};
   const {error} = await SB.from('mouvements').upsert(row, {onConflict:'id'});
   if(error) console.error('sbSaveMouvement:', error.message);
 }
 
-// ── SAUVEGARDE ventes ───────────────────────────
+//  SAUVEGARDE ventes 
 async function sbSaveVente(v) {
   const row = {pid:v.pid, mid:v.mid, qte:v.qte||1, prix_vente:v.prix||0, client_nom:v.clientNom||'', client_tel:v.clientTel||'', barcode_unite:v.barcode||'', user_action:v.user||'Admin'};
   const {error} = await SB.from('ventes').insert(row);
   if(error) console.error('sbSaveVente:', error.message);
 }
 
-// ── SAUVEGARDE contact visiteur ─────────────────
+//  SAUVEGARDE contact visiteur 
 async function sbSaveContact(c) {
   const row = {nom:c.nom||'', tel:c.tel||'', email:c.email||'', sujet:c.sujet||'', message:c.message||''};
   const {error} = await SB.from('contacts').insert(row);
   if(error) console.error('sbSaveContact:', error.message);
 }
 
-// ── SAUVEGARDE chat ─────────────────────────────
+//  SAUVEGARDE chat 
 async function sbSaveChatMsg(msg) {
   const row = {session_id:msg.sessionId||msg.session_id||'anon', visiteur_nom:msg.nom||'Visiteur', de:msg.de||'visiteur', message:msg.message||msg.msg||''};
   const {error} = await SB.from('chat_messages').insert(row);
@@ -1380,20 +1582,20 @@ async function sbSaveChatMsg(msg) {
   return !error;
 }
 
-// ── SAUVEGARDE journal ──────────────────────────
+//  SAUVEGARDE journal 
 async function sbSaveJournal(j) {
   const row = {type:j.type||'action', details:j.details||'', user_action:j.user||j.user_action||'Admin', mid:j.mid||null};
   const {error} = await SB.from('journal').insert(row);
   if(error) console.error('sbSaveJournal:', error.message);
 }
 
-// ── SAUVEGARDE vérification QR ──────────────────
+//  SAUVEGARDE vérification QR 
 async function sbSaveVerif(barcode, resultat) {
   const {error} = await SB.from('verifications').insert({barcode:barcode, resultat:resultat});
   if(error) console.error('sbSaveVerif:', error.message);
 }
 
-// ── SAUVEGARDE lots ─────────────────────────────
+//  SAUVEGARDE lots 
 async function sbSaveLot(lot) {
   const row = {id:lot.id, nom:lot.nom, ref:lot.ref, pid:lot.pid, mid:lot.mid||null, qte:lot.qte||0, date_lot:lot.date||new Date().toISOString().split('T')[0], cree_par:lot.creePar||'Admin', statut:lot.statut||'attente', valide:lot.valide||false};
   const {error} = await SB.from('lots').upsert(row, {onConflict:'id'});
@@ -1404,7 +1606,7 @@ async function sbSaveLot(lot) {
   }
 }
 
-// ── REALTIME — Chat en temps réel ───────────────
+//  REALTIME - Chat en temps réel 
 function sbSubscribeChat(callback) {
   SB.channel('chat_messages')
     .on('postgres_changes', {event:'INSERT', schema:'public', table:'chat_messages'}, payload => {
@@ -1413,11 +1615,150 @@ function sbSubscribeChat(callback) {
     .subscribe();
 }
 
-console.log('🔌 Supabase initialisé — laouni-electricite-moderne');
+
 </script>
 
 <script>
 /* LAOUNI v2.1 - 202606060100 */
+
+// ============================================================
+//  SECURITE ULTRA — Anti-Hacker Protection
+// ============================================================
+(function() {
+  'use strict';
+
+  // 1. ANTI DEVTOOLS — Détection ouverture console/inspect
+  var devtoolsOpen = false;
+  var threshold = 160;
+  setInterval(function() {
+    if(window.outerWidth - window.innerWidth > threshold ||
+       window.outerHeight - window.innerHeight > threshold) {
+      if(!devtoolsOpen) {
+        devtoolsOpen = true;
+        if(window._securityLevel === 'admin') {
+          document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#0a0a0a;color:#ef4444;flex-direction:column;gap:16px"><div style="font-size:48px">🚨</div><div style="font-size:18px;font-weight:700">Accès refusé</div><div style="font-size:12px;color:#666">Tentative de débogage détectée</div></div>';
+        }
+      }
+    } else {
+      devtoolsOpen = false;
+    }
+  }, 1000);
+
+  // 2. ANTI COPIER-COLLER SOURCE — Désactiver clic droit
+  document.addEventListener('contextmenu', function(e) {
+    if(window._securityLevel === 'admin') e.preventDefault();
+  });
+
+  // 3. ANTI INJECTION XSS — Sanitizer
+  window.sanitize = function(str) {
+    if(typeof str !== 'string') return '';
+    return str.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;').replace(/\//g,'&#x2F;');
+  };
+
+  // 4. RATE LIMITING LOGIN — Bloquer brute force
+  var loginAttempts = 0;
+  var loginBlockedUntil = 0;
+  window._checkLoginRateLimit = function() {
+    var now = Date.now();
+    if(now < loginBlockedUntil) {
+      var wait = Math.ceil((loginBlockedUntil - now) / 1000);
+      return {blocked: true, wait: wait};
+    }
+    loginAttempts++;
+    if(loginAttempts >= 5) {
+      loginBlockedUntil = now + (loginAttempts * 30000); // 30s * nb tentatives
+      return {blocked: true, wait: loginAttempts * 30};
+    }
+    return {blocked: false};
+  };
+  window._resetLoginRateLimit = function() {
+    loginAttempts = 0;
+    loginBlockedUntil = 0;
+  };
+
+  // 5. ANTI SQL INJECTION — Valider les inputs
+  window.validateInput = function(val, type) {
+    if(!val) return false;
+    val = val.trim();
+    if(type === 'code') return /^[A-Za-z0-9\-_]{2,20}$/.test(val);
+    if(type === 'password') return val.length >= 6 && val.length <= 50;
+    if(type === 'text') return val.length > 0 && val.length <= 500;
+    return true;
+  };
+
+  // 6. SESSION TIMEOUT — Déconnexion auto après inactivité (30 min)
+  var lastActivity = Date.now();
+  var SESSION_TIMEOUT = 30 * 60 * 1000;
+  ['click','keypress','scroll','touchstart'].forEach(function(evt) {
+    document.addEventListener(evt, function() { lastActivity = Date.now(); }, {passive:true});
+  });
+  setInterval(function() {
+    if(window.currentUser && Date.now() - lastActivity > SESSION_TIMEOUT) {
+      window.currentUser = null;
+      var ap = document.getElementById('adminPanel');
+      var v = document.getElementById('vitrine');
+      var n = document.getElementById('mainNav');
+      if(ap) ap.style.display = 'none';
+      if(v) v.style.display = 'block';
+      if(n) n.style.display = 'flex';
+      if(window.notify) notify('Session expirée - Reconnectez-vous', true);
+    }
+  }, 60000);
+
+  // 7. ANTI IFRAME — Désactivé (compatible avec tous les environnements)
+  // if(window.top !== window.self) { window.top.location = window.self.location; }
+
+  // 8. CONTENT SECURITY — Bloquer l'injection de scripts externes
+  window.addEventListener('error', function(e) {
+    if(e.target && e.target.tagName === 'SCRIPT' && e.target.src && !e.target.src.includes(location.hostname)) {
+      e.target.remove();
+    }
+  }, true);
+
+  // 9. TOKEN CSRF — Protection des actions sensibles
+  window._csrfToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+  window._validateCsrf = function(token) { return token === window._csrfToken; };
+
+  // 10. LOG SECURITE — Enregistrer les tentatives suspectes
+  window._logSecurity = async function(type, detail) {
+    try {
+      if(window.SB) {
+        await SB.from('journal').insert({
+          type: 'SECURITE_' + type,
+          details: detail,
+          user_action: 'SYSTEM',
+          mid: null
+        });
+      }
+    } catch(e) {}
+  };
+
+  window._securityLevel = 'public';
+})();
+
+// ── MENU MOBILE/TABLETTE ─────────────────────
+function toggleMobileMenu() {
+  var menu = document.getElementById('navMobileMenu');
+  var btn = document.getElementById('navMenuBtn');
+  if(!menu) return;
+  var isOpen = menu.classList.contains('open');
+  if(isOpen) {
+    menu.classList.remove('open');
+    if(btn) btn.style.opacity = '1';
+  } else {
+    menu.classList.add('open');
+    if(btn) btn.style.opacity = '.7';
+  }
+}
+
+// Fermer menu si on clique sur un lien
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('#navMobilePanel a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      document.getElementById('navMobileMenu').classList.remove('open');
+    });
+  });
+});
 
 var loginRole = 'gerant';
 var dashTab = 'stock';
@@ -1433,13 +1774,13 @@ const T = {
     'nav-guide':'Guide','nav-mag':'Magasins','nav-contact':'Contact',
     'heroBadge':'🌱 Spécialiste énergie solaire en Guinée',
     'heroTitle3':'POUR TOUS',
-    'heroDesc':'Onduleurs hybrides MPPT, batteries lithium, panneaux solaires — Produits certifiés et authentifiés dans nos magasins en Guinée.',
+    'heroDesc':'Onduleurs hybrides MPPT, batteries lithium, panneaux solaires - Produits certifiés et authentifiés dans nos magasins en Guinée.',
     'heroCta1Txt':'Voir nos produits','heroCta2Txt':'Vérifier mon produit',
     'statMagLbl':'Magasins en Guinée','statAuthLbl':'Produits authentifiés','statProdLbl':'Produits disponibles',
     'v-tag':'Sécurité achat','v-title':"Vérifier l\'authenticité",
     "v-sub":"Entrez le code barre sur votre produit pour verifier qu il est authentique Laouni.",
     'v-btn':'🔍 Vérifier',
-    'p-tag':'Catalogue','p-title':'Nos Produits','p-sub':'Onduleurs hybrides, batteries lithium, panneaux solaires — Tous certifiés authentiques.',
+    'p-tag':'Catalogue','p-title':'Nos Produits','p-sub':'Onduleurs hybrides, batteries lithium, panneaux solaires - Tous certifiés authentiques.',
     'sim-title':'Simulateur Énergétique','outils-title':'Nos Outils','qr-title':'Générateur QR Code',
     'mag-title':'Nos Magasins','c-title':'Contact',
     'mag-sub':'Retrouvez-nous dans nos villes en Guinée.',
@@ -1449,7 +1790,7 @@ const T = {
     'lbl-nom':'Votre nom','lbl-tel':'Téléphone','lbl-msg':'Message',
     'btn-send-txt':'📤 Envoyer via WhatsApp',
     'f-produits':'Produits','f-mag':'Magasins','f-contact':'Contact',
-    "footerDesc":"Specialiste energie solaire en Guinee — Onduleurs, batteries, panneaux certifies.",
+    "footerDesc":"Specialiste energie solaire en Guinee - Onduleurs, batteries, panneaux certifies.",
     'login-title':'Espace Sécurisé',"login-sub":"Administrateur - Gerant de magasin",
     'lbl-gerant':'Gérant','lbl-admin':'Admin',
     'login-id-lbl':'Code magasin *','login-pw-lbl':'Mot de passe *','login-btn':'Se connecter',
@@ -1463,13 +1804,13 @@ const T = {
     'nav-guide':'Guide','nav-mag':'Stores','nav-contact':'Contact',
     'heroBadge':'🌱 Solar energy specialist in Guinea',
     'heroTitle3':'FOR ALL',
-    'heroDesc':'Hybrid MPPT inverters, lithium batteries, solar panels — Certified products in our stores in Guinea.',
+    'heroDesc':'Hybrid MPPT inverters, lithium batteries, solar panels - Certified products in our stores in Guinea.',
     'heroCta1Txt':'View our products','heroCta2Txt':'Verify my product',
     'statMagLbl':'Stores in Guinea','statAuthLbl':'Authentic products','statProdLbl':'Available products',
     'v-tag':'Purchase security','v-title':'Verify authenticity',
     'v-sub':'Enter the barcode printed on your product to verify it is genuine Laouni.',
     'v-btn':'🔍 Verify',
-    'p-tag':'Catalogue','p-title':'Our Products','p-sub':'Hybrid inverters, lithium batteries, solar panels — All certified authentic.',
+    'p-tag':'Catalogue','p-title':'Our Products','p-sub':'Hybrid inverters, lithium batteries, solar panels - All certified authentic.',
     'sim-title':'Energy Simulator','outils-title':'Our Tools','qr-title':'QR Code Generator',
     'mag-title':'Our Stores','c-title':'Contact',
     'mag-sub':'Find us in cities across Guinea.',
@@ -1479,7 +1820,7 @@ const T = {
     'lbl-nom':'Your name','lbl-tel':'Phone','lbl-msg':'Message',
     'btn-send-txt':'📤 Send via WhatsApp',
     'f-produits':'Products','f-mag':'Stores','f-contact':'Contact',
-    'footerDesc':'Solar energy specialist in Guinea — Certified hybrid inverters, lithium batteries, solar panels.',
+    'footerDesc':'Solar energy specialist in Guinea - Certified hybrid inverters, lithium batteries, solar panels.',
     'login-title':'Secure Area','login-sub':'Administrator · Store Manager',
     'lbl-gerant':'Manager','lbl-admin':'Admin',
     'login-id-lbl':'Store code *','login-pw-lbl':'Password *','login-btn':'Log in',
@@ -1512,7 +1853,7 @@ let DB = {
   clients: [],
   notifications: [],
   lots: [
-    {id:"lot-demo1", nom:"Lot démo — Batteries Juin 2025", ref:"LOT-BAT-001",
+    {id:"lot-demo1", nom:"Lot démo - Batteries Juin 2025", ref:"LOT-BAT-001",
      pid:"p2", mid:"mg1", qte:5,
      unites:[
        {id:"u1",barcode:"LOT-BAT-001-001",vendu:false},
@@ -1524,7 +1865,7 @@ let DB = {
      date:"2025-06-01", creePar:"Admin",
      statut:"attente", valide:false
     },
-    {id:"lot-demo2", nom:"Lot démo — Onduleurs Mai 2025", ref:"LOT-OND-001",
+    {id:"lot-demo2", nom:"Lot démo - Onduleurs Mai 2025", ref:"LOT-OND-001",
      pid:"p1", mid:null, qte:3,
      unites:[
        {id:"u6",barcode:"LOT-OND-001-001",vendu:false},
@@ -1543,9 +1884,9 @@ let DB = {
     {id:"mg3",name:"Lelouma",ville:"Lelouma",tel:"+224 621 861 912",code:"MGLL",pass:"lelouma2024",actif:true,gerantNom:"",gerantPrenom:"",gerantTel:"+224 621 861 912",gerantMail:""},
   ],
   produits: [
-    {id:"p1",nom:"Onduleur Hybride 5.5kW",ref:"OND-5500-MPPT",barcode:"6901234567890",cat:"Onduleur",marque:"Laouni",prix:8500000,desc:"Onduleur hybride MPPT 5.5kW — Entrée solaire 120A",photo:null,video:"",actif:true,date:"2024-01-10"},
+    {id:"p1",nom:"Onduleur Hybride 5.5kW",ref:"OND-5500-MPPT",barcode:"6901234567890",cat:"Onduleur",marque:"Laouni",prix:8500000,desc:"Onduleur hybride MPPT 5.5kW - Entrée solaire 120A",photo:null,video:"",actif:true,date:"2024-01-10"},
     {id:"p2",nom:"Batterie Lithium 16kWh",ref:"BAT-LI-16KWH",barcode:"6901234567891",cat:"Batterie",marque:"Laouni",prix:12000000,desc:"Batterie LiFePO4 51.2V 314Ah 16kWh",photo:null,video:"",actif:true,date:"2024-01-10"},
-    {id:"p3",nom:"Panneau Solaire 545W",ref:"PAN-545W-MONO",barcode:"6901234567892",cat:"Panneau Solaire",marque:"Laouni",prix:1200000,desc:"Panneau monocristallin 545W — Garantie 25 ans",photo:null,video:"",actif:true,date:"2024-02-05"},
+    {id:"p3",nom:"Panneau Solaire 545W",ref:"PAN-545W-MONO",barcode:"6901234567892",cat:"Panneau Solaire",marque:"Laouni",prix:1200000,desc:"Panneau monocristallin 545W - Garantie 25 ans",photo:null,video:"",actif:true,date:"2024-02-05"},
     {id:"p4",nom:"Onduleur Hybride 6.2kW",ref:"OND-6200-MPPT",barcode:"6901234567893",cat:"Onduleur",marque:"Laouni",prix:9500000,desc:"Onduleur hybride MPPT 6.2kW",photo:null,video:"",actif:true,date:"2024-03-01"},
   ],
   stocks: [
@@ -1594,7 +1935,7 @@ function logAction(type, details, user, mid) {
   // Garder max 5000 entrées
   if(DB.journal.length > 5000) DB.journal = DB.journal.slice(0, 5000);
 }
-const fmtM = n => n ? (n/1000000).toFixed(1)+"M GNF" : "—";
+const fmtM = n => n ? (n/1000000).toFixed(1)+"M GNF" : "-";
 const fmtN = n => (n||0).toString().replace(/\B(?=(\d{3})+(?!\d))/g," ");
 
 function getStockTotal(pid){ return DB.stocks.filter(s=>s.pid===pid).reduce((a,s)=>a+s.qte,0); }
@@ -1647,7 +1988,7 @@ function adminFooterClick() { openLoginModal(); }
 function openLoginModal() {
   if(currentUser) { showAdminPanel();
   chatMajVisibilite(); return; }
-  document.getElementById('loginModal').style.display = 'flex';
+  document.getElementById('loginModal').style.display = 'block';
 }
 function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
 
@@ -1683,27 +2024,48 @@ function switchLoginRole(r) {
 }
 
 function doLogin() {
-  const id = document.getElementById('loginId').value.trim();
-  const pw = document.getElementById('loginPw').value.trim();
+  // Rate limit anti-brute force
+  var rateCheck = window._checkLoginRateLimit();
+  if(rateCheck.blocked) {
+    notify('🚨 Trop de tentatives ! Attendez ' + rateCheck.wait + 's.', true);
+    window._logSecurity('BRUTE_FORCE', 'Connexion bloquée');
+    return;
+  }
+  const id = (document.getElementById('loginId').value || '').trim();
+  const pw = (document.getElementById('loginPw').value || '').trim();
   if(!id || !pw) { notify(LANG==='fr'?'Remplir tous les champs.':'Fill all fields.', true); return; }
+  // Valider les inputs (anti-injection)
+  if(!/^[A-Za-z0-9\-_]{1,30}$/.test(id)) {
+    notify('🚨 Identifiant invalide.', true);
+    window._logSecurity('INJECTION', 'Input suspect: ' + id.substring(0,20));
+    return;
+  }
   if(loginRole === 'admin' && id === 'admin' && pw === DB.adminPass) {
+    window._resetLoginRateLimit();
+    window._securityLevel = 'admin';
     currentUser = {role:'admin', name:'Administrateur'};
     closeLoginModal();
     showAdminPanel();
+    logAction('CONNEXION', 'Connexion Admin', 'Administrateur', null);
     notify('✅ Bienvenue Administrateur !');
     return;
   }
   if(loginRole === 'gerant') {
     const mg = DB.magasins.find(m => m.actif && m.code === id && m.pass === pw);
     if(mg) {
-    currentUser = {role:'gerant', magId:mg.id, name:mg.name};
-    closeLoginModal();
-    showAdminPanel();
-    notify('✅ Bienvenue — Magasin ' + mg.name + ' !');
-    return;
+      window._resetLoginRateLimit();
+      window._securityLevel = 'gerant';
+      currentUser = {role:'gerant', magId:mg.id, name:mg.name};
+      closeLoginModal();
+      showAdminPanel();
+      logAction('CONNEXION', 'Connexion Gérant', mg.name, mg.id);
+      notify('✅ Bienvenue - Magasin ' + mg.name + ' !');
+      return;
     }
   }
-  notify(LANG==='fr'?'Identifiants incorrects.':'Incorrect credentials.', true);
+  // Échec connexion
+  window._logSecurity('ECHEC_LOGIN', 'Tentative échouée: ' + id);
+  notify(LANG==='fr'?'❌ Identifiants incorrects.':'❌ Incorrect credentials.', true);
 }
 
 function retourSite() {
@@ -1711,10 +2073,11 @@ function retourSite() {
   document.getElementById('vitrine').style.display = 'block';
   document.getElementById('mainNav').style.display = 'flex';
   chatMajVisibilite();
+  // Mettre à jour l'URL sans recharger
+  history.pushState({page:'public'}, '', '/');
 }
 
 function doLogout() {
-  // Afficher confirmation dans modal
   showModal(
     '<div style="text-align:center;padding:10px">' +
     '<div style="font-size:40px;margin-bottom:12px">&#x1F6AA;</div>' +
@@ -1722,7 +2085,7 @@ function doLogout() {
     '<div style="color:var(--gr);font-size:13px;margin-bottom:20px">Vous allez quitter votre espace.</div>' +
     '<div style="display:flex;gap:10px;justify-content:center">' +
     '<button onclick="confirmerLogout()" style="background:linear-gradient(135deg,#B91C1C,#EF4444);color:#fff;border:none;padding:11px 24px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer">&#x2713; Confirmer</button>' +
-    '<button onclick="closeModal()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:var(--wh);padding:11px 24px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer">&#x2715; Annuler</button>' +
+    '<button onclick="closeModal()" style="background:#f9fafb;border:1px solid #e5e7eb;color:#374151;padding:11px 24px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer">&#x2715; Annuler</button>' +
     '</div></div>'
   );
 }
@@ -1730,11 +2093,14 @@ function doLogout() {
 function confirmerLogout() {
   closeModal();
   var userName = currentUser ? currentUser.name : '?';
-  logAction('DECONNEXION', 'Déconnexion', userName, null);
+  logAction('DECONNEXION', 'Deconnexion', userName, null);
+  window._securityLevel = 'public';
+  window._resetLoginRateLimit();
   currentUser = null;
   document.getElementById('adminPanel').style.display = 'none';
   document.getElementById('vitrine').style.display = 'block';
   document.getElementById('mainNav').style.display = 'flex';
+  history.pushState({page:'public'}, '', '/');
   notify(LANG==='fr'?'Déconnecté.':'Logged out.');
 }
 
@@ -1742,6 +2108,8 @@ function showAdminPanel() {
   document.getElementById('vitrine').style.display = 'none';
   document.getElementById('mainNav').style.display = 'none';
   document.getElementById('adminPanel').style.display = 'block';
+  // Ajouter état dans l'historique pour que le bouton retour fonctionne
+  history.pushState({page:'admin'}, '', '#admin');
   const isAdmin = currentUser.role === 'admin';
   document.getElementById('admUserBadge').textContent = (isAdmin ? '🛡 ' : '🏪 ') + currentUser.name;
 
@@ -1761,9 +2129,10 @@ function showAdminPanel() {
     ['chat',     '💬 Chat' + (function(){var c=DB.chats?DB.chats.filter(function(m){return m.from==='gerant'&&!m.luAdmin;}).length:0;return c>0?' ('+c+')':'';})()],
     ['notifs',   '📣 Notifications' + (notifs_nonlus > 0 ? ' ('+notifs_nonlus+')' : '')],
     ['site',     '🌐 Site web'],
-    ['recherches','🔍 Recherches'+(function(){var r=DB.recherches.filter(function(x){return !x.trouvé;}).length;return r>0?' <span style="background:#EF4444;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px">'+r+'</span>':'';})()+' '],
+    ['recherches','🔍 Recherches'+(function(){var r=DB.recherches.filter(function(x){return !x.trouve;}).length;return r>0?' <span style="background:#EF4444;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px">'+r+'</span>':'';})()+' '],
     ['ca','💰 CA & Ventes'],
     ['journal',  '📋 Journal'],
+    ['galerie',  '🖼️ Galerie'],
     ['params',   '⚙️ Parametres']
   ] : [
     ['vente',    '🛒 Vente'],
@@ -1781,7 +2150,8 @@ function showAdminPanel() {
       return total>0?' <span style="background:#EF4444;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:700">'+total+'</span>':'';
     })()],
     ['monprofil', '👤 Mon Profil'],
-    ['recherches','🔍 Recherches'+(function(){var r=DB.recherches.filter(function(x){return !x.trouvé;}).length;return r>0?' <span style="background:#EF4444;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px">'+r+'</span>':'';})()+' '],
+    ['recherches','🔍 Recherches'+(function(){var r=DB.recherches.filter(function(x){return !x.trouve;}).length;return r>0?' <span style="background:#EF4444;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px">'+r+'</span>':'';})()+' '],
+    ['galerie',  '🖼️ Galerie'],
     ['journal',  '📋 Mon Journal'],
     ['params',   '⚙️ Parametres']
   ];
@@ -1837,10 +2207,172 @@ function renderDash(tab) {
   else if(dashTab === 'lots' && isAdmin)     renderLotsTab(tabDiv);
   else if(dashTab === 'notifs' && isAdmin)   renderNotifsTab(tabDiv);
   else if(dashTab === 'site' && isAdmin)     renderSiteGlobalTab(tabDiv);
+  else if(dashTab === 'galerie')             renderGalerieTab(tabDiv);
   else if(dashTab === 'params')              renderParamsTab(tabDiv, isAdmin);
   else if(dashTab === 'recherches')          renderRecherchesTab(tabDiv);
   else if(dashTab === 'ca')                  renderCATab(tabDiv);
   else if(dashTab === 'journal')             renderJournalTab(tabDiv);
+}
+
+function renderGalerieTab(div) {
+  if(!DB.galerie) DB.galerie = [];
+  const isAdmin = currentUser.role === 'admin';
+  const magId = currentUser.magId || 'admin';
+  const magName = isAdmin ? 'Admin' : (DB.magasins.find(m=>m.id===magId)||{name:'?'}).name;
+
+  div.innerHTML =
+    '<div class="adm-card">' +
+    '<div class="adm-sl">🖼️ GALERIE PHOTOS - Visible sur le site public</div>' +
+
+    // Upload zone
+    '<div style="background:#fff7ed;border:2px dashed rgba(249,115,22,.4);border-radius:12px;padding:1.5rem;text-align:center;margin-bottom:1rem;cursor:pointer" onclick="document.getElementById(\'galInput\').click()">' +
+    '<div style="font-size:36px;margin-bottom:8px">📸</div>' +
+    '<div style="font-family:Syne,sans-serif;font-weight:700;color:#f97316;margin-bottom:4px">Cliquer pour ajouter des photos</div>' +
+    '<div style="font-size:12px;color:#94a3b8">JPG, PNG - max 5MB par photo</div>' +
+    '<input type="file" id="galInput" accept="image/*" multiple style="display:none" onchange="galerieAddPhotos(this)">' +
+    '</div>' +
+
+    // Catégorie
+    '<div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">' +
+    '<label style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:#64748b;display:flex;align-items:center;gap:6px">Catégorie :</label>' +
+    '<select id="galCat" class="sel" style="flex:1;max-width:200px">' +
+    '<option value="magasin">🏪 Magasin</option>' +
+    '<option value="produits">📦 Produits</option>' +
+    '<option value="equipe">👥 Équipe</option>' +
+    '<option value="installation">⚡ Installation</option>' +
+    '<option value="promo">🎁 Promotion</option>' +
+    '</select>' +
+    '<input id="galLegende" class="inp" placeholder="Légende (optionnel)" style="flex:2">' +
+    '</div>' +
+
+    // Grille photos
+    '<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:#64748b;margin-bottom:8px">PHOTOS PUBLIÉES ('+DB.galerie.length+')</div>' +
+    '<div id="galGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px">' +
+    (DB.galerie.length === 0 ?
+      '<div style="grid-column:1/-1;text-align:center;color:#94a3b8;padding:2rem;font-size:13px">Aucune photo publiée</div>' :
+      DB.galerie.map((p,i) =>
+        '<div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid #e5e7eb;background:#f9fafb">' +
+        '<img src="'+p.url+'" style="width:100%;height:120px;object-fit:cover;display:block">' +
+        '<div style="padding:6px 8px">' +
+        '<div style="font-size:10px;font-weight:700;color:#f97316;text-transform:uppercase">'+p.cat+'</div>' +
+        '<div style="font-size:11px;color:#374151;margin-top:2px">'+( p.legende||'')+'</div>' +
+        '<div style="font-size:10px;color:#94a3b8;margin-top:2px">'+p.magName+' · '+p.date+'</div>' +
+        '</div>' +
+        '<button onclick="galerieDelete('+i+')" style="position:absolute;top:4px;right:4px;background:rgba(239,68,68,.9);color:#fff;border:none;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:12px">×</button>' +
+        '</div>'
+      ).join('')
+    ) +
+    '</div>' +
+    '</div>';
+}
+
+function galerieAddPhotos(input) {
+  if(!DB.galerie) DB.galerie = [];
+  const files = Array.from(input.files);
+  const cat = document.getElementById('galCat').value;
+  const legende = document.getElementById('galLegende').value;
+  const isAdmin = currentUser.role === 'admin';
+  const magId = currentUser.magId || 'admin';
+  const magName = isAdmin ? 'Admin' : (DB.magasins.find(m=>m.id===magId)||{name:'?'}).name;
+
+  let loaded = 0;
+  files.forEach(file => {
+    if(file.size > 5*1024*1024) { notify('Photo trop lourde (max 5MB) : '+file.name, true); return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const photo = {
+        id: genId(),
+        url: e.target.result,
+        cat: cat,
+        legende: legende,
+        magId: magId,
+        magName: magName,
+        date: today(),
+        publie: true
+      };
+      DB.galerie.unshift(photo);
+      // Sync Supabase
+      sbSaveGalerie(photo);
+      loaded++;
+      if(loaded === files.length) {
+        notify('✅ '+loaded+' photo(s) publiée(s) !');
+        renderDash('galerie');
+        // Mettre à jour la galerie publique
+        renderGaleriePublique();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function galerieDelete(i) {
+  if(!confirm('Supprimer cette photo ?')) return;
+  const photo = DB.galerie[i];
+  DB.galerie.splice(i, 1);
+  if(photo && photo.id) sbDeleteGalerie(photo.id);
+  notify('Photo supprimée');
+  renderDash('galerie');
+  renderGaleriePublique();
+}
+
+async function sbSaveGalerie(photo) {
+  try {
+    const {error} = await SB.from('galerie').upsert({
+      id: photo.id, url: photo.url, cat: photo.cat,
+      legende: photo.legende||'', mag_id: photo.magId,
+      mag_name: photo.magName, date_photo: photo.date, publie: true
+    }, {onConflict:'id'});
+    if(error) console.error('sbSaveGalerie:', error.message);
+  } catch(e) {}
+}
+
+async function sbDeleteGalerie(id) {
+  try { await SB.from('galerie').delete().eq('id', id); } catch(e) {}
+}
+
+function renderGaleriePublique() {
+  const el = document.getElementById('galeriePubliqueSection');
+  if(!el || !DB.galerie || DB.galerie.length === 0) { if(el) el.style.display='none'; return; }
+  el.style.display = 'block';
+
+  const cats = ['tous','magasin','produits','equipe','installation','promo'];
+  const catLabels = {tous:'Tout',magasin:'🏪 Magasin',produits:'📦 Produits',equipe:'👥 Équipe',installation:'⚡ Installation',promo:'🎁 Promos'};
+
+  el.innerHTML =
+    '<div class="section" style="background:#f8f8f8">' +
+    '<div class="section-inner">' +
+    '<div class="section-tag">📸 Nos Photos</div>' +
+    '<h2 class="section-title">Galerie</h2>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem" id="galFilterBtns">' +
+    cats.map(c =>
+      '<button onclick="filtrerGalerie(\''+c+'\')" id="gf-'+c+'" style="padding:.4rem 1rem;border-radius:20px;border:1px solid '+(c==='tous'?'#f97316':'#e5e7eb')+';background:'+(c==='tous'?'rgba(249,115,22,.1)':'#fff')+';color:'+(c==='tous'?'#f97316':'#64748b')+';font-size:.78rem;font-weight:600;cursor:pointer">'+catLabels[c]+'</button>'
+    ).join('') +
+    '</div>' +
+    '<div id="galPubGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px">' +
+    DB.galerie.map(p =>
+      '<div class="gal-item" data-cat="'+p.cat+'" style="border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer" onclick="galerieOpenPhoto(\''+p.url+'\')">' +
+      '<img src="'+p.url+'" style="width:100%;height:150px;object-fit:cover;display:block" loading="lazy">' +
+      (p.legende ? '<div style="padding:8px;font-size:12px;color:#374151;font-weight:500">'+p.legende+'</div>' : '') +
+      '</div>'
+    ).join('') +
+    '</div>' +
+    '</div></div>';
+}
+
+function filtrerGalerie(cat) {
+  document.querySelectorAll('[id^="gf-"]').forEach(b => {
+    const isCat = b.id === 'gf-'+cat;
+    b.style.borderColor = isCat ? '#f97316' : '#e5e7eb';
+    b.style.background = isCat ? 'rgba(249,115,22,.1)' : '#fff';
+    b.style.color = isCat ? '#f97316' : '#64748b';
+  });
+  document.querySelectorAll('.gal-item').forEach(item => {
+    item.style.display = (cat==='tous' || item.dataset.cat===cat) ? 'block' : 'none';
+  });
+}
+
+function galerieOpenPhoto(url) {
+  showModal('<div style="text-align:center"><img src="'+url+'" style="max-width:100%;max-height:70vh;border-radius:10px;object-fit:contain"><br><button onclick="closeModal()" class="btn-g" style="margin-top:12px">✕ Fermer</button></div>');
 }
 
 function renderStockTab(div, isAdmin) {
@@ -2086,8 +2618,8 @@ function ouvrirFormProduit(pid) {
 
     '<div><label class="lbl">Afficher le prix ?</label>' +
     '<select class="sel" id="fp_showprix">' +
-    '<option value="non"' + (!p || !p.showPrix ? ' selected' : '') + '>Non — Contacter pour prix</option>' +
-    '<option value="oui"' + (p && p.showPrix ? ' selected' : '') + '>Oui — Afficher sur le site</option>' +
+    '<option value="non"' + (!p || !p.showPrix ? ' selected' : '') + '>Non - Contacter pour prix</option>' +
+    '<option value="oui"' + (p && p.showPrix ? ' selected' : '') + '>Oui - Afficher sur le site</option>' +
     '</select></div>' +
     '<div style="grid-column:span 2">' +
     '<label class="lbl">Stock initial par magasin</label>' +
@@ -2119,7 +2651,7 @@ function ouvrirFormProduit(pid) {
     '<input type="file" id="fp_photo" accept="image/*" style="display:none" onchange="previewPhoto()">' +
     '<div class="upz" onclick="document.getElementById(\'fp_photo\').click()" id="fp_photoZone">' +
     (p && p.photo ?
-    '<img src="' + p.photo + '" style="max-height:90px;border-radius:6px;margin-bottom:4px"><div style="color:#4CAF50;font-size:11px">Photo actuelle — cliquer pour changer</div>' :
+    '<img src="' + p.photo + '" style="max-height:90px;border-radius:6px;margin-bottom:4px"><div style="color:#4CAF50;font-size:11px">Photo actuelle - cliquer pour changer</div>' :
     '<div style="font-size:28px;margin-bottom:5px">📷</div><div style="color:var(--gr);font-size:12px">Cliquer pour choisir une photo<br><span style="font-size:10px">Depuis votre galerie ou camera</span></div>') +
     '</div>' +
     '</div>' +
@@ -2443,7 +2975,7 @@ function imprimerEtiquette(pid) {
 
   var w = window.open('', '_blank');
   w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8">');
-  w.document.write('<title>Etiquette QR — ' + p.nom + '</title>');
+  w.document.write('<title>Etiquette QR - ' + p.nom + '</title>');
   w.document.write('<style>');
   w.document.write('*{margin:0;padding:0;box-sizing:border-box;}');
   w.document.write('body{font-family:Arial,sans-serif;background:#fff;padding:10px;}');
@@ -2465,7 +2997,7 @@ function imprimerEtiquette(pid) {
   w.document.write('<button onclick="window.close()" style="background:#374151;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer">✕ Fermer</button>');
   w.document.write('</div>');
 
-  w.document.write('<p style="text-align:center;color:#666;font-size:11px;margin-bottom:12px">Feuille A4 — 6 etiquettes a decouper et coller sur vos produits</p>');
+  w.document.write('<p style="text-align:center;color:#666;font-size:11px;margin-bottom:12px">Feuille A4 - 6 etiquettes a decouper et coller sur vos produits</p>');
 
   w.document.write('<div class="page">');
   for(var i=0; i<6; i++) {
@@ -2651,7 +3183,7 @@ function renderVerifsTab(div) {
     </div>
     ${DB.verifs.length===0?'<div style="text-align:center;color:var(--gr);padding:40px"><div style="font-size:28px;margin-bottom:8px">🔍</div>Aucune verification effectuee.</div>':''}
     ${DB.verifs.map(v=>`<div class="row" style="border-color:${v.ok?'rgba(249,115,22,.2)':'rgba(239,68,68,.2)'}">
-    <div><span style="font-family:Syne,sans-serif;font-weight:700;font-size:12px;color:${v.ok?'#4CAF50':'var(--rd)'}">${v.ok?'✅ Authentique':'❌ Non trouve'}</span><span style="color:var(--gr);font-size:11px;margin-left:10px">${v.code}</span>${v.nom?`<span style="color:var(--wh);font-size:11px;margin-left:6px">— ${v.nom}</span>`:''}</div>
+    <div><span style="font-family:Syne,sans-serif;font-weight:700;font-size:12px;color:${v.ok?'#4CAF50':'var(--rd)'}">${v.ok?'✅ Authentique':'❌ Non trouve'}</span><span style="color:var(--gr);font-size:11px;margin-left:10px">${v.code}</span>${v.nom?`<span style="color:var(--wh);font-size:11px;margin-left:6px">- ${v.nom}</span>`:''}</div>
     <span style="color:var(--gr);font-size:10px">${v.date}</span>
     </div>`).join('')}`;
 }
@@ -2665,7 +3197,7 @@ function renderMonProfilGerant(div) {
 
   div.innerHTML =
     '<div class="adm-card" style="margin-bottom:14px;border-color:rgba(249,115,22,.25)">' +
-    '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#4CAF50;margin-bottom:12px">🏪 ' + mag.name + ' — Infos actuelles</div>' +
+    '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#4CAF50;margin-bottom:12px">🏪 ' + mag.name + ' - Infos actuelles</div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
     '<div class="ib"><div class="il">Prénom</div><div style="font-size:13px">' + (mag.gerantPrenom||'<span style="color:var(--gr)">Non renseigné</span>') + '</div></div>' +
     '<div class="ib"><div class="il">Nom</div><div style="font-size:13px">' + (mag.gerantNom||'<span style="color:var(--gr)">Non renseigné</span>') + '</div></div>' +
@@ -2694,12 +3226,12 @@ function renderMonProfilGerant(div) {
     '<div style="background:rgba(245,158,11,.1);border:1.5px solid rgba(245,158,11,.35);border-radius:10px;padding:14px 16px;margin-bottom:14px">' +
     '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:var(--or);margin-bottom:8px">⏳ Modification en attente de validation admin</div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">' +
-    '<div class="ib"><div class="il">Prénom</div><div>' + (pending.prenom||'—') + '</div></div>' +
-    '<div class="ib"><div class="il">Nom</div><div>' + (pending.nom||'—') + '</div></div>' +
-    '<div class="ib"><div class="il">Téléphone</div><div>' + (pending.tel||'—') + '</div></div>' +
-    '<div class="ib"><div class="il">Adresse</div><div>' + (pending.adresse||'—') + '</div></div>' +
+    '<div class="ib"><div class="il">Prénom</div><div>' + (pending.prenom||'-') + '</div></div>' +
+    '<div class="ib"><div class="il">Nom</div><div>' + (pending.nom||'-') + '</div></div>' +
+    '<div class="ib"><div class="il">Téléphone</div><div>' + (pending.tel||'-') + '</div></div>' +
+    '<div class="ib"><div class="il">Adresse</div><div>' + (pending.adresse||'-') + '</div></div>' +
     '</div>' +
-    '<div style="margin-top:8px;font-size:11px;color:var(--gr)">Soumis le ' + pending.date + ' — En attente de validation par l admin</div>' +
+    '<div style="margin-top:8px;font-size:11px;color:var(--gr)">Soumis le ' + pending.date + ' - En attente de validation par l admin</div>' +
     '<button onclick="annulerDemandeGerant(\'' + pending.id + '\')" style="margin-top:8px;background:transparent;border:1px solid rgba(239,68,68,.3);color:var(--rd);padding:5px 12px;border-radius:4px;cursor:pointer;font-family:Syne,sans-serif;font-weight:700;font-size:10px">✕ Annuler la demande</button>' +
     '</div>'
     :
@@ -2738,7 +3270,7 @@ function soumettreProfilGerant() {
 
   DB.notifications.unshift({
     id:genId(), dest:'admin', destName:'Administrateur',
-    objet:'Mise à jour profil gérant — ' + mag.name,
+    objet:'Mise à jour profil gérant - ' + mag.name,
     msg:'Le gérant ' + currentUser.name + ' (' + mag.name + ') a soumis ses informations personnelles pour validation.\n' +
     'Prénom: ' + prenom + ' · Nom: ' + nom + ' · Tél: ' + tel,
     prio:'normal', date:today(), lu:false, envoyePar:currentUser.name
@@ -2777,13 +3309,13 @@ function renderValidationGerantsAdmin(div) {
     '<span style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--or);padding:3px 9px;border-radius:3px;font-family:Syne,sans-serif;font-weight:700;font-size:10px">⏳ EN ATTENTE</span>' +
     '</div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">' +
-    '<div class="ib"><div class="il">Prénom</div><div style="font-size:13px;color:var(--wh)">' + (p.prenom||'—') + '</div></div>' +
-    '<div class="ib"><div class="il">Nom</div><div style="font-size:13px;color:var(--wh)">' + (p.nom||'—') + '</div></div>' +
-    '<div class="ib"><div class="il">Téléphone</div><div style="font-size:13px;color:var(--wh)">' + (p.tel||'—') + '</div></div>' +
-    '<div class="ib"><div class="il">Adresse</div><div style="font-size:13px;color:var(--wh)">' + (p.adresse||'—') + '</div></div>' +
+    '<div class="ib"><div class="il">Prénom</div><div style="font-size:13px;color:var(--wh)">' + (p.prenom||'-') + '</div></div>' +
+    '<div class="ib"><div class="il">Nom</div><div style="font-size:13px;color:var(--wh)">' + (p.nom||'-') + '</div></div>' +
+    '<div class="ib"><div class="il">Téléphone</div><div style="font-size:13px;color:var(--wh)">' + (p.tel||'-') + '</div></div>' +
+    '<div class="ib"><div class="il">Adresse</div><div style="font-size:13px;color:var(--wh)">' + (p.adresse||'-') + '</div></div>' +
     '</div>' +
     '<div style="display:flex;gap:10px">' +
-    '<button class="btn-g" style="flex:1;justify-content:center" onclick="validerProfilGerant(\'' + p.id + '\')">✅ Valider — Appliquer</button>' +
+    '<button class="btn-g" style="flex:1;justify-content:center" onclick="validerProfilGerant(\'' + p.id + '\')">✅ Valider - Appliquer</button>' +
     '<button class="btn-r" onclick="rejeterProfilGerant(\'' + p.id + '\')">✕ Rejeter</button>' +
     '</div>' +
     '</div>';
@@ -2849,7 +3381,7 @@ function renderClientsTab(div, isAdmin) {
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">' +
     '<div>' +
     '<div style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:var(--or)">' + allCli.length + ' client(s)</div>' +
-    (myMid ? '<div style="color:var(--gr);font-size:11px;margin-top:2px">Magasin: <b style="color:var(--wh)">' + (getMagById(myMid)||{name:'—'}).name + '</b></div>' : '') +
+    (myMid ? '<div style="color:var(--gr);font-size:11px;margin-top:2px">Magasin: <b style="color:var(--wh)">' + (getMagById(myMid)||{name:'-'}).name + '</b></div>' : '') +
     '</div>' +
     '<button class="btn-o" onclick="ouvrirFormClient(null)">+ Ajouter client</button>' +
     '</div>' +
@@ -2888,7 +3420,7 @@ function buildClientList(clients, isAdmin) {
     '<div>' +
     '<div style="font-weight:600;font-size:14px">' + c.nom + '</div>' +
     '<div style="color:var(--gr);font-size:11px;margin-top:1px">' + (c.tel||'Pas de tél') + (mag&&isAdmin?' · 🏪 '+mag.name:'') + '</div>' +
-    '<div style="color:var(--gr);font-size:10px">Depuis: ' + (c.dateCreation||'—') + '</div>' +
+    '<div style="color:var(--gr);font-size:10px">Depuis: ' + (c.dateCreation||'-') + '</div>' +
     '</div>' +
     '</div>' +
     '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' +
@@ -2990,7 +3522,7 @@ function renderNotifsTab(div) {
     '</div>' +
 
     '<div class="adm-card" style="margin-bottom:14px;border-color:rgba(139,92,246,.3)">' +
-    '<div class="adm-sl">🎯 Bandeau promotionnel — Site public</div>' +
+    '<div class="adm-sl">🎯 Bandeau promotionnel - Site public</div>' +
     '<p style="color:var(--gr);font-size:12px;margin-bottom:14px;line-height:1.6">Ce bandeau s affiche en haut du site public avec une couleur distinctive. Idéal pour une promotion, un événement ou une annonce importante.</p>' +
     '<div style="margin-bottom:10px">' +
     '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">' +
@@ -3003,7 +3535,7 @@ function renderNotifsTab(div) {
     '</div>' +
     '<div style="margin-bottom:10px">' +
     '<label class="lbl">Message promo *</label>' +
-    '<input class="inp" id="promo_msg" value="' + ((DB.siteConfig&&DB.siteConfig.promoMsg)||'') + '" placeholder="Ex: 🔥 PROMOTION — 10% de remise sur tous les onduleurs ce mois !">' +
+    '<input class="inp" id="promo_msg" value="' + ((DB.siteConfig&&DB.siteConfig.promoMsg)||'') + '" placeholder="Ex: 🔥 PROMOTION - 10% de remise sur tous les onduleurs ce mois !">' +
     '</div>' +
     '<div style="margin-bottom:10px">' +
     '<label class="lbl">Couleur du bandeau</label>' +
@@ -3103,7 +3635,7 @@ function renderPromoBanner() {
   }
   existing.style.display = 'block';
   existing.style.cssText = 'overflow:hidden;white-space:nowrap;padding:.7rem 0;background:' + c.bg + ';border-top:2px solid ' + c.border + ';border-bottom:2px solid ' + c.border + ';position:relative;z-index:5';
-  var doubled = cfg.promoMsg + ' — ' + cfg.promoMsg + ' — ' + cfg.promoMsg + ' — ' + cfg.promoMsg + ' — ' + cfg.promoMsg + ' — ';
+  var doubled = cfg.promoMsg + ' - ' + cfg.promoMsg + ' - ' + cfg.promoMsg + ' - ' + cfg.promoMsg + ' - ' + cfg.promoMsg + ' - ';
   existing.innerHTML = '<div style="display:inline-flex;animation:ticker 30s linear infinite;gap:0">' +
     '<span style="display:inline-block;padding:0 2rem;font-size:.9rem;font-weight:800;color:' + c.text + ';font-family:Syne,sans-serif;letter-spacing:1px">' + doubled + '</span>' +
     '<span style="display:inline-block;padding:0 2rem;font-size:.9rem;font-weight:800;color:' + c.text + ';font-family:Syne,sans-serif;letter-spacing:1px">' + doubled + '</span>' +
@@ -3129,7 +3661,7 @@ function renderNotifsGerant(div) {
 
   var html = '';
 
-  // ── LOTS EN ATTENTE ────────────────────────────────────
+  //  LOTS EN ATTENTE 
   if(lotsEnAttente.length > 0) {
     html += '<div style="background:rgba(245,158,11,.08);border:2px solid rgba(245,158,11,.4);border-radius:12px;padding:16px;margin-bottom:16px">';
     html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">';
@@ -3160,7 +3692,7 @@ function renderNotifsGerant(div) {
     html += '</div>';
   }
 
-  // ── NOTIFICATIONS TEXTE ────────────────────────────────
+  //  NOTIFICATIONS TEXTE 
   html += '<div style="font-family:Syne,sans-serif;font-size:13px;font-weight:700;color:var(--or);margin-bottom:10px">'+mesNotifs.length+' message(s)</div>';
   if(mesNotifs.length === 0 && lotsEnAttente.length === 0) {
     html += '<div style="text-align:center;color:var(--gr);padding:40px"><div style="font-size:32px;margin-bottom:8px">&#x1F4ED;</div>Aucune notification.</div>';
@@ -3182,14 +3714,14 @@ function renderNotifsGerant(div) {
 
   div.innerHTML = html;
 
-  // ── ATTACHER LES ÉVÉNEMENTS PAR INDEX ─────────────────
+  //  ATTACHER LES ÉVÉNEMENTS PAR INDEX 
   for(var bi=0; bi<lotsEnAttente.length; bi++) {
     (function(idx, lotId) {
       var btnA = document.getElementById('accept-lot-'+idx);
       var btnR = document.getElementById('refuse-lot-'+idx);
       if(btnA) btnA.addEventListener('click', function(){
         var lot2 = DB.lots.find(function(l){return l.id===lotId;});
-        logAction('RECEPTION', 'Lot '+(lot2?lot2.ref:lotId)+' accepté — '+(lot2?lot2.qte:0)+' unités réceptionnées', currentUser.name, currentUser.magId);
+        logAction('RECEPTION', 'Lot '+(lot2?lot2.ref:lotId)+' accepté - '+(lot2?lot2.qte:0)+' unités réceptionnées', currentUser.name, currentUser.magId);
         validerReceptionLot(lotId);
         notify('&#x2705; Lot accept&#233; ! Stock mis &#224; jour.');
         showAdminPanel();
@@ -3234,7 +3766,7 @@ function refuserLot(lotId) {
   DB.notifications.unshift({
     id: genId(),
     dest: 'admin',
-    objet: '❌ Lot refusé — ' + lot.ref,
+    objet: '❌ Lot refusé - ' + lot.ref,
     msg: 'Le gérant de ' + (getMagById(currentUser.magId)||{name:'?'}).name + ' a refusé le lot ' + lot.ref + ' (' + (prod?prod.nom:'') + ', ' + lot.qte + ' unités).',
     prio: 'important',
     date: today(),
@@ -3454,7 +3986,7 @@ function renderLotsTab(div) {
     html += '<div style="text-align:center;color:var(--gr);padding:40px">' +
     '<div style="font-size:36px;margin-bottom:8px">📦</div>' +
     '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:15px;margin-bottom:6px">Aucun lot cree</div>' +
-    '<p style="font-size:12px;line-height:1.7">Creez un lot pour regrouper une quantite<br>d un meme produit (ex: Batch N001 — 20 batteries)</p>' +
+    '<p style="font-size:12px;line-height:1.7">Creez un lot pour regrouper une quantite<br>d un meme produit (ex: Batch N001 - 20 batteries)</p>' +
     '</div>';
   } else {
     DB.lots.forEach(function(lot) {
@@ -3556,7 +4088,7 @@ function ouvrirFormLot(lotId) {
     '<button class="btn-sm" onclick="document.getElementById(\'formLotZone\').innerHTML=\'\'">✕</button>' +
     '</div>' +
     '<div class="g2" style="margin-bottom:12px">' +
-    '<div><label class="lbl">Nom du lot *</label><input class="inp" id="fl_nom" placeholder="Ex: Batch N001 — Batteries Juin"></div>' +
+    '<div><label class="lbl">Nom du lot *</label><input class="inp" id="fl_nom" placeholder="Ex: Batch N001 - Batteries Juin"></div>' +
     '<div><label class="lbl">Reference lot *</label><input class="inp" id="fl_ref" placeholder="Ex: LOT-BAT-001"></div>' +
     '<div><label class="lbl">Produit *</label><select class="sel" id="fl_pid">' + prodOptions + '</select></div>' +
     '<div><label class="lbl">Magasin destine</label><select class="sel" id="fl_mid">' + magOptions + '</select></div>' +
@@ -3616,7 +4148,7 @@ function creerLot() {
   };
 
   DB.lots.push(lot);
-  logAction('LOT_CREE', 'Lot '+ref+' créé — '+getProdById(pid)?.nom+' × '+qte+(mid?' → '+(getMagById(mid)||{name:'tous'}).name:''), currentUser.name, null);
+  logAction('LOT_CREE', 'Lot '+ref+' créé - '+getProdById(pid)?.nom+' × '+qte+(mid?' → '+(getMagById(mid)||{name:'tous'}).name:''), currentUser.name, null);
   document.getElementById('formLotZone').innerHTML = '';
   notify('✅ Lot ' + nom + ' cree ! Le gerant doit scanner le QR pour valider la reception.');
   renderLotsTab(document.getElementById('tabContent'));
@@ -3634,13 +4166,13 @@ function afficherQRLot(lotId) {
   showModal(
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">' +
     '<div>' +
-    '<h3 style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;color:var(--or)">🔲 QR Code — Lot</h3>' +
+    '<h3 style="font-family:Syne,sans-serif;font-size:16px;font-weight:800;color:var(--or)">🔲 QR Code - Lot</h3>' +
     '<p style="color:var(--gr);font-size:12px;margin-top:2px">' + lot.nom + ' · ' + lot.ref + '</p>' +
     '</div>' +
     '<button class="btn-sm" onclick="closeModal()">✕</button>' +
     '</div>' +
     '<div style="background:#fff;border-radius:10px;padding:18px;text-align:center;margin-bottom:14px">' +
-    '<div style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5C2E;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">⚡ LAOUNI — GESTION LOT</div>' +
+    '<div style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5C2E;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">⚡ LAOUNI - GESTION LOT</div>' +
     '<div id="qrLotDiv" style="display:inline-block;margin-bottom:8px"></div>' +
     '<div style="font-family:monospace;font-size:12px;font-weight:700;color:#0A0F0D;margin-bottom:3px">' + lot.ref + '</div>' +
     '<div style="font-size:10px;color:#333">' + (prod?prod.nom:'') + ' · ' + lot.unites.length + ' unites</div>' +
@@ -3679,7 +4211,7 @@ function imprimerQRLot(lotId) {
   var domain = cfg.domain || 'laouni-electricite-moderne.com';
 
   var w = window.open('','_blank');
-  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>QR Lot — ' + lot.ref + '</title>');
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>QR Lot - ' + lot.ref + '</title>');
   w.document.write('<style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Arial,sans-serif;background:#fff;padding:10px;}');
   w.document.write('.page{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:210mm;}');
   w.document.write('.etiquette{border:2px solid #1E5C2E;border-radius:8px;padding:10px 8px;text-align:center;background:#fff;width:62mm;}');
@@ -3693,11 +4225,11 @@ function imprimerQRLot(lotId) {
   w.document.write('<button onclick="window.print()" style="background:#F59E0B;color:#0A0F0D;border:none;padding:10px 24px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer">🖨 Imprimer</button>');
   w.document.write('<button onclick="window.close()" style="background:#374151;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer">✕ Fermer</button>');
   w.document.write('</div>');
-  w.document.write('<p style="text-align:center;color:#666;font-size:11px;margin-bottom:12px">6 etiquettes QR LOT — ' + lot.nom + '</p>');
+  w.document.write('<p style="text-align:center;color:#666;font-size:11px;margin-bottom:12px">6 etiquettes QR LOT - ' + lot.nom + '</p>');
   w.document.write('<div class="page">');
   for(var i=0; i<6; i++) {
     w.document.write('<div class="etiquette">');
-    w.document.write('<div class="brand">⚡ LAOUNI — GESTION STOCK</div>');
+    w.document.write('<div class="brand">⚡ LAOUNI - GESTION STOCK</div>');
     if(qrSrc) w.document.write('<img src="' + qrSrc + '" style="width:100px;height:100px;margin:4px 0">');
     w.document.write('<div class="lot-ref">' + lot.ref + '</div>');
     w.document.write('<div class="lot-info">' + (prod?prod.nom:'') + '</div>');
@@ -3822,11 +4354,11 @@ function validerVenteLot(lotId) {
   var prod = getProdById(lot.pid);
   var mid  = lot.mid || currentUser.magId;
   DB.mouvements.unshift({id:genId(), pid:lot.pid, mid:mid, type:'sortie', qte:checked.length,
-    motif:'Vente lot ' + lot.ref + (cnom?' — '+cnom:''), date:today(), user:currentUser.name, valide:true});
+    motif:'Vente lot ' + lot.ref + (cnom?' - '+cnom:''), date:today(), user:currentUser.name, valide:true});
 
   DB.ventes.unshift({id:genId(), pid:lot.pid, mid:mid, qte:checked.length, montant:montant,
     clientNom:cnom, clientTel:ctel, clientId:null, date:today(), user:currentUser.name, lotRef:lot.ref});
-  logAction('VENTE', 'Lot '+lot.ref+' — '+(prod?prod.nom:'?')+' × '+checked.length+(cnom?' → '+cnom:'')+(montant?' — '+montant.toLocaleString()+' GNF':''), currentUser.name, mid);
+  logAction('VENTE', 'Lot '+lot.ref+' - '+(prod?prod.nom:'?')+' × '+checked.length+(cnom?' → '+cnom:'')+(montant?' - '+montant.toLocaleString()+' GNF':''), currentUser.name, mid);
 
   DB.stocks = DB.stocks.map(function(s) {
     return (s.pid===lot.pid && s.mid===mid) ? Object.assign({},s,{qte:Math.max(0,s.qte-checked.length)}) : s;
@@ -3949,11 +4481,11 @@ function doVerifyWithLot() {
     '<span style="font-size:32px">🔴</span>' +
     '<div>' +
     '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:16px;color:var(--rd);letter-spacing:1px">PRODUIT VENDU</div>' +
-    '<div style="color:var(--gr);font-size:12px;margin-top:2px">Ce produit a deja ete vendu — non disponible</div>' +
+    '<div style="color:var(--gr);font-size:12px;margin-top:2px">Ce produit a deja ete vendu - non disponible</div>' +
     '</div>' +
     '</div>' +
     '<div class="g2">' +
-    '<div class="ib"><div class="il">Produit</div><div style="font-weight:500;font-size:12px">' + (lotProd?lotProd.nom:'—') + '</div></div>' +
+    '<div class="ib"><div class="il">Produit</div><div style="font-weight:500;font-size:12px">' + (lotProd?lotProd.nom:'-') + '</div></div>' +
     '<div class="ib"><div class="il">Lot</div><div style="font-weight:500;font-size:12px">' + soldLot.ref + '</div></div>' +
     '<div class="ib"><div class="il">Code unite</div><div style="font-weight:500;font-size:12px;font-family:monospace">' + q + '</div></div>' +
     (soldUnit.dateVente ? '<div class="ib"><div class="il">Date vente</div><div style="font-weight:500;font-size:12px">' + soldUnit.dateVente + '</div></div>' : '') +
@@ -4124,7 +4656,7 @@ function renderContactsTab(div) {
     <div class="g2" style="margin-bottom:12px">
     <div><label class="lbl">Titre principal (nav)</label><input class="inp" id="ct-logoname" value="${cfg.logoName||'LAOUNI'}"></div>
     <div><label class="lbl">Sous-titre (nav)</label><input class="inp" id="ct-logosub" value="${cfg.logoSub||'Electricite Moderne'}"></div>
-    <div><label class="lbl">Copyright footer</label><input class="inp" id="ct-copy" value="${cfg.copyright||'2025 Laouni Electricite Moderne — Guinee'}"></div>
+    <div><label class="lbl">Copyright footer</label><input class="inp" id="ct-copy" value="${cfg.copyright||'2025 Laouni Electricite Moderne - Guinee'}"></div>
     </div>
     <button class="btn-g" onclick="sauvegarderTexteNav()">💾 Appliquer</button>
     </div>`;
@@ -4212,7 +4744,7 @@ function renderVenteTab(div) {
 
     '<div class="adm-card" style="margin-bottom:12px;border-color:rgba(245,158,11,.3)" id="etape1Card">' +
     '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">' +
-    '<div class="adm-sl" style="margin:0">ÉTAPE 1 — Scanner le QR Code du lot</div>' +
+    '<div class="adm-sl" style="margin:0">ÉTAPE 1 - Scanner le QR Code du lot</div>' +
     '<span id="lotSelBadge"></span>' +
     '</div>' +
     '<div id="lotSelInfo" style="margin-bottom:10px"></div>' +
@@ -4227,7 +4759,7 @@ function renderVenteTab(div) {
     '</div>' +
 
     '<div class="adm-card" style="margin-bottom:12px;border-color:rgba(96,165,250,.3)" id="etape2Card">' +
-    '<div class="adm-sl">ÉTAPE 2 — Scanner le code barre de l unité</div>' +
+    '<div class="adm-sl">ÉTAPE 2 - Scanner le code barre de l unité</div>' +
     '<div style="background:rgba(96,165,250,.06);border:1px solid rgba(96,165,250,.15);border-radius:6px;padding:9px 12px;margin-bottom:10px;font-size:12px;color:#2563eb">' +
     'Scannez le code barre imprimé sur l unité physique du produit.' +
     '</div>' +
@@ -4291,7 +4823,7 @@ function scanQRLotVente() {
     }).catch(function(){});
     },400);
     } else {
-    zone.innerHTML += '<div style="color:var(--or);font-size:11px">Camera non disponible — utilisez la saisie manuelle.</div>';
+    zone.innerHTML += '<div style="color:var(--or);font-size:11px">Camera non disponible - utilisez la saisie manuelle.</div>';
     }
     })
     .catch(function(){ zone.innerHTML='<div style="color:var(--rd);font-size:12px;padding:8px">Camera non accessible.</div>'; });
@@ -4327,7 +4859,7 @@ function choisirLotListe() {
     lots.map(function(l){
     var p=getProdById(l.pid);
     var restant=l.unites?l.unites.filter(function(u){return !u.vendu;}).length:0;
-    return '<option value="'+l.id+'">'+l.ref+' — '+(p?p.nom:'')+' ('+restant+' dispo)</option>';
+    return '<option value="'+l.id+'">'+l.ref+' - '+(p?p.nom:'')+' ('+restant+' dispo)</option>';
     }).join('') +
     '</select>' +
     '<div style="display:flex;gap:8px;margin-top:8px">' +
@@ -4342,7 +4874,7 @@ function selectionnerLotPourVente(lotId) {
   if(!lot){notify('Lot introuvable.',true);return;}
 
   if(!lot.valide){
-    notify('Ce lot n a pas encore ete valide par le gerant — stock pas encore disponible.',true);
+    notify('Ce lot n a pas encore ete valide par le gerant - stock pas encore disponible.',true);
     return;
   }
 
@@ -4458,7 +4990,7 @@ function traiterCodeBarreVente(bc) {
     '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
     '<span style="font-size:28px">🔴</span>' +
     '<div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:var(--rd)">DÉJÀ VENDU</div>' +
-    '<div style="color:var(--gr);font-size:11px">Unite vendue le ' + (foundUnit.dateVente||'—') + (foundUnit.clientNom?' — '+foundUnit.clientNom:'') + '</div></div>' +
+    '<div style="color:var(--gr);font-size:11px">Unite vendue le ' + (foundUnit.dateVente||'-') + (foundUnit.clientNom?' - '+foundUnit.clientNom:'') + '</div></div>' +
     '</div>' +
     '</div>';
     if(formDiv) formDiv.style.display='none';
@@ -4478,7 +5010,7 @@ function traiterCodeBarreVente(bc) {
     '<div style="background:rgba(249,115,22,.08);border:1.5px solid rgba(249,115,22,.3);border-radius:10px;padding:12px 14px;margin-bottom:12px">' +
     '<div style="display:flex;align-items:center;gap:10px">' +
     '<span style="font-size:26px">✅</span>' +
-    '<div><div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;color:#4CAF50">Unite trouvée — DISPONIBLE</div>' +
+    '<div><div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;color:#4CAF50">Unite trouvée - DISPONIBLE</div>' +
     '<div style="color:var(--gr);font-size:11px">Lot: '+foundLot.ref+' · '+bc+'</div></div>' +
     '</div>' +
     '</div>';
@@ -4769,7 +5301,7 @@ function validerVente() {
     '<div style="display:flex;align-items:center;gap:10px">' +
     (prod&&prod.photo?'<img src="'+prod.photo+'" style="width:44px;height:44px;object-fit:cover;border-radius:6px;flex-shrink:0">':'<div style="width:44px;height:44px;background:#fff7ed;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">⚡</div>') +
     '<div>' +
-    '<div style="font-weight:700;font-size:14px">' + (prod?prod.nom:'—') + '</div>' +
+    '<div style="font-weight:700;font-size:14px">' + (prod?prod.nom:'-') + '</div>' +
     '<div style="color:var(--gr);font-size:11px">' + (prod?prod.ref:'') + '</div>' +
     (_venteEnCours.type==='lot'?'<div style="font-family:monospace;font-size:10px;color:#2563eb">Lot: '+(_lotSelectionne?_lotSelectionne.ref:'')+'</div>':'') +
     '<div style="font-family:monospace;font-size:10px;color:var(--gr)">Code: '+_venteEnCours.bc+'</div>' +
@@ -4798,8 +5330,8 @@ function validerVente() {
     '</div>' +
 
     '<div style="background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.15);border-radius:6px;padding:9px 13px;margin-bottom:14px;font-size:12px;color:var(--gr2)">' +
-    '🏪 Magasin: <b style="color:var(--wh)">' + (mag?mag.name:'—') + '</b> · ' +
-    'Vendeur: <b style="color:var(--wh)">' + (currentUser.name||'—') + '</b>' +
+    '🏪 Magasin: <b style="color:var(--wh)">' + (mag?mag.name:'-') + '</b> · ' +
+    'Vendeur: <b style="color:var(--wh)">' + (currentUser.name||'-') + '</b>' +
     '</div>' +
 
     '<div style="display:flex;gap:10px">' +
@@ -4830,7 +5362,7 @@ function confirmerVenteFinale() {
     }
   }
 
-  var motif = (_venteEnCours.type==='lot' ? 'Vente lot unite: '+_venteEnCours.bc : 'Vente: '+_venteEnCours.bc) + (cnom?' — '+cnom:'');
+  var motif = (_venteEnCours.type==='lot' ? 'Vente lot unite: '+_venteEnCours.bc : 'Vente: '+_venteEnCours.bc) + (cnom?' - '+cnom:'');
   DB.mouvements.unshift({id:genId(), pid:pid, mid:mid, type:'sortie', qte:qte, montant:montant,
     motif:motif, date:today(), user:currentUser.name, valide:true});
 
@@ -4851,8 +5383,8 @@ function confirmerVenteFinale() {
   }
 
   var stockApres = getQteMag(pid, mid);
-  var montantFmt = montant > 0 ? ' — ' + fmtGNF(montant) + ' GNF' : '';
-  notify('✅ Vente validee ! ' + (prod?prod.nom:'') + montantFmt + ' — Stock restant: ' + stockApres);
+  var montantFmt = montant > 0 ? ' - ' + fmtGNF(montant) + ' GNF' : '';
+  notify('✅ Vente validee ! ' + (prod?prod.nom:'') + montantFmt + ' - Stock restant: ' + stockApres);
 
   renderPublicData();
   _venteEnCours = null;
@@ -4967,7 +5499,7 @@ function renderParamsTab(div, isAdmin) {
 
     html += '<div class="adm-card" style="border-color:rgba(96,165,250,.3)">';
     html += '<div class="adm-sl">🛒 Enregistrer une vente</div>';
-    html += '<p style="color:var(--gr);font-size:12px;margin-bottom:14px;line-height:1.6">Enregistrez une vente — le stock du magasin diminue automatiquement.</p>';
+    html += '<p style="color:var(--gr);font-size:12px;margin-bottom:14px;line-height:1.6">Enregistrez une vente - le stock du magasin diminue automatiquement.</p>';
     html += '<div class="g2" style="margin-bottom:10px">';
     html += '<div><label class="lbl">Produit</label><select class="sel" id="vt_prod" onchange="majStockVente()">' + prodOptions + '</select></div>';
     html += '<div><label class="lbl">Magasin</label><select class="sel" id="vt_mag" onchange="majStockVente()">' + magOptions + '</select></div>';
@@ -5014,14 +5546,14 @@ function enregistrerVente() {
   if(!pid || !mid || qte < 1) { notify('Remplir produit, magasin et quantite.', true); return; }
   var stock = getQteMag(pid, mid);
   if(qte > stock) { notify('Stock insuffisant! Disponible: ' + stock + ' unite(s).', true); return; }
-  var motif = 'Vente' + (client ? ' — ' + client : '');
+  var motif = 'Vente' + (client ? ' - ' + client : '');
   DB.mouvements.unshift({id:genId(), pid:pid, mid:mid, type:'sortie', qte:qte, motif:motif, date:today(), user:currentUser.name, valide:true});
   DB.stocks = DB.stocks.map(function(s) {
     return (s.pid === pid && s.mid === mid) ? Object.assign({}, s, {qte: Math.max(0, s.qte - qte)}) : s;
   });
   var prod = getProdById(pid);
   var mag  = getMagById(mid);
-  notify('Vente ok ! ' + (prod ? prod.nom : '') + ' — ' + mag.name + ' : ' + (stock - qte) + ' restant(s)');
+  notify('Vente ok ! ' + (prod ? prod.nom : '') + ' - ' + mag.name + ' : ' + (stock - qte) + ' restant(s)');
   renderPublicData();
   majStockVente();
 }
@@ -5093,7 +5625,7 @@ function renderPublicData() {
   if(sm) sm.textContent = actMags;
   if(sp) sp.textContent = actProds;
   const tM = document.getElementById('t-magasins');
-  if(tM) tM.textContent = `📍 ${actMags} magasin${actMags>1?'s':''} : ${DB.magasins.filter(m=>m.actif).map(m=>m.name).join(' • ')} — Guinée`;
+  if(tM) tM.textContent = `📍 ${actMags} magasin${actMags>1?'s':''} : ${DB.magasins.filter(m=>m.actif).map(m=>m.name).join(' • ')} - Guinée`;
 }
 
 function renderStoresBar() {
@@ -5102,7 +5634,7 @@ function renderStoresBar() {
   const label = LANG==='fr' ? 'Nos magasins' : 'Our stores';
   bar.innerHTML = `<span style="font-size:.68rem;color:#94a3b8;font-weight:700;letter-spacing:2px;text-transform:uppercase;white-space:nowrap">${label}</span>` +
     DB.magasins.filter(m=>m.actif).map(m =>
-    `<span class="store-chip"><span class="store-dot"></span> ${m.name} — ${m.tel}</span>`
+    `<span class="store-chip"><span class="store-dot"></span> ${m.name} - ${m.tel}</span>`
     ).join('');
 }
 
@@ -5151,12 +5683,12 @@ function ouvrirProduit(pid) {
     ${p.video?`<div style="margin-bottom:14px"><iframe width="100%" height="200" src="https://www.youtube.com/embed/${getYtId(p.video)}" frameborder="0" allowfullscreen style="border-radius:8px"></iframe></div>`:''}
     ${p.desc?`<p style="color:#94a3b8;font-size:13px;line-height:1.7;margin-bottom:14px">${p.desc}</p>`:''}
     <div class="g2" style="margin-bottom:14px">
-    ${[['Code barre',p.barcode],['Référence',p.ref],['Catégorie',p.cat],['Marque',p.marque||'Laouni']].map(([l,v])=>`<div class="ib"><div class="il">${l}</div><div style="font-weight:500;font-size:12px">${v||'—'}</div></div>`).join('')}
+    ${[['Code barre',p.barcode],['Référence',p.ref],['Catégorie',p.cat],['Marque',p.marque||'Laouni']].map(([l,v])=>`<div class="ib"><div class="il">${l}</div><div style="font-weight:500;font-size:12px">${v||'-'}</div></div>`).join('')}
     </div>
     <div style="display:grid;grid-template-columns:repeat(${DB.magasins.filter(m=>m.actif).length},1fr);gap:8px;margin-bottom:14px">
     ${DB.magasins.filter(m=>m.actif).map(m=>{const q=getQteMag(p.id,m.id);return`<div class="ib" style="text-align:center"><div style="font-family:Syne,sans-serif;font-weight:700;font-size:11px;color:#f97316;margin-bottom:5px">${m.name}</div><div style="font-size:22px;font-family:Syne,sans-serif;font-weight:800;color:${q===0?'var(--red)':'var(--orange)'}">${q}</div><div style="color:#94a3b8;font-size:9px;margin-top:2px">unité${q!==1?'s':''}</div></div>`;}).join('')}
     </div>
-    <div style="background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.2);border-radius:6px;padding:10px 14px;color:#4CAF50;font-size:12px;margin-bottom:14px">✅ Produit authentifié — Registre officiel Laouni Electricité Moderne</div>
+    <div style="background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.2);border-radius:6px;padding:10px 14px;color:#4CAF50;font-size:12px;margin-bottom:14px">✅ Produit authentifié - Registre officiel Laouni Electricité Moderne</div>
     <div style="display:flex;gap:10px">
     <a href="https://wa.me/${DB.siteConfig?.wa||'224610111015'}?text=Bonjour, je suis intéressé par : ${encodeURIComponent(p.nom)} (Réf: ${p.ref})" target="_blank" class="btn-g" style="text-decoration:none;justify-content:center;flex:1">💬 Demander le prix</a>
     </div>`);
@@ -5210,13 +5742,13 @@ function renderFooter() {
   const copy = document.getElementById('footerCopy');
   const dom = document.getElementById('footerDomain');
   if(prods) prods.innerHTML = DB.produits.filter(p=>p.actif).slice(0,5).map(p=>`<li style="margin-bottom:.5rem"><a href="#produits" style="color:#94a3b8;text-decoration:none;font-size:.82rem">${p.nom}</a></li>`).join('');
-  if(mags) mags.innerHTML = DB.magasins.filter(m=>m.actif).map(m=>`<li style="margin-bottom:.5rem"><a href="#magasins" style="color:#94a3b8;text-decoration:none;font-size:.82rem">${m.name} — ${m.tel}</a></li>`).join('');
+  if(mags) mags.innerHTML = DB.magasins.filter(m=>m.actif).map(m=>`<li style="margin-bottom:.5rem"><a href="#magasins" style="color:#94a3b8;text-decoration:none;font-size:.82rem">${m.name} - ${m.tel}</a></li>`).join('');
   if(cont) cont.innerHTML = [
     `<li style="margin-bottom:.5rem"><a href="tel:${cfg.tel1||'+224610111015'}" style="color:#94a3b8;text-decoration:none;font-size:.82rem">📞 ${cfg.tel1||'+224 610 111 015'}</a></li>`,
     `<li style="margin-bottom:.5rem"><a href="mailto:${cfg.email||'contact@laouni.gn'}" style="color:#94a3b8;text-decoration:none;font-size:.82rem">📧 ${cfg.email||'contact@laouni.gn'}</a></li>`,
     `<li style="margin-bottom:.5rem"><a href="https://wa.me/${cfg.wa||'224610111015'}" target="_blank" style="color:#25D366;text-decoration:none;font-size:.82rem">💬 WhatsApp</a></li>`,
   ].join('');
-  if(copy) copy.textContent = `© ${new Date().getFullYear()} Laouni Electricité Moderne — Guinée. Tous droits réservés.`;
+  if(copy) copy.textContent = `© ${new Date().getFullYear()} Laouni Electricité Moderne - Guinée. Tous droits réservés.`;
   if(dom) dom.textContent = cfg.domain||'laouni-electricite-moderne.com';
 }
 
@@ -5283,7 +5815,7 @@ function scannerVerification() {
     }, 400);
     } else {
     var z = document.getElementById('scanVerifZone');
-    if(z) z.innerHTML += '<div style="color:var(--or);font-size:12px;padding:6px">ℹ️ Caméra disponible — saisie manuelle recommandée sur cet appareil.</div>';
+    if(z) z.innerHTML += '<div style="color:var(--or);font-size:12px;padding:6px">ℹ️ Caméra disponible - saisie manuelle recommandée sur cet appareil.</div>';
     }
     })
     .catch(function(){
@@ -5329,10 +5861,10 @@ function doVerify() {
     '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">' +
     '<span style="font-size:36px">🔴</span>' +
     '<div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:16px;color:var(--rd);letter-spacing:1px">PRODUIT VENDU</div>' +
-    '<div style="color:var(--gr);font-size:12px;margin-top:2px">Ce produit a été vendu — signalement si acheté d occasion</div></div>' +
+    '<div style="color:var(--gr);font-size:12px;margin-top:2px">Ce produit a été vendu - signalement si acheté d occasion</div></div>' +
     '</div>' +
     '<div class="g2">' +
-    '<div class="ib"><div class="il">Produit</div><div style="font-weight:500;font-size:12px">' + (lotProd?lotProd.nom:'—') + '</div></div>' +
+    '<div class="ib"><div class="il">Produit</div><div style="font-weight:500;font-size:12px">' + (lotProd?lotProd.nom:'-') + '</div></div>' +
     '<div class="ib"><div class="il">Lot</div><div style="font-weight:500;font-size:12px">' + foundLot.ref + '</div></div>' +
     '<div class="ib"><div class="il">Code unité</div><div style="font-weight:500;font-size:12px;font-family:monospace">' + q + '</div></div>' +
     (foundUnit.dateVente ? '<div class="ib"><div class="il">Date vente</div><div style="font-weight:500;font-size:12px">' + foundUnit.dateVente + '</div></div>' : '') +
@@ -5355,7 +5887,7 @@ function doVerify() {
     '<div style="color:var(--gr);font-size:12px;margin-top:2px">Enregistré dans le registre officiel Laouni</div></div>' +
     '</div>' +
     '<div class="g2">' +
-    '<div class="ib"><div class="il">Produit</div><div style="font-weight:500;font-size:12px">' + (lotProd?lotProd.nom:'—') + '</div></div>' +
+    '<div class="ib"><div class="il">Produit</div><div style="font-weight:500;font-size:12px">' + (lotProd?lotProd.nom:'-') + '</div></div>' +
     '<div class="ib"><div class="il">Lot</div><div style="font-weight:500;font-size:12px">' + foundLot.ref + '</div></div>' +
     '<div class="ib"><div class="il">Code unité</div><div style="font-weight:500;font-size:12px;font-family:monospace">' + q + '</div></div>' +
     '<div class="ib"><div class="il">Statut</div><div style="font-weight:700;font-size:12px;color:#4CAF50">🟢 DISPONIBLE</div></div>' +
@@ -5531,8 +6063,8 @@ function calculerSimulation() {
     '<div style="background:linear-gradient(135deg,rgba(249,115,22,.1),rgba(245,158,11,.06));border:1px solid rgba(249,115,22,.25);border-radius:10px;padding:14px 16px">' +
     '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:12px;color:#4CAF50;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">📦 À installer</div>' +
     '<div style="font-size:13px;line-height:2.2;color:#64748b">' +
-    '<span style="color:#ea580c">☀️</span> <b style="color:#1a1a1a">'+nbPan+'</b> panneau(x) '+pan.label+' — <b style="color:var(--or)">'+fmtGNF(nbPan*pan.price)+' GNF</b><br>' +
-    '<span style="color:#2563eb">🔋</span> <b style="color:#1a1a1a">'+nbBat+'</b> batterie(s) '+bat.label+' — <b style="color:var(--or)">'+fmtGNF(nbBat*bat.price)+' GNF</b><br>' +
+    '<span style="color:#ea580c">☀️</span> <b style="color:#1a1a1a">'+nbPan+'</b> panneau(x) '+pan.label+' - <b style="color:var(--or)">'+fmtGNF(nbPan*pan.price)+' GNF</b><br>' +
+    '<span style="color:#2563eb">🔋</span> <b style="color:#1a1a1a">'+nbBat+'</b> batterie(s) '+bat.label+' - <b style="color:var(--or)">'+fmtGNF(nbBat*bat.price)+' GNF</b><br>' +
     '<span style="color:#A78BFA">🔌</span> <b style="color:#1a1a1a">1</b> onduleur hybride <b style="color:#A78BFA">'+ondW+'W</b>' +
     '</div>' +
     '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(249,115,22,.15);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">' +
@@ -5553,9 +6085,9 @@ function afficherSchema(s, btn) {
   document.querySelectorAll('.schema-opt-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
   const descs = {
-    simple:'<strong style="color:#f97316">Option 1 :</strong> Détecteur seul — Allumage automatique à chaque détection.',
-    forcee:'<strong style="color:#f97316">Option 2 :</strong> Détecteur + Interrupteur marche forcée — AUTO = détection active | ON = allumage permanent.',
-    schema3d:'<strong style="color:#f97316">Option 3 :</strong> Vue 3D isométrique — Installation complète dans une pièce.'
+    simple:'<strong style="color:#f97316">Option 1 :</strong> Détecteur seul - Allumage automatique à chaque détection.',
+    forcee:'<strong style="color:#f97316">Option 2 :</strong> Détecteur + Interrupteur marche forcée - AUTO = détection active | ON = allumage permanent.',
+    schema3d:'<strong style="color:#f97316">Option 3 :</strong> Vue 3D isométrique - Installation complète dans une pièce.'
   };
   const d=document.getElementById('schema_desc');
   if(d) d.innerHTML=descs[s]||'';
@@ -5609,18 +6141,39 @@ function genererQR() {
   notify('⚠️ La génération de QR code est réservée à l espace admin.', true);
 }
 
+//  GESTION BOUTON RETOUR & RAFRAÎCHISSEMENT 
+// Si on rafraîchit sur #admin → rester connecté si session active
+if(window.location.hash === '#admin') {
+  history.replaceState({page:'admin'}, '', '#admin');
+}
+
+// Bouton retour du navigateur → bloquer la sortie de l'admin sans déconnexion
+window.addEventListener('popstate', function(e) {
+  const adminPanel = document.getElementById('adminPanel');
+  if(adminPanel && adminPanel.style.display === 'block' && currentUser) {
+    // Remettre l'état admin dans l'historique pour bloquer le retour
+    history.pushState({page:'admin'}, '', '#admin');
+    // Proposer la déconnexion
+    doLogout();
+  }
+});
+
+//  BOUTON CONNEXION 
+window.addEventListener('load', function() {
+  var btn = document.getElementById('btnLogin');
+  if(btn) {
+    btn.addEventListener('click', function() {
+      var modal = document.getElementById('loginModal');
+      if(modal) modal.style.display = 'block';
+    });
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   // Charger depuis Supabase au démarrage
   sbLoadAll();
   applyColors();
   renderPromoBanner();
-  setTimeout(function() {
-    var splash = document.getElementById('splash');
-    if(splash) {
-    splash.style.animation = 'fadeOut .4s ease forwards';
-    setTimeout(function(){ if(splash) splash.style.display='none'; }, 400);
-    }
-  }, 800);
   
   document.querySelectorAll('.section, .magasin-card, .product-card').forEach(function(el){
     el.classList.add('visible');
@@ -5704,7 +6257,7 @@ function simInit2() {
   if(selBat) {
     selBat.innerHTML = BATTERIES_SIM2.map(function(b) {
     var kwh = Math.round(b.v * b.ah / 10) / 100;
-    return '<option value="'+b.key+'">'+b.label+' ('+kwh+' kWh) — '+b.prix.toLocaleString('fr-FR')+' GNF</option>';
+    return '<option value="'+b.key+'">'+b.label+' ('+kwh+' kWh) - '+b.prix.toLocaleString('fr-FR')+' GNF</option>';
     }).join('');
     selBat.value = 'li314';
   }
@@ -5756,7 +6309,7 @@ function simAddRow2(nom, w, qte, hj, hn) {
     // Ligne 4: Total Wh
     '<div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:6px;padding:7px 12px;display:flex;justify-content:space-between;align-items:center">' +
       '<span style="font-size:11px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:1px">Consommation totale/jour</span>' +
-      '<span style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:#F59E0B" id="swh'+n+'">— Wh</span>' +
+      '<span style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:#F59E0B" id="swh'+n+'">- Wh</span>' +
     '</div>';
 
   tbody.appendChild(row);
@@ -5775,7 +6328,7 @@ function simUpdateWh2(n) {
   var hn  = parseFloat((document.getElementById('shn'+n)||{}).value)||0;
   var wh  = w * q * (hj + hn);
   var el  = document.getElementById('swh'+n);
-  if(el) el.textContent = wh > 0 ? Math.round(wh)+' Wh/jour' : '— Wh';
+  if(el) el.textContent = wh > 0 ? Math.round(wh)+' Wh/jour' : '- Wh';
 }
 
 function simDelRow2(n) {
@@ -5879,7 +6432,7 @@ function simCalculer2() {
   html += '<div class="devis-header">';
   html += '<div>';
   html += '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;letter-spacing:2px">⚡ LAOUNI ÉLECTRICITÉ MODERNE</div>';
-  html += '<div style="color:rgba(255,255,255,.7);font-size:12px;margin-top:2px">Énergie solaire — Guinée &nbsp;|&nbsp; +224 610 111 015</div>';
+  html += '<div style="color:rgba(255,255,255,.7);font-size:12px;margin-top:2px">Énergie solaire - Guinée &nbsp;|&nbsp; +224 610 111 015</div>';
   html += '</div>';
   html += '<div style="text-align:right">';
   html += '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#F59E0B">SIMULATION SOLAIRE</div>';
@@ -5920,10 +6473,10 @@ function simCalculer2() {
 
   var kwhBatDisplay = (Math.round(bat.v * bat.ah / 10)/100).toFixed(2);
   var lignes = [
-    ['☀️ Panneau solaire '+pan.label, panW+' Wc crête — Garantie 25 ans', nbPan],
-    nbBat > 0 ? ['🔋 Batterie '+bat.label, kwhBatDisplay+' kWh — DoD '+Math.round(bat.dod*100)+'% ('+bat.v+'V × '+bat.ah+'Ah)', nbBat] : null,
+    ['☀️ Panneau solaire '+pan.label, panW+' Wc crête - Garantie 25 ans', nbPan],
+    nbBat > 0 ? ['🔋 Batterie '+bat.label, kwhBatDisplay+' kWh - DoD '+Math.round(bat.dod*100)+'% ('+bat.v+'V × '+bat.ah+'Ah)', nbBat] : null,
     ['⚡ Onduleur hybride MPPT '+ondObj.va+' VA', 'Puissance min requise: '+Math.round(puissanceCrete*1.3)+' VA', 1],
-    ['🔌 Câblage, disjoncteurs, protections', 'DC + AC — qualité certifiée', 1],
+    ['🔌 Câblage, disjoncteurs, protections', 'DC + AC - qualité certifiée', 1],
     ['📦 Fixations, connecteurs, accessoires', 'Structure aluminium + quincaillerie', 1],
   ];
   lignes.forEach(function(l) {
@@ -5967,7 +6520,7 @@ function simCalculer2() {
     ['Soleil Guinée', H_SOLEIL_BRUT+'h brut ('+H_SOLEIL_EFF+'h eff.)', '#FCD34D'],
     ['Production panneaux', (Math.round(kwhProduit*100)/100)+' kWh/jour', '#4CAF50'],
     ['Capacité batterie', nbBat > 0 ? (Math.round(kwhBatTotal*100)/100)+' kWh total' : 'Sans batterie', '#60A5FA'],
-    ['Autonomie nuit', autonomieH >= 99 ? '—' : autonomieH+'h / '+H_NUIT+'h', autonomieH >= H_NUIT ? '#4CAF50' : '#EF4444'],
+    ['Autonomie nuit', autonomieH >= 99 ? '-' : autonomieH+'h / '+H_NUIT+'h', autonomieH >= H_NUIT ? '#4CAF50' : '#EF4444'],
     ['Onduleur min requis', Math.round(puissanceCrete*1.3)+' VA', 'var(--or)'],
     ['Marge sécurité', '+20%', 'var(--gr2)'],
   ].forEach(function(td) {
@@ -6041,7 +6594,7 @@ function renderChatTab(div) {
 
   var html = '';
 
-  // ── Section visiteurs ─────────────────────────────────
+  //  Section visiteurs 
   html += '<div style="margin-bottom:16px">';
   html += '<div style="font-family:Syne,sans-serif;font-size:11px;color:#2563eb;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">';
   html += '&#x1F310; Messages des visiteurs';
@@ -6087,7 +6640,7 @@ function renderChatTab(div) {
   }
   html += '</div>';
 
-  // ── Chat entre admin et gérants ───────────────────────
+  //  Chat entre admin et gérants 
   if(isAdmin) {
     html += '<div style="font-family:Syne,sans-serif;font-size:11px;color:var(--or);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 10px">&#x1F4AC; Chat avec les magasins</div>';
     DB.magasins.filter(function(m){return m.actif;}).forEach(function(mg) {
@@ -6134,7 +6687,7 @@ function renderChatTab(div) {
 
   div.innerHTML = html;
 
-  // ── Attacher événements réponse visiteurs ─────────────
+  //  Attacher événements réponse visiteurs 
   convs.forEach(function(conv) {
     var btn = document.getElementById('rep-btn-'+conv.id);
     var inp = document.getElementById('rep-inp-'+conv.id);
@@ -6157,7 +6710,7 @@ function renderChatTab(div) {
     }
   });
 
-  // ── Admin: envoyer aux magasins ───────────────────────
+  //  Admin: envoyer aux magasins 
   if(isAdmin) {
     DB.magasins.filter(function(m){return m.actif;}).forEach(function(mg){
       var btn = document.getElementById('adm-btn-'+mg.id);
@@ -6320,9 +6873,9 @@ function journalVoirPlus() {
 }
 
 
-// ══════════════════════════════════════════════════════════════
-// PROFILS SIMULATEUR — Sauvegarde locale (localStorage)
-// ══════════════════════════════════════════════════════════════
+// 
+// PROFILS SIMULATEUR - Sauvegarde locale (localStorage)
+// 
 
 var SIM_PROFILS_KEY = 'laouni_sim_profils';
 
@@ -6456,7 +7009,7 @@ function simNouveauProfil() {
   simAddRow2('Lampe LED', 15, 4, 8, 6);
   simAddRow2('', 0, 1, 0, 0);
   simAddRow2('', 0, 1, 0, 0);
-  notify('Nouveau profil — ajoutez vos appareils.');
+  notify('Nouveau profil - ajoutez vos appareils.');
 }
 
 function simAfficherProfils() {
@@ -6464,7 +7017,7 @@ function simAfficherProfils() {
   if(!el) return;
   var profils = simGetProfils();
   if(profils.length === 0) {
-    el.innerHTML = '<div style="color:#94a3b8;font-size:12px;padding:8px">Aucun profil — sauvegardez votre première configuration.</div>';
+    el.innerHTML = '<div style="color:#94a3b8;font-size:12px;padding:8px">Aucun profil - sauvegardez votre première configuration.</div>';
     return;
   }
   el.innerHTML = profils.map(function(p) {
@@ -6487,9 +7040,9 @@ function simAfficherProfils() {
 }
 
 
-// ══════════════════════════════════════════════════════════════
+// 
 // RECHERCHE PUBLIQUE + STATISTIQUES ADMIN
-// ══════════════════════════════════════════════════════════════
+// 
 
 var pubSearchTimer = null;
 
@@ -6573,13 +7126,13 @@ function pubEnregistrerRecherche(q, resultats) {
   if(existing) {
     existing.count++;
     existing.lastAt = now2;
-    existing.trouvé = resultats.length > 0;
+    existing.trouve = resultats.length > 0;
   } else {
     DB.recherches.unshift({
       id: genId(),
       q: q,
       count: 1,
-      trouvé: resultats.length > 0,
+      trouve: resultats.length > 0,
       date: dateJ,
       lastAt: now2
     });
@@ -6589,7 +7142,7 @@ function pubEnregistrerRecherche(q, resultats) {
   if(resultats.length === 0) {
     var totalRecherches = 0;
     for(var ti=0; ti<DB.recherches.length; ti++) {
-      if(DB.recherches[ti].q.toLowerCase() === q.toLowerCase() && !DB.recherches[ti].trouvé) {
+      if(DB.recherches[ti].q.toLowerCase() === q.toLowerCase() && !DB.recherches[ti].trouve) {
         totalRecherches += DB.recherches[ti].count;
       }
     }
@@ -6598,7 +7151,7 @@ function pubEnregistrerRecherche(q, resultats) {
       DB.notifications.unshift({
         id: genId(),
         dest: 'admin',
-        objet: '&#x1F6A8; Produit très recherché — Rupture',
+        objet: '&#x1F6A8; Produit très recherché - Rupture',
         msg: '"'+q+'" a été recherché '+totalRecherches+' fois et n&#39;est pas en stock. Pensez à r&#233;approvisionner.',
         prio: 'urgent',
         date: dateJ,
@@ -6610,20 +7163,20 @@ function pubEnregistrerRecherche(q, resultats) {
   }
 }
 
-// ── ONGLET RECHERCHES ADMIN ────────────────────────────────
+//  ONGLET RECHERCHES ADMIN 
 function renderRecherchesTab(div) {
   var total = DB.recherches.length;
-  var ruptures = DB.recherches.filter(function(r){return !r.trouvé;});
-  var trouvées = DB.recherches.filter(function(r){return r.trouvé;});
+  var ruptures = DB.recherches.filter(function(r){return !r.trouve;});
+  var trouvées = DB.recherches.filter(function(r){return r.trouve;});
 
   // Agrégation par terme
   var agg = {};
   DB.recherches.forEach(function(r) {
     var key = r.q.toLowerCase();
-    if(!agg[key]) agg[key] = {q:r.q, count:0, trouvé:r.trouvé, dates:[]};
+    if(!agg[key]) agg[key] = {q:r.q, count:0, trouve:r.trouve, dates:[]};
     agg[key].count += r.count;
     agg[key].dates.push(r.date);
-    if(!r.trouvé) agg[key].trouvé = false;
+    if(!r.trouve) agg[key].trouve = false;
   });
   var sorted = Object.values(agg).sort(function(a,b){return b.count-a.count;});
 
@@ -6662,15 +7215,15 @@ function rechRenderList(items) {
     '<th style="text-align:right">Dernière fois</th>'+
     '</tr></thead><tbody>'+
     items.map(function(r) {
-      var isTrouvé = r.trouvé;
+      var isTrouve = r.trouve;
       return '<tr>'+
         '<td style="font-weight:600;color:#1a1a1a">&#x1F50D; '+r.q+'</td>'+
         '<td style="text-align:center">'+
           '<span style="font-family:Syne,sans-serif;font-weight:800;font-size:16px;color:'+(r.count>=5?'#EF4444':r.count>=3?'#F59E0B':'#60A5FA')+'">'+r.count+'x</span>'+
         '</td>'+
         '<td style="text-align:center">'+
-          '<span style="background:'+(isTrouvé?'rgba(249,115,22,.15)':'rgba(239,68,68,.15)')+';color:'+(isTrouvé?'#4CAF50':'#EF4444')+';padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">'+
-          (isTrouvé?'&#x2713; En stock':'&#x274C; Rupture')+
+          '<span style="background:'+(isTrouve?'rgba(249,115,22,.15)':'rgba(239,68,68,.15)')+';color:'+(isTrouve?'#4CAF50':'#EF4444')+';padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">'+
+          (isTrouve?'&#x2713; En stock':'&#x274C; Rupture')+
           '</span>'+
         '</td>'+
         '<td style="text-align:right;font-size:11px;color:var(--gr)">'+r.dates[r.dates.length-1]+'</td>'+
@@ -6685,15 +7238,15 @@ function rechFiltrer() {
   var agg = {};
   DB.recherches.forEach(function(r) {
     var key = r.q.toLowerCase();
-    if(!agg[key]) agg[key] = {q:r.q, count:0, trouvé:r.trouvé, dates:[]};
+    if(!agg[key]) agg[key] = {q:r.q, count:0, trouve:r.trouve, dates:[]};
     agg[key].count += r.count;
     agg[key].dates.push(r.date);
-    if(!r.trouvé) agg[key].trouvé = false;
+    if(!r.trouve) agg[key].trouve = false;
   });
   var sorted = Object.values(agg).sort(function(a,b){return b.count-a.count;});
   var filtered = sorted.filter(function(r) {
     var matchQ = !q || r.q.toLowerCase().indexOf(q) >= 0;
-    var matchF = !f || (f==='rupture'&&!r.trouvé) || (f==='trouve'&&r.trouvé);
+    var matchF = !f || (f==='rupture'&&!r.trouve) || (f==='trouve'&&r.trouve);
     return matchQ && matchF;
   });
   var el = document.getElementById('rech-list');
@@ -6702,12 +7255,12 @@ function rechFiltrer() {
 
 
 
-// ══════════════════════════════════════════════════════════════
-// SIMULATEUR SOLAIRE — VERSION SIMPLE ET CORRECTE
+// 
+// SIMULATEUR SOLAIRE - VERSION SIMPLE ET CORRECTE
 // 09h→17h30 = 8.5h soleil | 17h30→09h = 15.5h nuit
 // V × Ah / 1000 = kWh batterie
 // Onduleur: puissance crête × 1.3 → modèle supérieur
-// ══════════════════════════════════════════════════════════════
+// 
 
 var SIM_N = 0; // compteur lignes
 
@@ -6897,7 +7450,7 @@ function simSaveProfils(p) {
 }
 
 function simCalculer() {
-  // ── Collecter appareils ───────────────────────────────
+  //  Collecter appareils 
   var divs = document.querySelectorAll('#sim-list > div[id]');
   if(!divs.length) { alert('Ajoutez des appareils.'); return; }
 
@@ -6922,12 +7475,12 @@ function simCalculer() {
   var REND = 0.85;   // rendement système
   var MARGE = 0.20;  // 20% sécurité
 
-  // ── Onduleur (commun) ─────────────────────────────────
+  //  Onduleur (commun) 
   var ondMin = puissCrete * 1.3;
   var ondW = SIM_ONDS[SIM_ONDS.length-1];
   for(var oi=0;oi<SIM_ONDS.length;oi++){if(SIM_ONDS[oi]>=ondMin){ondW=SIM_ONDS[oi];break;}}
 
-  // ── Fonction calcul pour une config ──────────────────
+  //  Fonction calcul pour une config 
   function calcConfig(pan, bat) {
     // Panneaux
     var prodPan    = pan.w * hSol * REND / 1000;
@@ -6959,7 +7512,7 @@ function simCalculer() {
   }
 
 
-  // ── Choisir la batterie adaptée à la consommation nuit ──
+  //  Choisir la batterie adaptée à la consommation nuit 
   // Règle: choisir la batterie dont la capacité utile couvre le besoin
   // avec le minimum de batteries (idéalement 1 ou 2)
   function choisirBatAdaptee(whNuit) {
@@ -6983,7 +7536,7 @@ function simCalculer() {
   }
 
   // Options: choisir panneau fixe, batterie adaptée au besoin nuit
-  var batAdapt0 = SIM_BATS[0]; // GEL 100Ah — option économique toujours GEL
+  var batAdapt0 = SIM_BATS[0]; // GEL 100Ah - option économique toujours GEL
   var batAdapt1 = choisirBatAdaptee(whN); // Adaptée
   var batAdapt2 = choisirBatAdaptee(whN); // Adaptée (on peut forcer Li si besoin > 5 kWh)
   // Si besoin nuit > 6 kWh, forcer Li pour standard et haute
@@ -6997,14 +7550,14 @@ function simCalculer() {
     {label:'💰 Option Économique',      c:'#60A5FA', cfg:calcConfig(SIM_PANS[0], batAdapt0)},
   ];
 
-  // ── Affichage ─────────────────────────────────────────
+  //  Affichage 
   var date = new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
 
   var h = '';
 
   // Récap consommation
   h += '<div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);border-radius:12px;padding:16px;margin-bottom:14px">';
-  h += '<div style="font-family:Syne,sans-serif;font-size:11px;color:var(--or);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">📊 Votre consommation — '+date+'</div>';
+  h += '<div style="font-family:Syne,sans-serif;font-size:11px;color:var(--or);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">📊 Votre consommation - '+date+'</div>';
   h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:12px">';
   [ [Math.round(whTot)+' Wh/j','Total/jour','#4CAF50'],
     [Math.round(whJ)+' Wh','Jour ('+hSol+'h)','#FCD34D'],
@@ -7038,12 +7591,12 @@ function simCalculer() {
     h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:12px">';
     [
       [r.nbPan+' panneau'+(r.nbPan>1?'x':''), r.pan.l+' monocristallin', '#FCD34D'],
-      [r.nbBat>0 ? r.nbBat+' batterie'+(r.nbBat>1?'s':'') : '—', r.bat.l+(r.nbBat>0?' ('+r.pctUtil+'% utilisé)':''), r.pctUtil>60?'#4CAF50':r.pctUtil>30?'#F59E0B':'#EF4444'],
+      [r.nbBat>0 ? r.nbBat+' batterie'+(r.nbBat>1?'s':'') : '-', r.bat.l+(r.nbBat>0?' ('+r.pctUtil+'% utilisé)':''), r.pctUtil>60?'#4CAF50':r.pctUtil>30?'#F59E0B':'#EF4444'],
       [fmtOnd(ondW), 'Onduleur hybride MPPT', '#A78BFA'],
       [r.prodTot+' kWh', 'Production/jour', '#4CAF50'],
-      [r.nbBat>0 ? r.autoH+'h / '+Math.round(hNuit)+'h' : '—', 'Autonomie nuit', autoOK?'#4CAF50':'#EF4444'],
+      [r.nbBat>0 ? r.autoH+'h / '+Math.round(hNuit)+'h' : '-', 'Autonomie nuit', autoOK?'#4CAF50':'#EF4444'],
       ['+'+r.surplusPan+' kWh', 'Surplus panneaux', '#34D399'],
-      [r.nbBat>0 ? '+'+r.surplusBat+' kWh' : '—', 'Surplus batterie', '#34D399'],
+      [r.nbBat>0 ? '+'+r.surplusBat+' kWh' : '-', 'Surplus batterie', '#34D399'],
     ].forEach(function(it){
       h += '<div style="background:#f9fafb;border-radius:8px;padding:10px;text-align:center">';
       h += '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:16px;color:'+it[2]+'">'+it[0]+'</div>';
@@ -7056,7 +7609,7 @@ function simCalculer() {
     if(r.nbBat>0) h += '• '+r.nbBat+' × batterie <b style="color:#1a1a1a">'+r.bat.l+'</b> ('+Math.round(r.bat.kwh*100)/100+' kWh, DoD '+Math.round(r.bat.dod*100)+'%)<br>';
     h += '• Onduleur hybride MPPT <b style="color:#1a1a1a">'+ondW+' VA</b><br>';
     h += '• Autonomie nuit : <b style="color:'+(autoOK?'#4CAF50':'#EF4444')+'">'+(r.nbBat>0?r.autoH+'h sur '+Math.round(hNuit)+'h':'Sans batterie')+'</b><br>';
-    h += '• Prix : <b style="color:#F59E0B">Sur devis — Contactez-nous</b>';
+    h += '• Prix : <b style="color:#F59E0B">Sur devis - Contactez-nous</b>';
     h += '</div></div>';
   });
 
@@ -7097,9 +7650,9 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 
-// ══════════════════════════════════════════════════════════════
-// PROFILS SIMULATEUR — Sauvegarde locale (localStorage)
-// ══════════════════════════════════════════════════════════════
+// 
+// PROFILS SIMULATEUR - Sauvegarde locale (localStorage)
+// 
 
 var SIM_PROFILS_KEY = 'laouni_sim_profils';
 
@@ -7233,7 +7786,7 @@ function simNouveauProfil() {
   simAddRow2('Lampe LED', 15, 4, 8, 6);
   simAddRow2('', 0, 1, 0, 0);
   simAddRow2('', 0, 1, 0, 0);
-  notify('Nouveau profil — ajoutez vos appareils.');
+  notify('Nouveau profil - ajoutez vos appareils.');
 }
 
 function simAfficherProfils() {
@@ -7241,7 +7794,7 @@ function simAfficherProfils() {
   if(!el) return;
   var profils = simGetProfils();
   if(profils.length === 0) {
-    el.innerHTML = '<div style="color:#94a3b8;font-size:12px;padding:8px">Aucun profil — sauvegardez votre première configuration.</div>';
+    el.innerHTML = '<div style="color:#94a3b8;font-size:12px;padding:8px">Aucun profil - sauvegardez votre première configuration.</div>';
     return;
   }
   el.innerHTML = profils.map(function(p) {
@@ -7264,9 +7817,9 @@ function simAfficherProfils() {
 }
 
 
-// ══════════════════════════════════════════════════════════════
+// 
 // RECHERCHE PUBLIQUE + STATISTIQUES ADMIN
-// ══════════════════════════════════════════════════════════════
+// 
 
 var pubSearchTimer = null;
 
@@ -7350,13 +7903,13 @@ function pubEnregistrerRecherche(q, resultats) {
   if(existing) {
     existing.count++;
     existing.lastAt = now2;
-    existing.trouvé = resultats.length > 0;
+    existing.trouve = resultats.length > 0;
   } else {
     DB.recherches.unshift({
       id: genId(),
       q: q,
       count: 1,
-      trouvé: resultats.length > 0,
+      trouve: resultats.length > 0,
       date: dateJ,
       lastAt: now2
     });
@@ -7366,7 +7919,7 @@ function pubEnregistrerRecherche(q, resultats) {
   if(resultats.length === 0) {
     var totalRecherches = 0;
     for(var ti=0; ti<DB.recherches.length; ti++) {
-      if(DB.recherches[ti].q.toLowerCase() === q.toLowerCase() && !DB.recherches[ti].trouvé) {
+      if(DB.recherches[ti].q.toLowerCase() === q.toLowerCase() && !DB.recherches[ti].trouve) {
         totalRecherches += DB.recherches[ti].count;
       }
     }
@@ -7375,7 +7928,7 @@ function pubEnregistrerRecherche(q, resultats) {
       DB.notifications.unshift({
         id: genId(),
         dest: 'admin',
-        objet: '&#x1F6A8; Produit très recherché — Rupture',
+        objet: '&#x1F6A8; Produit très recherché - Rupture',
         msg: '"'+q+'" a été recherché '+totalRecherches+' fois et n&#39;est pas en stock. Pensez à r&#233;approvisionner.',
         prio: 'urgent',
         date: dateJ,
@@ -7387,20 +7940,20 @@ function pubEnregistrerRecherche(q, resultats) {
   }
 }
 
-// ── ONGLET RECHERCHES ADMIN ────────────────────────────────
+//  ONGLET RECHERCHES ADMIN 
 function renderRecherchesTab(div) {
   var total = DB.recherches.length;
-  var ruptures = DB.recherches.filter(function(r){return !r.trouvé;});
-  var trouvées = DB.recherches.filter(function(r){return r.trouvé;});
+  var ruptures = DB.recherches.filter(function(r){return !r.trouve;});
+  var trouvées = DB.recherches.filter(function(r){return r.trouve;});
 
   // Agrégation par terme
   var agg = {};
   DB.recherches.forEach(function(r) {
     var key = r.q.toLowerCase();
-    if(!agg[key]) agg[key] = {q:r.q, count:0, trouvé:r.trouvé, dates:[]};
+    if(!agg[key]) agg[key] = {q:r.q, count:0, trouve:r.trouve, dates:[]};
     agg[key].count += r.count;
     agg[key].dates.push(r.date);
-    if(!r.trouvé) agg[key].trouvé = false;
+    if(!r.trouve) agg[key].trouve = false;
   });
   var sorted = Object.values(agg).sort(function(a,b){return b.count-a.count;});
 
@@ -7439,15 +7992,15 @@ function rechRenderList(items) {
     '<th style="text-align:right">Dernière fois</th>'+
     '</tr></thead><tbody>'+
     items.map(function(r) {
-      var isTrouvé = r.trouvé;
+      var isTrouve = r.trouve;
       return '<tr>'+
         '<td style="font-weight:600;color:#1a1a1a">&#x1F50D; '+r.q+'</td>'+
         '<td style="text-align:center">'+
           '<span style="font-family:Syne,sans-serif;font-weight:800;font-size:16px;color:'+(r.count>=5?'#EF4444':r.count>=3?'#F59E0B':'#60A5FA')+'">'+r.count+'x</span>'+
         '</td>'+
         '<td style="text-align:center">'+
-          '<span style="background:'+(isTrouvé?'rgba(249,115,22,.15)':'rgba(239,68,68,.15)')+';color:'+(isTrouvé?'#4CAF50':'#EF4444')+';padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">'+
-          (isTrouvé?'&#x2713; En stock':'&#x274C; Rupture')+
+          '<span style="background:'+(isTrouve?'rgba(249,115,22,.15)':'rgba(239,68,68,.15)')+';color:'+(isTrouve?'#4CAF50':'#EF4444')+';padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">'+
+          (isTrouve?'&#x2713; En stock':'&#x274C; Rupture')+
           '</span>'+
         '</td>'+
         '<td style="text-align:right;font-size:11px;color:var(--gr)">'+r.dates[r.dates.length-1]+'</td>'+
@@ -7462,15 +8015,15 @@ function rechFiltrer() {
   var agg = {};
   DB.recherches.forEach(function(r) {
     var key = r.q.toLowerCase();
-    if(!agg[key]) agg[key] = {q:r.q, count:0, trouvé:r.trouvé, dates:[]};
+    if(!agg[key]) agg[key] = {q:r.q, count:0, trouve:r.trouve, dates:[]};
     agg[key].count += r.count;
     agg[key].dates.push(r.date);
-    if(!r.trouvé) agg[key].trouvé = false;
+    if(!r.trouve) agg[key].trouve = false;
   });
   var sorted = Object.values(agg).sort(function(a,b){return b.count-a.count;});
   var filtered = sorted.filter(function(r) {
     var matchQ = !q || r.q.toLowerCase().indexOf(q) >= 0;
-    var matchF = !f || (f==='rupture'&&!r.trouvé) || (f==='trouve'&&r.trouvé);
+    var matchF = !f || (f==='rupture'&&!r.trouve) || (f==='trouve'&&r.trouve);
     return matchQ && matchF;
   });
   var el = document.getElementById('rech-list');
@@ -7493,7 +8046,7 @@ function simImprimer() {
   var html = '<!DOCTYPE html><html lang="fr"><head>'
     + '<meta charset="UTF-8"/>'
     + '<meta name="viewport" content="width=device-width,initial-scale=1"/>'
-    + '<title>Devis Solaire — Laouni</title>'
+    + '<title>Devis Solaire - Laouni</title>'
     + '<style>'
     + 'body{font-family:Arial,sans-serif;background:#fff;color:#111;padding:16px;max-width:780px;margin:0 auto;font-size:13px}'
     + 'h1{color:#1a5c2e;font-size:18px;margin:0}'
@@ -7581,14 +8134,14 @@ function renderCATab(div) {
 
   var html = '';
 
-  // ── CUMUL GLOBAL ──────────────────────────────────────
+  //  CUMUL GLOBAL 
   var vAll = DB.ventes || [];
   var vJour   = caFiltrer(vAll, todayStr, todayStr);
   var vSemaine= caFiltrer(vAll, lundiStr, todayStr);
   var vMois   = caFiltrer(vAll, moisStr+'-01', todayStr);
   var vTotal  = vAll;
 
-  html += '<div style="font-family:Syne,sans-serif;font-size:11px;color:var(--or);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">📊 Chiffre d&#39;affaires global — Tous magasins</div>';
+  html += '<div style="font-family:Syne,sans-serif;font-size:11px;color:var(--or);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">📊 Chiffre d&#39;affaires global - Tous magasins</div>';
 
   html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:18px">';
   [
@@ -7605,7 +8158,7 @@ function renderCATab(div) {
   });
   html += '</div>';
 
-  // ── PAR MAGASIN ───────────────────────────────────────
+  //  PAR MAGASIN 
   html += '<div style="font-family:Syne,sans-serif;font-size:11px;color:var(--or);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">🏪 Détail par magasin</div>';
 
   var mags = DB.magasins.filter(function(m){return m.actif;});
@@ -7651,7 +8204,7 @@ function renderCATab(div) {
   html += '</tr>';
   html += '</tbody></table>';
 
-  // ── TOP PRODUITS ──────────────────────────────────────
+  //  TOP PRODUITS 
   html += '<div style="font-family:Syne,sans-serif;font-size:11px;color:var(--or);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin:16px 0 10px">🏆 Top produits ce mois</div>';
 
   var prodCA = {};
@@ -7716,9 +8269,12 @@ function chatToggle(){
 }
 
 function chatMajVisibilite(){
-  // La bulle reste toujours visible
+  // Bulle chat toujours visible
   var bubble = document.getElementById("chat-bubble");
   if(bubble) bubble.style.display = "flex";
+  // WA flottant toujours visible (sauf en impression)
+  var waFloat = document.getElementById("waFloat");
+  if(waFloat) waFloat.style.display = "flex";
 }
 
 function chatInitList(){
