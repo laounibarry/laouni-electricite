@@ -1,11 +1,11 @@
 # robots.txt — Laouni Electricité Moderne
-# https://laouni-electricite-moderne.com/
+# https://laouni-electricitemoderne.com/
 
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://laouni-electricite-moderne.com/sitemap.xml
+Sitemap: https://laouni-electricitemoderne.com/sitemap.xml
 
 # Autoriser tous les bots IA et moteurs de recherche
 User-agent: Googlebot
