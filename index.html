@@ -1031,7 +1031,7 @@ img { loading: lazy; }
     <h2 class="section-title">Simulateur Solaire Guinée</h2>
     <p class="section-sub">09h → 17h30 = 8.5h de soleil &nbsp;|&nbsp; 17h30 → 09h = 15.5h de nuit</p>
 
-    <!-- ═══ MODE SIMPLE : 3 tapes ═══ -->
+    <!-- ═══ MODE SIMPLE ═══ -->
     <div id="sim-simple">
 
       <div style="text-align:center;margin-bottom:14px">
@@ -1039,21 +1039,47 @@ img { loading: lazy; }
         <div style="font-size:12.5px;color:#64748b;margin-top:2px">Touchez une image, c'est tout.</div>
       </div>
 
-      <div id="sim-lieux" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(102px,1fr));gap:9px;margin-bottom:16px"></div>
+      <div id="sim-lieux" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(98px,1fr));gap:9px;margin-bottom:16px"></div>
 
       <div id="sim-etape2" style="display:none">
+
         <div style="text-align:center;margin:18px 0 10px">
           <div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:#0f172a">Quelle taille&nbsp;?</div>
         </div>
-        <div id="sim-tailles" style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px"></div>
+        <div id="sim-tailles" style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px"></div>
 
-        <div style="text-align:center;margin:18px 0 10px">
-          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:#0f172a">Vous avez aussi&nbsp;?</div>
-          <div style="font-size:12.5px;color:#64748b;margin-top:2px">Touchez ce que vous possédez</div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:#0f172a">Vos équipements</div>
+          <div style="font-size:12px;color:#64748b" id="sim-eq-total"></div>
         </div>
-        <div id="sim-extras" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(102px,1fr));gap:9px;margin-bottom:18px"></div>
+        <div id="sim-equip" style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px"></div>
 
-        <button onclick="simSimpleCalculer()" style="width:100%;background:linear-gradient(135deg,#1E5C2E,#2D7A3E);color:#fff;border:none;padding:17px;border-radius:14px;font-family:Syne,sans-serif;font-weight:800;font-size:16px;cursor:pointer;letter-spacing:.5px;box-shadow:0 4px 14px rgba(30,92,46,.3)">
+        <button onclick="simOuvrirAjout()" style="width:100%;background:#fff7ed;border:2px dashed rgba(249,115,22,.45);color:#c2410c;padding:13px;border-radius:12px;font-family:Syne,sans-serif;font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:16px;touch-action:manipulation">
+          + Ajouter un équipement
+        </button>
+
+        <div id="sim-ajout" style="display:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px;margin-bottom:16px">
+          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:13.5px;margin-bottom:10px;color:#0f172a">Équipements courants</div>
+          <div id="sim-ajout-liste" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin-bottom:14px"></div>
+          <div style="border-top:1px solid #f1f5f9;padding-top:12px">
+            <div style="font-size:12px;color:#64748b;margin-bottom:8px">Ou décrivez le vôtre&nbsp;:</div>
+            <input id="sim-x-nom" class="inp" placeholder="Nom de l'appareil" style="margin-bottom:7px;font-size:13px">
+            <div style="display:flex;gap:7px;margin-bottom:9px">
+              <input id="sim-x-w" class="inp" type="number" inputmode="numeric" placeholder="Watts" style="flex:1;font-size:13px">
+              <input id="sim-x-q" class="inp" type="number" inputmode="numeric" placeholder="Combien" value="1" style="width:88px;font-size:13px">
+            </div>
+            <div style="display:flex;gap:7px;margin-bottom:11px">
+              <input id="sim-x-hj" class="inp" type="number" inputmode="decimal" placeholder="Heures le jour" style="flex:1;font-size:13px">
+              <input id="sim-x-hn" class="inp" type="number" inputmode="decimal" placeholder="Heures la nuit" style="flex:1;font-size:13px">
+            </div>
+            <div style="display:flex;gap:7px">
+              <button onclick="simAjoutPerso()" style="flex:1;background:var(--green2);color:#fff;border:none;padding:11px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer">Ajouter</button>
+              <button onclick="simFermerAjout()" style="background:#f1f5f9;border:none;color:#64748b;padding:11px 16px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer">Fermer</button>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="simSimpleCalculer()" style="width:100%;background:linear-gradient(135deg,#1E5C2E,#2D7A3E);color:#fff;border:none;padding:17px;border-radius:14px;font-family:Syne,sans-serif;font-weight:800;font-size:16px;cursor:pointer;letter-spacing:.5px;box-shadow:0 4px 14px rgba(30,92,46,.3);touch-action:manipulation">
           Voir mon installation
         </button>
       </div>
@@ -7421,91 +7447,261 @@ function fmtOnd(va) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// MODE SIMPLE — l'utilisateur ne lit rien, il touche des images.
-// Les appareils, leurs puissances et leurs heures sont pré-remplis
-// à partir d'usages guinéens courants, puis passés au meme moteur
-// de calcul que le mode détaillé.
+// MODE SIMPLE — chaque lieu a SES équipements. La liste reste
+// entièrement modifiable : quantité, puissance, heures jour/nuit.
 // ═══════════════════════════════════════════════════════════════
+
+// Bibliothèque d'équipements (puissances usuelles en Guinée)
+var SIM_EQ = {
+  lampe:   { i:'💡', n:'Lampe LED',        w:15 },
+  neon:    { i:'🔦', n:'Néon',             w:36 },
+  projo:   { i:'🔆', n:'Projecteur LED',   w:100 },
+  tv:      { i:'📺', n:'Télévision',       w:80 },
+  tvg:     { i:'📺', n:'Grande TV',        w:150 },
+  deco:    { i:'📡', n:'Décodeur',         w:20 },
+  venti:   { i:'🌀', n:'Ventilateur',      w:60 },
+  brasseur:{ i:'🌬️', n:'Brasseur d\'air',  w:90 },
+  clim9:   { i:'❄️', n:'Clim 9000 BTU',    w:900 },
+  clim12:  { i:'❄️', n:'Clim 12000 BTU',   w:1200 },
+  clim18:  { i:'❄️', n:'Clim 18000 BTU',   w:1800 },
+  frigo:   { i:'🧊', n:'Réfrigérateur',    w:150 },
+  congel:  { i:'🧊', n:'Congélateur',      w:200 },
+  vitrine: { i:'🧊', n:'Vitrine réfrigérée',w:350 },
+  chambref:{ i:'🧊', n:'Chambre froide',   w:2200 },
+  pompe:   { i:'💧', n:'Pompe à eau',      w:750 },
+  pompef:  { i:'💧', n:'Pompe de forage',  w:1500 },
+  ordi:    { i:'💻', n:'Ordinateur',       w:65 },
+  impr:    { i:'🖨️', n:'Imprimante',       w:200 },
+  photoc:  { i:'📄', n:'Photocopieuse',    w:900 },
+  sono:    { i:'🔊', n:'Sonorisation',     w:150 },
+  micro:   { i:'🎤', n:'Micro + ampli',    w:80 },
+  charge:  { i:'📱', n:'Chargeur tél',     w:10 },
+  fer:     { i:'👔', n:'Fer à repasser',   w:1000 },
+  microo:  { i:'🍳', n:'Micro-ondes',      w:900 },
+  moulin:  { i:'⚙️', n:'Moulin à grain',   w:1500 },
+  soudure: { i:'🔥', n:'Poste à souder',   w:3500 },
+  meuleuse:{ i:'🛠️', n:'Meuleuse',         w:900 },
+  perceuse:{ i:'🔩', n:'Perceuse',         w:700 },
+  compress:{ i:'💨', n:'Compresseur',      w:1500 },
+  tondeuse:{ i:'💇', n:'Tondeuse',         w:30 },
+  sechoir: { i:'💨', n:'Séchoir cheveux',  w:1200 },
+  steril:  { i:'🏥', n:'Stérilisateur',    w:1200 },
+  frigovac:{ i:'💉', n:'Frigo à vaccins',  w:250 },
+  couveuse:{ i:'🐣', n:'Couveuse',         w:400 },
+};
+
+// Chaque lieu : ses équipements de base [clé, quantité, heures jour, heures nuit]
+// et la liste de ce qu'on peut y ajouter en un geste.
 var SIM_LIEUX = [
-  { k:'maison',  i:'🏠', n:'Maison',   base:[['Lampe LED 15W',15,4,4,6],['TV 32"',80,1,3,3],['Ventilateur',60,2,6,8],['Chargeur tél',10,3,2,3]] },
-  { k:'boutique',i:'🏪', n:'Boutique', base:[['Lampe LED 15W',15,5,10,2],['Réfrigérateur',150,1,12,8],['TV 32"',80,1,8,1],['Ventilateur',60,2,9,1]] },
-  { k:'bureau',  i:'🏢', n:'Bureau',   base:[['Lampe LED 15W',15,6,9,0],['Ordinateur',65,3,8,0],['Ventilateur',60,2,8,0],['Décodeur TV',20,1,4,0]] },
-  { k:'mosquee', i:'🕌', n:'Mosquée',  base:[['Néon 36W',36,8,5,5],['Ventilateur',60,6,6,4],['Sonorisation',150,1,3,2]] },
-  { k:'atelier', i:'⚙️', n:'Atelier',  base:[['Néon 36W',36,4,9,0],['Moulin à grain',1500,1,3,0],['Ventilateur',60,2,8,0]] },
-  { k:'ferme',   i:'🌾', n:'Champ',    base:[['Pompe à eau',750,1,4,0],['Lampe LED 15W',15,2,0,6]] },
+  { k:'maison', i:'🏠', n:'Maison',
+    base:[['lampe',5,4,6],['tv',1,3,3],['venti',2,5,8],['charge',3,2,3],['frigo',1,12,8]],
+    sugg:['congel','clim12','fer','tvg','microo','pompe','brasseur','deco'] },
+
+  { k:'boutique', i:'🏪', n:'Boutique',
+    base:[['lampe',6,10,2],['vitrine',1,12,10],['tv',1,8,1],['venti',2,9,1],['charge',2,6,0]],
+    sugg:['congel','clim12','frigo','chambref','sono','projo','ordi'] },
+
+  { k:'bureau', i:'🏢', n:'Bureau',
+    base:[['lampe',6,9,0],['ordi',3,8,0],['clim12',1,7,0],['impr',1,2,0],['venti',2,8,0]],
+    sugg:['photoc','clim18','frigo','tv','projo','charge'] },
+
+  { k:'ecole', i:'🏫', n:'École',
+    base:[['neon',10,6,0],['venti',6,6,0],['ordi',2,5,0],['sono',1,2,0]],
+    sugg:['projo','impr','photoc','pompe','frigo','clim12','brasseur'] },
+
+  { k:'mosquee', i:'🕌', n:'Mosquée',
+    base:[['neon',8,5,5],['venti',6,6,4],['sono',1,3,2],['micro',1,3,2]],
+    sugg:['brasseur','projo','clim18','pompe','lampe'] },
+
+  { k:'sante', i:'🏥', n:'Centre de santé',
+    base:[['neon',6,10,8],['frigovac',1,24,24],['venti',3,10,6],['steril',1,3,0],['ordi',1,6,0]],
+    sugg:['clim12','pompe','couveuse','frigo','projo','charge'] },
+
+  { k:'atelier', i:'⚙️', n:'Atelier',
+    base:[['neon',4,9,0],['soudure',1,2,0],['meuleuse',1,3,0],['venti',2,8,0]],
+    sugg:['compress','perceuse','moulin','projo','tv','charge'] },
+
+  { k:'moulin', i:'🌽', n:'Moulin',
+    base:[['moulin',1,5,0],['neon',3,4,2],['venti',1,5,0]],
+    sugg:['compress','lampe','tv','charge','pompe'] },
+
+  { k:'champ', i:'🌾', n:'Champ / Forage',
+    base:[['pompef',1,5,0],['lampe',2,0,6]],
+    sugg:['pompe','projo','couveuse','neon','charge'] },
+
+  { k:'froid', i:'🧊', n:'Chambre froide',
+    base:[['chambref',1,14,10],['neon',2,8,2]],
+    sugg:['congel','vitrine','venti','lampe'] },
+
+  { k:'salon', i:'💇', n:'Salon',
+    base:[['lampe',4,9,2],['tondeuse',2,5,0],['sechoir',1,3,0],['venti',2,9,1],['tv',1,8,1]],
+    sugg:['clim12','frigo','sono','charge'] },
+
+  { k:'cyber', i:'🖥️', n:'Cyber café',
+    base:[['ordi',8,10,2],['neon',4,9,2],['impr',1,3,0],['clim12',1,8,0],['venti',2,9,0]],
+    sugg:['photoc','tv','charge','projo'] },
 ];
+
 var SIM_TAILLES = [
   { k:'petit', i:'🙍', n:'Petit',  f:0.6 },
   { k:'moyen', i:'👨‍👩‍👦', n:'Moyen', f:1 },
   { k:'grand', i:'👨‍👩‍👧‍👦', n:'Grand',  f:1.8 },
 ];
-var SIM_EXTRAS = [
-  { k:'frigo',  i:'🧊', n:'Frigo',       app:['Réfrigérateur',150,1,12,8] },
-  { k:'congel', i:'❄️', n:'Congélateur', app:['Congélateur',200,1,12,8] },
-  { k:'clim',   i:'🌬️', n:'Climatiseur', app:['Clim 12000 BTU',1200,1,6,4] },
-  { k:'pompe',  i:'💧', n:'Pompe',       app:['Pompe à eau',750,1,3,0] },
-  { k:'fer',    i:'👔', n:'Fer',         app:['Fer à repasser',1000,1,1,0] },
-  { k:'tv55',   i:'📺', n:'Grande TV',   app:['TV 55"',150,1,4,3] },
-];
-var simChoixLieu = null, simChoixTaille = 'moyen', simChoixExtras = {};
 
-function _simTuile(id, ico, nom, actif, onclick) {
+// Coût d'un groupe électrogène, pour montrer l'économie.
+// ⚠️ À AJUSTER avec le vrai prix du carburant en Guinée.
+var SIM_PRIX_CARBURANT = 12000;   // GNF le litre
+var SIM_CONSO_GROUPE   = 0.40;    // litres consommés par kWh produit
+
+var simChoixLieu = null, simChoixTaille = 'moyen', simEquip = [];
+
+function _simTuile(ico, nom, actif, onclick) {
   return '<button onclick="' + onclick + '" style="background:' + (actif ? '#fff7ed' : '#fff') +
-    ';border:2px solid ' + (actif ? '#f97316' : '#e5e7eb') + ';border-radius:14px;padding:13px 6px;cursor:pointer;' +
-    'display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .15s;touch-action:manipulation;width:100%">' +
-    '<span style="font-size:28px;line-height:1">' + ico + '</span>' +
-    '<span style="font-family:Syne,sans-serif;font-weight:700;font-size:12.5px;color:' + (actif ? '#c2410c' : '#334155') + '">' + nom + '</span>' +
-    '</button>';
+    ';border:2px solid ' + (actif ? '#f97316' : '#e5e7eb') + ';border-radius:14px;padding:12px 5px;cursor:pointer;' +
+    'display:flex;flex-direction:column;align-items:center;gap:5px;touch-action:manipulation;width:100%">' +
+    '<span style="font-size:26px;line-height:1">' + ico + '</span>' +
+    '<span style="font-family:Syne,sans-serif;font-weight:700;font-size:11.5px;line-height:1.2;text-align:center;color:' +
+    (actif ? '#c2410c' : '#334155') + '">' + nom + '</span></button>';
 }
 
 function simInitSimple() {
   var l = document.getElementById('sim-lieux');
   if (l) l.innerHTML = SIM_LIEUX.map(function (x) {
-    return _simTuile(x.k, x.i, x.n, simChoixLieu === x.k, "simChoisirLieu('" + x.k + "')");
+    return _simTuile(x.i, x.n, simChoixLieu === x.k, "simChoisirLieu('" + x.k + "')");
   }).join('');
   var t = document.getElementById('sim-tailles');
   if (t) t.innerHTML = SIM_TAILLES.map(function (x) {
-    return _simTuile(x.k, x.i, x.n, simChoixTaille === x.k, "simChoisirTaille('" + x.k + "')");
+    return _simTuile(x.i, x.n, simChoixTaille === x.k, "simChoisirTaille('" + x.k + "')");
   }).join('');
-  var e = document.getElementById('sim-extras');
-  if (e) e.innerHTML = SIM_EXTRAS.map(function (x) {
-    return _simTuile(x.k, x.i, x.n, !!simChoixExtras[x.k], "simBasculerExtra('" + x.k + "')");
-  }).join('');
+  simRendreEquip();
 }
+
+// ── la liste modifiable ──────────────────────────────────────
+function simRendreEquip() {
+  var z = document.getElementById('sim-equip');
+  if (!z) return;
+  if (!simEquip.length) { z.innerHTML = '<div style="color:#94a3b8;font-size:12.5px;padding:8px 0">Aucun équipement.</div>'; }
+  else z.innerHTML = simEquip.map(function (e, i) {
+    return '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:10px 11px">' +
+      '<div style="display:flex;align-items:center;gap:9px">' +
+      '<span style="font-size:21px;line-height:1">' + e.i + '</span>' +
+      '<div style="flex:1;min-width:0">' +
+      '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:#0f172a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + e.n + '</div>' +
+      '<button onclick="simBasculerReglage(' + i + ')" style="background:none;border:none;padding:0;color:#94a3b8;font-size:11px;cursor:pointer;text-decoration:underline">' +
+      e.w + ' W · ' + e.hj + 'h jour · ' + e.hn + 'h nuit</button></div>' +
+      '<div style="display:flex;align-items:center;gap:7px;flex-shrink:0">' +
+      '<button onclick="simQte(' + i + ',-1)" style="width:31px;height:31px;border-radius:9px;border:1px solid #e5e7eb;background:#f8fafc;font-size:17px;font-weight:700;color:#475569;cursor:pointer;touch-action:manipulation;line-height:1">−</button>' +
+      '<span style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;min-width:20px;text-align:center">' + e.q + '</span>' +
+      '<button onclick="simQte(' + i + ',1)" style="width:31px;height:31px;border-radius:9px;border:1px solid #e5e7eb;background:#f8fafc;font-size:17px;font-weight:700;color:#475569;cursor:pointer;touch-action:manipulation;line-height:1">+</button>' +
+      '</div></div>' +
+      '<div id="sim-reg-' + i + '" style="display:none;border-top:1px solid #f1f5f9;margin-top:9px;padding-top:9px">' +
+      '<div style="display:flex;gap:6px">' +
+      '<label style="flex:1"><span style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:uppercase">Watts</span>' +
+      '<input class="inp" type="number" inputmode="numeric" value="' + e.w + '" onchange="simMaj(' + i + ',\'w\',this.value)" style="font-size:13px"></label>' +
+      '<label style="flex:1"><span style="font-size:10px;color:#ea580c;font-weight:700;text-transform:uppercase">H / jour</span>' +
+      '<input class="inp" type="number" inputmode="decimal" value="' + e.hj + '" onchange="simMaj(' + i + ',\'hj\',this.value)" style="font-size:13px"></label>' +
+      '<label style="flex:1"><span style="font-size:10px;color:#2563eb;font-weight:700;text-transform:uppercase">H / nuit</span>' +
+      '<input class="inp" type="number" inputmode="decimal" value="' + e.hn + '" onchange="simMaj(' + i + ',\'hn\',this.value)" style="font-size:13px"></label>' +
+      '</div>' +
+      '<button onclick="simSupprEquip(' + i + ')" style="margin-top:9px;background:none;border:none;color:#dc2626;font-size:12px;cursor:pointer;text-decoration:underline;padding:2px 0">Retirer cet équipement</button>' +
+      '</div></div>';
+  }).join('');
+
+  var tot = simEquip.reduce(function (s, e) { return s + e.w * e.q; }, 0);
+  var c = document.getElementById('sim-eq-total');
+  if (c) c.textContent = simEquip.length ? tot.toLocaleString('fr-FR') + ' W au total' : '';
+}
+
+function simBasculerReglage(i) {
+  var d = document.getElementById('sim-reg-' + i);
+  if (d) d.style.display = d.style.display === 'none' ? 'block' : 'none';
+}
+function simQte(i, d) {
+  simEquip[i].q = Math.max(0, simEquip[i].q + d);
+  if (simEquip[i].q === 0) simEquip.splice(i, 1);
+  simRendreEquip();
+}
+function simMaj(i, champ, v) { simEquip[i][champ] = Math.max(0, parseFloat(v) || 0); simRendreEquip(); }
+function simSupprEquip(i) { simEquip.splice(i, 1); simRendreEquip(); }
 
 function simChoisirLieu(k) {
   simChoixLieu = k;
+  simRemplirDepuisLieu();
   var e2 = document.getElementById('sim-etape2');
-  if (e2) e2.style.display = 'block';
+  if (e2) { e2.style.display = 'block'; }
   simInitSimple();
   if (e2) e2.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
-function simChoisirTaille(k) { simChoixTaille = k; simInitSimple(); }
-function simBasculerExtra(k) { simChoixExtras[k] = !simChoixExtras[k]; simInitSimple(); }
+function simChoisirTaille(k) { simChoixTaille = k; simRemplirDepuisLieu(); simInitSimple(); }
 
-// remplit le tableau détaillé à partir des choix, puis lance le moteur
-function simSimpleCalculer() {
+function simRemplirDepuisLieu() {
   var lieu = SIM_LIEUX.filter(function (x) { return x.k === simChoixLieu; })[0];
-  if (!lieu) { alert('Choisissez d\'abord ce que vous voulez alimenter.'); return; }
+  if (!lieu) return;
   var f = (SIM_TAILLES.filter(function (x) { return x.k === simChoixTaille; })[0] || { f: 1 }).f;
+  simEquip = lieu.base.map(function (b) {
+    var e = SIM_EQ[b[0]];
+    return { cle: b[0], i: e.i, n: e.n, w: e.w, q: Math.max(1, Math.round(b[1] * f)), hj: b[2], hn: b[3] };
+  });
+}
 
+// ── ajout d'équipement ───────────────────────────────────────
+function simOuvrirAjout() {
+  var lieu = SIM_LIEUX.filter(function (x) { return x.k === simChoixLieu; })[0];
+  var cles = lieu ? lieu.sugg : Object.keys(SIM_EQ).slice(0, 10);
+  var z = document.getElementById('sim-ajout-liste');
+  if (z) z.innerHTML = cles.map(function (k) {
+    var e = SIM_EQ[k];
+    return e ? _simTuile(e.i, e.n, false, "simAjoutRapide('" + k + "')") : '';
+  }).join('');
+  var d = document.getElementById('sim-ajout');
+  if (d) { d.style.display = 'block'; d.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+}
+function simFermerAjout() { var d = document.getElementById('sim-ajout'); if (d) d.style.display = 'none'; }
+
+function simAjoutRapide(k) {
+  var e = SIM_EQ[k];
+  if (!e) return;
+  var deja = simEquip.filter(function (x) { return x.cle === k; })[0];
+  if (deja) { deja.q++; }
+  else simEquip.push({ cle: k, i: e.i, n: e.n, w: e.w, q: 1, hj: 6, hn: 2 });
+  simRendreEquip();
+}
+
+function simAjoutPerso() {
+  var n = (document.getElementById('sim-x-nom').value || '').trim();
+  var w = parseFloat(document.getElementById('sim-x-w').value) || 0;
+  var q = parseInt(document.getElementById('sim-x-q').value, 10) || 1;
+  var hj = parseFloat(document.getElementById('sim-x-hj').value) || 0;
+  var hn = parseFloat(document.getElementById('sim-x-hn').value) || 0;
+  if (!n || w <= 0) { alert('Donnez au moins un nom et une puissance en watts.'); return; }
+  if (hj + hn <= 0) { alert('Indiquez combien d\'heures par jour ou par nuit il fonctionne.'); return; }
+  simEquip.push({ cle: 'perso', i: '🔌', n: n, w: w, q: q, hj: hj, hn: hn });
+  ['sim-x-nom', 'sim-x-w', 'sim-x-hj', 'sim-x-hn'].forEach(function (id) { document.getElementById(id).value = ''; });
+  document.getElementById('sim-x-q').value = '1';
+  simRendreEquip();
+  simFermerAjout();
+}
+
+// ── calcul ───────────────────────────────────────────────────
+function simSimpleCalculer() {
+  if (!simEquip.length) { alert('Ajoutez au moins un équipement.'); return; }
   var liste = document.getElementById('sim-list');
   if (liste) liste.innerHTML = '';
   SIM_N = 0;
-  lieu.base.forEach(function (a) {
-    simAjouter(a[0], a[1], Math.max(1, Math.round(a[2] * f)), a[3], a[4]);
-  });
-  SIM_EXTRAS.forEach(function (x) {
-    if (simChoixExtras[x.k]) simAjouter(x.app[0], x.app[1], x.app[2], x.app[3], x.app[4]);
-  });
-
+  simEquip.forEach(function (e) { if (e.w > 0 && e.q > 0) simAjouter(e.n, e.w, e.q, e.hj, e.hn); });
   window._simModeSimple = true;
   simCalculer();
   window._simModeSimple = false;
 }
 
-// rendu allégé : trois lignes, un bouton, le détail replié
+// ── résultat court, avec l'économie de carburant ─────────────
 function simRendreSimple(d) {
+  var kwhJour = d.whTot / 1000;
+  var litresMois = kwhJour * 30 * SIM_CONSO_GROUPE;
+  var coutMois = Math.round(litresMois * SIM_PRIX_CARBURANT);
+  var coutAn = coutMois * 12;
+  var fmt = function (v) { return Math.round(v).toLocaleString('fr-FR'); };
+
   var h = '';
   h += '<div style="background:linear-gradient(135deg,#1E5C2E,#2D7A3E);border-radius:16px;padding:20px;color:#fff;text-align:center;margin-bottom:12px">' +
        '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;opacity:.8">Il vous faut</div>' +
@@ -7520,8 +7716,7 @@ function simRendreSimple(d) {
        '<div style="flex:1;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:15px;text-align:center">' +
        '<div style="font-size:30px;line-height:1">☀️</div>' +
        '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:23px;color:#0f172a;margin-top:5px">' + d.lit.nbPan + '</div>' +
-       '<div style="font-size:12px;color:#64748b">panneaux ' + d.lit.pan.w + 'W</div></div>' +
-       '</div>';
+       '<div style="font-size:12px;color:#64748b">panneaux ' + d.lit.pan.w + 'W</div></div></div>';
 
   var nuits = d.lit.autoH > 0 ? d.lit.autoH / d.hNuit : 0;
   if (nuits > 0) {
@@ -7533,6 +7728,20 @@ function simRendreSimple(d) {
          '<div style="font-size:12.5px;color:#9a3412">vous continuez à avoir du courant</div></div>';
   }
 
+  // L'argument qui déclenche l'achat
+  h += '<div style="background:#0f172a;border-radius:16px;padding:18px;color:#fff;margin-bottom:12px">' +
+       '<div style="text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#4ade80;margin-bottom:12px">Ce que vous arrêtez de payer</div>' +
+       '<div style="display:flex;gap:10px;text-align:center">' +
+       '<div style="flex:1"><div style="font-size:22px">⛽</div>' +
+       '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:17px;margin-top:3px">' + fmt(coutMois) + '</div>' +
+       '<div style="font-size:11px;color:#94a3b8">GNF par mois</div></div>' +
+       '<div style="flex:1"><div style="font-size:22px">📅</div>' +
+       '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:17px;margin-top:3px;color:#4ade80">' + fmt(coutAn) + '</div>' +
+       '<div style="font-size:11px;color:#94a3b8">GNF par an</div></div></div>' +
+       '<div style="font-size:11.5px;color:#94a3b8;text-align:center;margin-top:11px;line-height:1.5">' +
+       'Estimation du carburant d\'un groupe électrogène produisant vos ' + kwhJour.toFixed(1).replace('.', ',') +
+       ' kWh par jour (' + fmt(litresMois) + ' litres/mois). Vidanges, pièces et réparations en plus — le solaire n\'en a pas.</div></div>';
+
   h += '<a id="sim-wa-simple" href="#" target="_blank" style="display:block;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;text-decoration:none;padding:17px;border-radius:14px;font-family:Syne,sans-serif;font-weight:800;font-size:16px;text-align:center;box-shadow:0 4px 14px rgba(37,211,102,.32)">' +
        '💬 Demander mon prix</a>';
 
@@ -7542,7 +7751,8 @@ function simRendreSimple(d) {
   var z = document.getElementById('sim-simple-res');
   if (z) { z.innerHTML = h; z.style.display = 'block'; z.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   var w = document.getElementById('sim-wa-simple'), w0 = document.getElementById('sim-wa');
-  if (w && w0) w.href = w0.href;
+  if (w && w0) w.href = w0.href.replace('Merci de me communiquer votre devis.',
+    'Economie carburant estimee : ' + fmt(coutMois) + ' GNF/mois. Merci de me communiquer votre devis.');
 }
 
 function simVoirDetail() {
