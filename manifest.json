@@ -1,0 +1,22 @@
+{
+  "name": "Laouni Électricité Moderne — Énergie solaire en Guinée",
+  "short_name": "Laouni",
+  "description": "Onduleurs hybrides MPPT, batteries lithium et panneaux solaires certifiés. Vérification d'authenticité, simulateur solaire et 3 magasins en Guinée : Conakry, Labé, Lelouma.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#f97316",
+  "categories": ["business", "shopping", "utilities"],
+  "icons": [
+    { "src": "/icons/icon-96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "/icons/icon-144.png", "sizes": "144x144", "type": "image/png" },
+    { "src": "/icons/icon-152.png", "sizes": "152x152", "type": "image/png" },
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
