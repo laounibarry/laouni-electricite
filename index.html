@@ -7965,10 +7965,21 @@ function simCalculer() {
 
   // ── 2. Onduleur : il doit tenir le regime continu ET l'appel de demarrage
   var besoinContinu = puissSimult * SIM_MARGE_OND;
+
+  // La puissance solaire a installer ne depend pas de l'onduleur : on la calcule
+  // AVANT de le choisir, car il doit aussi pouvoir l'accepter en entree.
+  // Sans cela, on recommande des panneaux qu'il est impossible de raccorder.
+  var _panPrinc = SIM_PANS.filter(function (p) { return p.w === 750; })[0] || SIM_PANS[SIM_PANS.length - 1];
+  var _besoinPV = whJ / SIM_REND_OND + whN / (SIM_REND_OND * SIM_REND_BAT);
+  var _pvPrevu  = Math.ceil((_besoinPV / (hPSH * SIM_PERTES_PV)) / _panPrinc.w) * _panPrinc.w;
+
   var ondW = 0;
   for (var oi = 0; oi < SIM_ONDS.length; oi++) {
-    // un onduleur encaisse environ 2x sa puissance pendant quelques secondes
-    if (SIM_ONDS[oi] >= besoinContinu && SIM_ONDS[oi] * 2 >= appelDem) { ondW = SIM_ONDS[oi]; break; }
+    // trois conditions : le regime continu, l'appel de demarrage (un onduleur
+    // encaisse environ 2x sa puissance quelques secondes), et l'entree solaire
+    if (SIM_ONDS[oi] >= besoinContinu && SIM_ONDS[oi] * 2 >= appelDem && SIM_ONDS[oi] * 1.3 >= _pvPrevu) {
+      ondW = SIM_ONDS[oi]; break;
+    }
   }
   var ondInsuffisant = false;
   if (!ondW) { ondW = SIM_ONDS[SIM_ONDS.length - 1]; ondInsuffisant = true; }
