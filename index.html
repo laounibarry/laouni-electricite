@@ -7336,25 +7336,45 @@ var SIM_P = [
   {i:'⚙️',n:'Moulin à grain',  w:1500, hj:2, hn:0},
 ];
 
-// Vos panneaux
+// Vos panneaux (full black, double face / bifacial)
 var SIM_PANS = [
   {w:300,  l:'300 Wc'},
-  {w:450,  l:'450 Wc'},
+  {w:450,  l:'450 Wc full black'},
   {w:545,  l:'545 Wc'},
   {w:700,  l:'700 Wc'},
+  {w:750,  l:'750 Wc full black'},
 ];
 
-// Vos batteries: V × Ah / 1000 = kWh
+// Vos batteries : V x Ah / 1000 = kWh
+// dod = profondeur de decharge admissible. NE PAS remettre a 1 :
+// une batterie plomb-GEL videe a 100% est detruite en quelques mois.
+// GEL/plomb = 50% maximum. Lithium LiFePO4 = 90% sans dommage.
 var SIM_BATS = [
-  {k:'g100', l:'GEL 12V 100Ah',      kwh:12*100/1000,    dod:1.0},
-  {k:'g150', l:'GEL 12V 150Ah',      kwh:12*150/1000,    dod:1.0},
-  {k:'g200', l:'GEL 12V 200Ah',      kwh:12*200/1000,    dod:1.0},
-  {k:'l314', l:'Lithium 51.2V 314Ah',kwh:51.2*314/1000,  dod:1.0},
-  {k:'l350', l:'Lithium 51.2V 350Ah',kwh:51.2*350/1000,  dod:1.0},
+  {k:'g100', l:'GEL 12V 100Ah',      v:12,   kwh:12*100/1000,    dod:0.50, tech:'gel'},
+  {k:'g150', l:'GEL 12V 150Ah',      v:12,   kwh:12*150/1000,    dod:0.50, tech:'gel'},
+  {k:'g200', l:'GEL 12V 200Ah',      v:12,   kwh:12*200/1000,    dod:0.50, tech:'gel'},
+  {k:'l314', l:'Lithium 51.2V 314Ah',v:51.2, kwh:51.2*314/1000,  dod:0.90, tech:'lithium'},
+  {k:'l350', l:'Lithium 51.2V 350Ah',v:51.2, kwh:51.2*350/1000,  dod:0.90, tech:'lithium'},
 ];
 
-// Vos onduleurs (VA)
+// Vos onduleurs (W)
 var SIM_ONDS = [1200, 3600, 5500, 6200, 11000];
+
+// Rendements et marges reels
+var SIM_REND_OND  = 0.92;  // pertes de conversion continu -> alternatif
+var SIM_PERTES_PV = 0.75;  // cables, chaleur, poussiere, vieillissement
+var SIM_MARGE_OND = 1.20;  // marge de securite sur la puissance continue
+
+// Appel au demarrage : un moteur (compresseur, pompe) reclame jusqu'a 3 fois
+// sa puissance nominale pendant 1 a 3 secondes. Ignorer cela, c'est vendre un
+// onduleur qui disjonctera des que le frigo redemarre.
+function simFacteurDemarrage(nom) {
+  var n = (nom || '').toLowerCase();
+  if (/pompe|moulin|compress|machine|scie|meule|soudure|perceuse|broyeur/.test(n)) return 3;
+  if (/clim|frigo|r\u00e9frig|refrig|congel|cong\u00e9l/.test(n)) return 3;
+  return 1;
+}
+
 function fmtOnd(va) {
   var kw = va / 1000;
   return (kw === Math.floor(kw) ? kw.toFixed(0) : kw.toFixed(1)) + ' kW';
@@ -7501,189 +7521,179 @@ function simSaveProfils(p) {
 }
 
 function simCalculer() {
-  //  Collecter appareils 
+  // ── 1. Collecte des appareils ────────────────────────────────
   var divs = document.querySelectorAll('#sim-list > div[id]');
-  if(!divs.length) { alert('Ajoutez des appareils.'); return; }
+  if (!divs.length) { alert('Ajoutez au moins un appareil.'); return; }
 
-  var apps=[], puissCrete=0, whJ=0, whN=0;
-  for(var i=0;i<divs.length;i++){
-    var n=divs[i].id.replace('sr','');
-    var w=parseFloat((document.getElementById('sw'+n)||{}).value)||0;
-    var q=parseFloat((document.getElementById('sq'+n)||{}).value)||1;
-    var hj=parseFloat((document.getElementById('shj'+n)||{}).value)||0;
-    var hn=parseFloat((document.getElementById('shn'+n)||{}).value)||0;
-    var nom=((document.getElementById('snom'+n)||{}).value||'').trim()||'Appareil';
-    if(w<=0) continue;
-    var wt=w*q;
-    apps.push({nom:nom,w:w,q:q,hj:hj,hn:hn,wt:wt,wj:wt*hj,wn:wt*hn});
-    puissCrete+=wt; whJ+=wt*hj; whN+=wt*hn;
+  var apps = [], puissSimult = 0, whJ = 0, whN = 0, supplementDem = 0;
+  for (var i = 0; i < divs.length; i++) {
+    var n   = divs[i].id.replace('sr', '');
+    var w   = parseFloat((document.getElementById('sw'  + n) || {}).value) || 0;
+    var q   = parseFloat((document.getElementById('sq'  + n) || {}).value) || 1;
+    var hj  = parseFloat((document.getElementById('shj' + n) || {}).value) || 0;
+    var hn  = parseFloat((document.getElementById('shn' + n) || {}).value) || 0;
+    var nom = ((document.getElementById('snom' + n) || {}).value || '').trim() || 'Appareil';
+    if (w <= 0) continue;
+    var wt = w * q;
+    var fd = simFacteurDemarrage(nom);
+    // on suppose qu'un seul moteur demarre a la fois : on retient le pire
+    if (fd > 1) supplementDem = Math.max(supplementDem, w * (fd - 1));
+    apps.push({ nom: nom, w: w, q: q, hj: hj, hn: hn, wt: wt, fd: fd, wj: wt * hj, wn: wt * hn });
+    puissSimult += wt; whJ += wt * hj; whN += wt * hn;
   }
-  if(!apps.length){alert('Vérifiez les puissances.');return;}
+  if (!apps.length) { alert('Verifiez les puissances saisies.'); return; }
 
-  var whTot = whJ+whN;
-  var hSol = parseFloat((document.getElementById('sim-loc')||{}).value)||8.5;
-  var hNuit = 24-hSol;
-  var REND = 0.85;   // rendement système
-  var MARGE = 0.20;  // 20% sécurité
+  var whTot = whJ + whN;
+  var hSol  = parseFloat((document.getElementById('sim-loc') || {}).value) || 8.5;
+  var hNuit = 24 - hSol;
+  var appelDem = puissSimult + supplementDem;
+  var moteurs = apps.filter(function (a) { return a.fd > 1; });
 
-  //  Onduleur (commun) 
-  var ondMin = puissCrete * 1.3;
-  var ondW = SIM_ONDS[SIM_ONDS.length-1];
-  for(var oi=0;oi<SIM_ONDS.length;oi++){if(SIM_ONDS[oi]>=ondMin){ondW=SIM_ONDS[oi];break;}}
+  // ── 2. Onduleur : il doit tenir le regime continu ET l'appel de demarrage
+  var besoinContinu = puissSimult * SIM_MARGE_OND;
+  var ondW = 0;
+  for (var oi = 0; oi < SIM_ONDS.length; oi++) {
+    // un onduleur encaisse environ 2x sa puissance pendant quelques secondes
+    if (SIM_ONDS[oi] >= besoinContinu && SIM_ONDS[oi] * 2 >= appelDem) { ondW = SIM_ONDS[oi]; break; }
+  }
+  var ondInsuffisant = false;
+  if (!ondW) { ondW = SIM_ONDS[SIM_ONDS.length - 1]; ondInsuffisant = true; }
+  var tensionSys = ondW <= 1200 ? 12 : 48;
 
-  //  Fonction calcul pour une config 
+  // ── 3. Une configuration par technologie de batterie ─────────
   function calcConfig(pan, bat) {
-    // Panneaux
-    var prodPan    = pan.w * hSol * REND / 1000;
-    var besoinkWh  = whTot/1000*(1+MARGE);
-    var nbPan      = Math.ceil(besoinkWh / prodPan);
-    var prodTot    = nbPan * prodPan;
-    var surplusPan = Math.round((prodTot - besoinkWh)*100)/100;
-    // Batteries
-    var batUtil    = bat.kwh * bat.dod;
-    var besoinBat  = whN>0 ? whN/1000*(1+MARGE) : 0;
-    var nbBat      = besoinBat>0 ? Math.max(1, Math.ceil(besoinBat/batUtil)) : 0;
-    var capTot     = nbBat * bat.kwh;
-    var capUtile   = nbBat * batUtil;
-    var surplusBat = besoinBat>0 ? Math.round((capUtile-besoinBat)*100)/100 : 0;
-    var autoH      = nbBat>0 ? Math.round(capUtile/(whN/1000)*10)/10 : 0;
-    // Pourcentage utilisation réelle de la batterie
-    var pctUtil    = nbBat>0 && capUtile>0 ? Math.round(besoinBat/capUtile*100) : 0;
-    return {
-      pan:pan, bat:bat,
-      nbPan:nbPan, nbBat:nbBat,
-      prodTot:Math.round(prodTot*100)/100,
-      surplusPan:surplusPan,
-      capTot:Math.round(capTot*100)/100,
-      capUtile:Math.round(capUtile*100)/100,
-      surplusBat:surplusBat,
-      autoH:autoH,
-      pctUtil:pctUtil
-    };
-  }
+    var alertes = [];
 
-
-  //  Choisir la batterie adaptée à la consommation nuit 
-  // Règle: choisir la batterie dont la capacité utile couvre le besoin
-  // avec le minimum de batteries (idéalement 1 ou 2)
-  function choisirBatAdaptee(whNuit) {
-    if(whNuit <= 0) return SIM_BATS[0];
-    var besoin = whNuit/1000 * (1+MARGE); // kWh avec marge
-    // Chercher la batterie qui donne 1-3 unités max pour couvrir le besoin
-    var meilleure = SIM_BATS[0];
-    var meilleureNb = 99;
-    for(var bi=0; bi<SIM_BATS.length; bi++) {
-      var batUtil = SIM_BATS[bi].kwh * SIM_BATS[bi].dod;
-      var nb = Math.ceil(besoin / batUtil);
-      // Préférer la batterie qui donne le moins de batteries (1 idéalement)
-      // mais avec utilisation > 40%
-      var pct = besoin / (nb * batUtil);
-      if(nb < meilleureNb && pct >= 0.40) {
-        meilleureNb = nb;
-        meilleure = SIM_BATS[bi];
-      }
+    // Batteries — l'energie de la nuit sort de la batterie, apres pertes onduleur
+    var energieNuit = (whN / SIM_REND_OND) / 1000;              // kWh reellement tires
+    var besoinBank  = bat.dod > 0 ? energieNuit / bat.dod : 0;  // capacite nominale requise
+    var nbSerie     = bat.tech === 'gel' ? Math.round(tensionSys / bat.v) : 1;
+    if (bat.tech === 'lithium' && tensionSys === 12) {
+      alertes.push('Cette batterie 51,2V exige un onduleur 48V : le 1,2 kW ne convient pas.');
     }
-    return meilleure;
+    var nbBat = besoinBank > 0 ? Math.max(nbSerie, Math.ceil(besoinBank / bat.kwh)) : 0;
+    if (nbBat > 0 && nbSerie > 1) nbBat = Math.ceil(nbBat / nbSerie) * nbSerie; // series completes
+    var capNom   = nbBat * bat.kwh;
+    var capUtile = capNom * bat.dod;
+    var autoH    = (whN > 0 && nbBat > 0) ? (capUtile * 1000 * SIM_REND_OND) / (whN / hNuit) : 0;
+    if (bat.tech === 'gel' && nbBat > 0) {
+      alertes.push('Plomb-GEL : ne jamais descendre sous 50 % de charge, sinon duree de vie divisee par 4.');
+    }
+
+    // Panneaux
+    var wcNecessaire = whTot / (hSol * SIM_PERTES_PV);
+    var nbPan   = Math.ceil(wcNecessaire / pan.w);
+    var puissPV = nbPan * pan.w;
+    var limitePV = ondW * 1.3;
+    if (puissPV > limitePV) {
+      alertes.push('Ces ' + nbPan + ' panneaux (' + (puissPV / 1000).toFixed(1) + ' kWc) depassent l\'entree solaire du ' +
+                   fmtOnd(ondW) + ' (' + (limitePV / 1000).toFixed(1) + ' kWc max) : prevoir l\'onduleur superieur.');
+    }
+    var prodJour = puissPV * hSol * SIM_PERTES_PV / 1000;
+
+    return { pan: pan, bat: bat, nbBat: nbBat, nbSerie: nbSerie, capNom: capNom, capUtile: capUtile,
+             autoH: autoH, nbPan: nbPan, puissPV: puissPV, prodJour: prodJour, alertes: alertes };
   }
 
-  // Options: choisir panneau fixe, batterie adaptée au besoin nuit
-  var batAdapt0 = SIM_BATS[0]; // GEL 100Ah - option économique toujours GEL
-  var batAdapt1 = choisirBatAdaptee(whN); // Adaptée
-  var batAdapt2 = choisirBatAdaptee(whN); // Adaptée (on peut forcer Li si besoin > 5 kWh)
-  // Si besoin nuit > 6 kWh, forcer Li pour standard et haute
-  if(whN/1000 > 6) { batAdapt1 = SIM_BATS[3]; batAdapt2 = SIM_BATS[4]; }
-  else if(whN/1000 > 3) { batAdapt1 = SIM_BATS[2]; batAdapt2 = SIM_BATS[3]; }
-  else { batAdapt1 = SIM_BATS[1]; batAdapt2 = SIM_BATS[2]; }
+  var pan   = SIM_PANS.filter(function (p) { return p.w === 750; })[0] || SIM_PANS[SIM_PANS.length - 1];
+  var panAlt = SIM_PANS.filter(function (p) { return p.w === 450; })[0];
+  var batGel = SIM_BATS.filter(function (b) { return b.k === 'g200'; })[0];
+  var batLit = SIM_BATS.filter(function (b) { return b.k === 'l314'; })[0];
+  var cGel = calcConfig(pan, batGel);
+  var cLit = calcConfig(pan, batLit);
+  var cAlt = panAlt ? calcConfig(panAlt, batLit) : null;
 
-  var configs = [
-    {label:'🏆 Option Haute Capacité', c:'#F59E0B', cfg:calcConfig(SIM_PANS[3], batAdapt2)},
-    {label:'⚡ Option Standard',        c:'#4CAF50', cfg:calcConfig(SIM_PANS[1], batAdapt1)},
-    {label:'💰 Option Économique',      c:'#60A5FA', cfg:calcConfig(SIM_PANS[0], batAdapt0)},
-  ];
-
-  //  Affichage 
-  var date = new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+  // ── 4. Affichage — AUCUN PRIX au public (prix sur demande) ───
+  function carte(titre, ico, c, vedette) {
+    var a = c.alertes.map(function (m) {
+      return '<div style="background:#fff7ed;border-left:3px solid #f97316;padding:7px 9px;border-radius:5px;font-size:11.5px;color:#7c2d12;margin-top:6px">⚠️ ' + m + '</div>';
+    }).join('');
+    return '<div style="flex:1;min-width:230px;background:#fff;border:' + (vedette ? '2px solid #16a34a' : '1px solid #e5e7eb') +
+      ';border-radius:12px;padding:14px">' +
+      (vedette ? '<div style="display:inline-block;background:#16a34a;color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;margin-bottom:8px">RECOMMANDE</div>' : '') +
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;margin-bottom:10px">' + ico + ' ' + titre + '</div>' +
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:13px"><span style="color:#64748b">Batteries</span><b>' + c.nbBat + ' x ' + c.bat.l + '</b></div>' +
+      (c.nbSerie > 1 ? '<div style="font-size:11px;color:#94a3b8;padding:4px 0">soit ' + (c.nbBat / c.nbSerie) + ' serie(s) de ' + c.nbSerie + ' en ' + tensionSys + 'V</div>' : '') +
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:13px"><span style="color:#64748b">Capacite utile</span><b>' + c.capUtile.toFixed(1) + ' kWh</b></div>' +
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:13px"><span style="color:#64748b">Autonomie sans soleil</span><b>' +
+        (c.autoH <= 0 ? '—' : (c.autoH >= hNuit
+            ? (c.autoH / hNuit).toFixed(1).replace('.', ',') + ((c.autoH / hNuit) >= 2 ? ' nuits' : ' nuit')
+            : c.autoH.toFixed(1).replace('.', ',') + ' h')) + '</b></div>' +
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px"><span style="color:#64748b">Panneaux</span><b>' + c.nbPan + ' x ' + c.pan.l + '</b></div>' +
+      a + '</div>';
+  }
 
   var h = '';
+  h += '<div style="background:var(--dark);border-radius:12px;padding:15px;margin-bottom:12px;color:#fff">' +
+       '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;margin-bottom:12px">📊 Vos besoins</div>' +
+       '<div style="display:flex;flex-wrap:wrap;gap:10px">' +
+       '<div style="flex:1;min-width:105px"><div style="font-size:10px;color:#f97316;font-weight:700;text-transform:uppercase">Consommation</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:17px">' + (whTot / 1000).toFixed(1) + ' kWh/j</div></div>' +
+       '<div style="flex:1;min-width:105px"><div style="font-size:10px;color:#f97316;font-weight:700;text-transform:uppercase">Dont la nuit</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:17px">' + (whN / 1000).toFixed(1) + ' kWh</div></div>' +
+       '<div style="flex:1;min-width:105px"><div style="font-size:10px;color:#f97316;font-weight:700;text-transform:uppercase">Puissance simultanee</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:17px">' + Math.round(puissSimult) + ' W</div></div>' +
+       '<div style="flex:1;min-width:105px"><div style="font-size:10px;color:#f97316;font-weight:700;text-transform:uppercase">Pic au demarrage</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:17px">' + Math.round(appelDem) + ' W</div></div>' +
+       '</div></div>';
 
-  // Récap consommation
-  h += '<div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);border-radius:12px;padding:16px;margin-bottom:14px">';
-  h += '<div style="font-family:Syne,sans-serif;font-size:11px;color:var(--or);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">📊 Votre consommation - '+date+'</div>';
-  h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:12px">';
-  [ [Math.round(whTot)+' Wh/j','Total/jour','#4CAF50'],
-    [Math.round(whJ)+' Wh','Jour ('+hSol+'h)','#FCD34D'],
-    [Math.round(whN)+' Wh','Nuit ('+Math.round(hNuit)+'h)','#60A5FA'],
-    [Math.round(puissCrete)+' W','Puissance installée','#F59E0B'],
-    [fmtOnd(ondW),'Onduleur min','#A78BFA'],
-  ].forEach(function(s){
-    h += '<div style="background:#f9fafb;border-radius:8px;padding:10px;text-align:center">';
-    h += '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:17px;color:'+s[2]+'">'+s[0]+'</div>';
-    h += '<div style="font-size:10px;color:var(--gr);text-transform:uppercase;letter-spacing:.5px;margin-top:3px">'+s[1]+'</div>';
-    h += '</div>';
-  });
-  h += '</div>';
-  // Tableau appareils
-  h += '<table class="devis-table"><thead><tr><th>Appareil</th><th style="text-align:center">W</th><th style="text-align:center">Qté</th><th style="text-align:center;color:#ea580c">H/jour</th><th style="text-align:center;color:#2563eb">H/nuit</th><th style="text-align:right">Wh/j</th></tr></thead><tbody>';
-  apps.forEach(function(a){
-    h += '<tr><td style="color:#1a1a1a">'+a.nom+'</td><td style="text-align:center;color:#1a1a1a">'+a.w+'</td><td style="text-align:center;color:#1a1a1a">'+a.q+'</td>';
-    h += '<td style="text-align:center;color:#ea580c">'+a.hj+'h</td><td style="text-align:center;color:#2563eb">'+a.hn+'h</td>';
-    h += '<td style="text-align:right;font-weight:700;color:#F59E0B">'+Math.round(a.wj+a.wn)+' Wh</td></tr>';
-  });
-  h += '<tr style="border-top:2px solid rgba(249,115,22,.3)"><td colspan="5" style="font-weight:800;color:#1a1a1a">TOTAL</td><td style="text-align:right;font-weight:800;color:#4CAF50">'+Math.round(whTot)+' Wh/j</td></tr>';
-  h += '</tbody></table></div>';
+  h += '<div style="background:linear-gradient(135deg,#1E5C2E,#2D7A3E);border-radius:12px;padding:15px;margin-bottom:12px;color:#fff">' +
+       '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;opacity:.85">Onduleur necessaire</div>' +
+       '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:26px;margin:4px 0">' + fmtOnd(ondW) + ' hybride</div>' +
+       '<div style="font-size:12px;opacity:.9">Systeme ' + tensionSys + 'V' +
+       (moteurs.length ? ' — dimensionne pour le demarrage de : ' + moteurs.map(function (m) { return m.nom; }).join(', ') : '') + '</div>' +
+       (ondInsuffisant ? '<div style="background:rgba(0,0,0,.25);padding:8px;border-radius:6px;margin-top:8px;font-size:11.5px">⚠️ Vos besoins depassent notre plus gros onduleur : il faudra en installer plusieurs en parallele. Contactez-nous.</div>' : '') +
+       '</div>';
 
-  // 3 Options
-  h += '<div style="font-family:Syne,sans-serif;font-size:11px;color:var(--or);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">3 CONFIGURATIONS RECOMMANDÉES</div>';
-  configs.forEach(function(opt){
-    var r = opt.cfg;
-    var autoOK = r.autoH >= hNuit;
-    h += '<div style="border:2px solid '+opt.c+'40;border-radius:12px;padding:15px;margin-bottom:12px;background:rgba(255,255,255,.02)">';
-    h += '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:'+opt.c+';margin-bottom:12px">'+opt.label+'</div>';
-    h += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:12px">';
-    [
-      [r.nbPan+' panneau'+(r.nbPan>1?'x':''), r.pan.l+' monocristallin', '#FCD34D'],
-      [r.nbBat>0 ? r.nbBat+' batterie'+(r.nbBat>1?'s':'') : '-', r.bat.l+(r.nbBat>0?' ('+r.pctUtil+'% utilisé)':''), r.pctUtil>60?'#4CAF50':r.pctUtil>30?'#F59E0B':'#EF4444'],
-      [fmtOnd(ondW), 'Onduleur hybride MPPT', '#A78BFA'],
-      [r.prodTot+' kWh', 'Production/jour', '#4CAF50'],
-      [r.nbBat>0 ? r.autoH+'h / '+Math.round(hNuit)+'h' : '-', 'Autonomie nuit', autoOK?'#4CAF50':'#EF4444'],
-      ['+'+r.surplusPan+' kWh', 'Surplus panneaux', '#34D399'],
-      [r.nbBat>0 ? '+'+r.surplusBat+' kWh' : '-', 'Surplus batterie', '#34D399'],
-    ].forEach(function(it){
-      h += '<div style="background:#f9fafb;border-radius:8px;padding:10px;text-align:center">';
-      h += '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:16px;color:'+it[2]+'">'+it[0]+'</div>';
-      h += '<div style="font-size:10px;color:var(--gr);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">'+it[1]+'</div>';
-      h += '</div>';
+  h += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">' +
+       carte('Option lithium', '🔋', cLit, true) +
+       carte('Option GEL', '🔌', cGel, false) +
+       '</div>';
+
+  if (cAlt && cAlt.nbPan !== cLit.nbPan) {
+    h += '<div style="background:#f8fafc;border:1px dashed #cbd5e1;border-radius:10px;padding:11px;margin-bottom:12px;font-size:12.5px;color:#475569">' +
+         '💡 Avec des panneaux <b>' + cAlt.pan.l + '</b> il en faudrait <b>' + cAlt.nbPan + '</b> au lieu de ' + cLit.nbPan + '. ' +
+         'Nos panneaux sont <b>double face (bifaciaux)</b> : poses sur toit clair ou sur pylone, ils produisent 5 a 15 % de plus que ce calcul, volontairement prudent.</div>';
+  }
+
+  // Bloc reserve au personnel connecte : chiffrage interne
+  if (typeof DB !== 'undefined' && DB.produits && typeof currentUser !== 'undefined' && currentUser && currentUser.role) {
+    var lignes = [], total = 0, complet = true;
+    function trouver(motif) {
+      return (DB.produits || []).filter(function (p) { return p.actif !== false && motif.test((p.nom || '').toLowerCase()); })[0];
+    }
+    [[trouver(new RegExp(String(ondW / 1000).replace('.', '[.,]') + '\\s*kw')), 1, 'Onduleur ' + fmtOnd(ondW)],
+     [trouver(/lithium/), cLit.nbBat, 'Batterie lithium'],
+     [trouver(/panneau|solaire/), cLit.nbPan, 'Panneaux']].forEach(function (r) {
+      if (!r[0] || !r[0].prix) { complet = false; return; }
+      var st = r[0].prix * r[1]; total += st;
+      lignes.push('<div style="display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0"><span>' + r[1] + ' x ' + r[0].nom + '</span><b>' + fmtGNF(st) + ' GNF</b></div>');
     });
-    h += '</div>';
-    h += '<div style="font-size:12px;color:var(--gr2);background:#ffffff;border-radius:7px;padding:10px;line-height:1.8">';
-    h += '• '+r.nbPan+' × panneau <b style="color:#1a1a1a">'+r.pan.l+'</b> ('+r.pan.w+'Wc crête)<br>';
-    if(r.nbBat>0) h += '• '+r.nbBat+' × batterie <b style="color:#1a1a1a">'+r.bat.l+'</b> ('+Math.round(r.bat.kwh*100)/100+' kWh, DoD '+Math.round(r.bat.dod*100)+'%)<br>';
-    h += '• Onduleur hybride MPPT <b style="color:#1a1a1a">'+ondW+' VA</b><br>';
-    h += '• Autonomie nuit : <b style="color:'+(autoOK?'#4CAF50':'#EF4444')+'">'+(r.nbBat>0?r.autoH+'h sur '+Math.round(hNuit)+'h':'Sans batterie')+'</b><br>';
-    h += '• Prix : <b style="color:#F59E0B">Sur devis - Contactez-nous</b>';
-    h += '</div></div>';
-  });
+    h += '<div style="background:#0f172a;border:1px solid #f97316;border-radius:12px;padding:14px;margin-bottom:12px;color:#fff">' +
+         '<div style="font-size:10px;color:#f97316;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">🔒 Chiffrage interne — non visible par le client</div>' +
+         lignes.join('') +
+         '<div style="display:flex;justify-content:space-between;border-top:1px solid #334155;margin-top:8px;padding-top:8px;font-family:Syne,sans-serif;font-weight:800"><span>Total materiel</span><span style="color:#4ade80">' + fmtGNF(total) + ' GNF</span></div>' +
+         (complet ? '' : '<div style="font-size:11px;color:#94a3b8;margin-top:6px">Certains prix manquent dans le catalogue — total partiel.</div>') +
+         '<div style="font-size:11px;color:#94a3b8;margin-top:6px">Hors pose, cablage, disjoncteurs et accessoires.</div></div>';
+  }
 
-  h += '<div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:12px;font-size:12px;color:var(--gr2);line-height:1.8;margin-bottom:10px">';
-  h += '<b style="color:#F59E0B">⚠️ Important :</b> Les batteries sont calculées à <b style="color:#1a1a1a">100% de décharge</b> (capacité nominale complète). ';
-  h += 'En pratique, décharger une batterie GEL à plus de 50% réduit sa durée de vie. ';
-  h += 'Pour une batterie lithium, 80% est recommandé. ';
-  h += 'Contactez-nous pour un dimensionnement avec marge de sécurité.';
-  h += '</div>';
-  h += '<div style="background:rgba(37,211,102,.05);border:1px solid rgba(37,211,102,.15);border-radius:10px;padding:12px;font-size:11px;color:var(--gr2);line-height:1.8">';
-  h += '<b>Note :</b> Calcul basé sur '+hSol+'h de soleil/jour (rendement système 85%, marge sécurité 20%). Prix sur devis après visite technique.';
-  h += '</div>';
+  h += '<div style="background:#fff7ed;border:1px solid rgba(249,115,22,.3);border-radius:12px;padding:14px;text-align:center">' +
+       '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:#7c2d12;margin-bottom:5px">Votre devis personnalise</div>' +
+       '<div style="font-size:12.5px;color:#9a3412">Envoyez-nous cette configuration : nous vous rappelons avec le prix exact, pose comprise.</div></div>';
 
   var el = document.getElementById('sim-result-html');
-  if(el) el.innerHTML = h;
+  if (el) el.innerHTML = h;
   var res = document.getElementById('sim-result');
-  if(res){res.style.display='block'; res.scrollIntoView({behavior:'smooth',block:'start'});}
+  if (res) { res.style.display = 'block'; res.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 
-  // WhatsApp
+  // WhatsApp : la configuration complete part avec la demande
   var wa = document.getElementById('sim-wa');
-  if(wa){
-    var msg = 'Bonjour Laouni, simulation solaire: Conso '+Math.round(whTot)+' Wh/j, Puissance '+Math.round(puissCrete)+'W, Onduleur '+ondW+'VA. Devis svp.';
-    wa.href = 'https://wa.me/224610111015?text='+encodeURIComponent(msg);
+  if (wa) {
+    var msg = 'Bonjour Laouni Electricite, voici ma simulation solaire :\n' +
+      '- Consommation : ' + (whTot / 1000).toFixed(1) + ' kWh/jour (dont ' + (whN / 1000).toFixed(1) + ' kWh la nuit)\n' +
+      '- Puissance simultanee : ' + Math.round(puissSimult) + ' W, pic au demarrage ' + Math.round(appelDem) + ' W\n' +
+      '- Onduleur : ' + fmtOnd(ondW) + ' hybride (' + tensionSys + 'V)\n' +
+      '- Batteries : ' + cLit.nbBat + ' x ' + cLit.bat.l + ' (ou ' + cGel.nbBat + ' x ' + cGel.bat.l + ')\n' +
+      '- Panneaux : ' + cLit.nbPan + ' x ' + cLit.pan.l + '\n' +
+      '- Appareils : ' + apps.map(function (a) { return a.q + 'x ' + a.nom; }).join(', ') + '\n' +
+      'Merci de me communiquer votre devis.';
+    wa.href = 'https://wa.me/' + ((typeof DB !== 'undefined' && DB.siteConfig && DB.siteConfig.wa) || '224610111015') + '?text=' + encodeURIComponent(msg);
   }
 }
 
