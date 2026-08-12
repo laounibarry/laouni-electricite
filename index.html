@@ -982,54 +982,11 @@ img { loading: lazy; }
 <div class="stores-bar" id="storesBar"></div>
 
 <!-- VÉRIFICATION AUTHENTICITÉ -->
-<section class="section" id="verifier" style="background:#f8f8f8;">
-  <div class="section-inner">
-    <div class="verify-section">
-      <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.5rem">
-        <span style="font-size:clamp(44px,8vw,64px);line-height:1">🔍✅</span>
-        <div>
-          <div class="section-tag" id="v-tag">Sécurité achat</div>
-          <h2 class="section-title" id="v-title">Vérifier l'authenticité</h2>
-          <p style="color:#64748b;font-size:.9rem;line-height:1.7" id="v-sub">Entrez le code barre imprimé sur votre produit pour vérifier qu'il est authentique Laouni Electricité Moderne.</p>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
-        <input class="verify-inp" id="verifyInput" placeholder="Saisir code barre — ex: 6901234567890" style="flex:1;min-width:200px" onkeydown="if(event.key==='Enter')doVerify()">
-        <button class="btn-o" onclick="doVerify()" id="v-btn">🔍 Vérifier</button>
-        <button class="btn-g" onclick="scannerVerification()" style="padding:10px 14px;white-space:nowrap">📷 Scanner</button>
-      </div>
-      <div id="scanVerifZone" style="margin-top:8px"></div>
-      <div id="verifyResult"></div>
-    </div>
-  </div>
-</section>
-
-<!-- PRODUITS -->
-<section class="section" id="produits" style="background:#f1f5f9;">
-  <div class="section-inner">
-    <div class="section-tag" id="p-tag">Catalogue</div>
-    <h2 class="section-title" id="p-title">Nos Produits</h2>
-    <p class="section-sub" id="p-sub">Onduleurs hybrides, batteries lithium, panneaux solaires — Tous certifiés authentiques.</p>
-    <!-- BARRE DE RECHERCHE PUBLIQUE -->
-    <div style="margin-top:1.5rem;margin-bottom:1rem">
-      <div style="display:flex;gap:10px;max-width:560px;margin:0 auto">
-        <div style="flex:1;position:relative">
-          <input id="pub-search" class="inp" placeholder="&#x1F50D; Rechercher un produit (onduleur, batterie, panneau...)" style="width:100%;padding-left:16px;font-size:14px" oninput="pubRechercher(this.value)"/>
-        </div>
-        <button onclick="pubRechercher(document.getElementById('pub-search').value)" style="background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border:none;padding:10px 18px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0">Rechercher</button>
-      </div>
-      <div id="pub-search-result" style="max-width:560px;margin:10px auto 0"></div>
-    </div>
-    <div id="produitsGrid" class="gauto"></div>
-  </div>
-</section>
-
-<!-- SIMULATEUR -->
 <section class="section" id="simulation" style="background:#f1f5f9;">
   <div class="section-inner" style="max-width:680px">
     <div class="section-tag">Outil gratuit</div>
     <h2 class="section-title">Simulateur Solaire Guinée</h2>
-    <p class="section-sub">09h → 17h30 = 8.5h de soleil &nbsp;|&nbsp; 17h30 → 09h = 15.5h de nuit</p>
+    <p class="section-sub">Dimensionnement calculé sur l'ensoleillement réel de votre région</p>
 
     <!-- ═══ MODE SIMPLE ═══ -->
     <div id="sim-simple">
@@ -1138,10 +1095,10 @@ img { loading: lazy; }
     <div style="background:var(--dark);border:1px solid rgba(249,115,22,.2);border-radius:12px;padding:14px;margin-bottom:14px">
       <label style="font-size:10px;color:#f97316;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;display:block;margin-bottom:8px">② Localisation</label>
       <select id="sim-loc" class="inp" style="font-size:13px">
-        <option value="8.5">Conakry / Basse Guinée — 8.5h soleil/jour</option>
-        <option value="8.5">Kindia / Fouta Djallon — 8.5h soleil/jour</option>
-        <option value="9.0">Kankan / Haute Guinée — 9h soleil/jour</option>
-        <option value="8.0">Guinée Forestière — 8h soleil/jour</option>
+        <option value="5.0">Conakry / Basse Guinée</option>
+        <option value="5.2">Kindia / Fouta Djallon</option>
+        <option value="5.6">Kankan / Haute Guinée</option>
+        <option value="4.6">Guinée Forestière</option>
       </select>
     </div>
 
@@ -1163,6 +1120,49 @@ img { loading: lazy; }
 </section>
 
 <!-- GUIDE SÉCURITÉ -->
+<section class="section" id="verifier" style="background:#f8f8f8;">
+  <div class="section-inner">
+    <div class="verify-section">
+      <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.5rem">
+        <span style="font-size:clamp(44px,8vw,64px);line-height:1">🔍✅</span>
+        <div>
+          <div class="section-tag" id="v-tag">Sécurité achat</div>
+          <h2 class="section-title" id="v-title">Vérifier l'authenticité</h2>
+          <p style="color:#64748b;font-size:.9rem;line-height:1.7" id="v-sub">Entrez le code barre imprimé sur votre produit pour vérifier qu'il est authentique Laouni Electricité Moderne.</p>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <input class="verify-inp" id="verifyInput" placeholder="Saisir code barre — ex: 6901234567890" style="flex:1;min-width:200px" onkeydown="if(event.key==='Enter')doVerify()">
+        <button class="btn-o" onclick="doVerify()" id="v-btn">🔍 Vérifier</button>
+        <button class="btn-g" onclick="scannerVerification()" style="padding:10px 14px;white-space:nowrap">📷 Scanner</button>
+      </div>
+      <div id="scanVerifZone" style="margin-top:8px"></div>
+      <div id="verifyResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUITS -->
+<section class="section" id="produits" style="background:#f1f5f9;">
+  <div class="section-inner">
+    <div class="section-tag" id="p-tag">Catalogue</div>
+    <h2 class="section-title" id="p-title">Nos Produits</h2>
+    <p class="section-sub" id="p-sub">Onduleurs hybrides, batteries lithium, panneaux solaires — Tous certifiés authentiques.</p>
+    <!-- BARRE DE RECHERCHE PUBLIQUE -->
+    <div style="margin-top:1.5rem;margin-bottom:1rem">
+      <div style="display:flex;gap:10px;max-width:560px;margin:0 auto">
+        <div style="flex:1;position:relative">
+          <input id="pub-search" class="inp" placeholder="&#x1F50D; Rechercher un produit (onduleur, batterie, panneau...)" style="width:100%;padding-left:16px;font-size:14px" oninput="pubRechercher(this.value)"/>
+        </div>
+        <button onclick="pubRechercher(document.getElementById('pub-search').value)" style="background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border:none;padding:10px 18px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0">Rechercher</button>
+      </div>
+      <div id="pub-search-result" style="max-width:560px;margin:10px auto 0"></div>
+    </div>
+    <div id="produitsGrid" class="gauto"></div>
+  </div>
+</section>
+
+<!-- SIMULATEUR -->
 <section class="section" id="guide" style="background:#f8f8f8;">
   <div class="section-inner">
     <div class="section-tag">Normes IEC 60364</div>
@@ -7430,6 +7430,8 @@ var SIM_ONDS = [1200, 3600, 5500, 6200, 11000];
 var SIM_REND_OND  = 0.92;  // pertes de conversion continu -> alternatif
 var SIM_PERTES_PV = 0.75;  // cables, chaleur, poussiere, vieillissement
 var SIM_MARGE_OND = 1.20;  // marge de securite sur la puissance continue
+var SIM_REND_BAT  = 0.90;  // rendement aller-retour de la batterie (charge puis decharge)
+var SIM_H_NUIT_USAGE = 15.5; // duree conventionnelle de "la nuit" pour la saisie des heures
 
 // Appel au demarrage : un moteur (compresseur, pompe) reclame jusqu'a 3 fois
 // sa puissance nominale pendant 1 a 3 secondes. Ignorer cela, c'est vendre un
@@ -7712,11 +7714,16 @@ function simRendreSimple(d) {
        '<div style="flex:1;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:15px;text-align:center">' +
        '<div style="font-size:30px;line-height:1">🔋</div>' +
        '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:23px;color:#0f172a;margin-top:5px">' + d.lit.nbBat + '</div>' +
-       '<div style="font-size:12px;color:#64748b">batterie' + (d.lit.nbBat > 1 ? 's' : '') + ' lithium</div></div>' +
+       '<div style="font-size:12px;color:#64748b">batterie' + (d.lit.nbBat > 1 ? 's' : '') + ' lithium</div>' +
+       '<div style="font-size:11.5px;color:#f97316;font-weight:700;margin-top:3px">' + d.lit.bat.v + 'V ' +
+       Math.round(d.lit.bat.kwh * 1000 / d.lit.bat.v) + 'Ah</div>' +
+       '<div style="font-size:11px;color:#94a3b8">' + (d.lit.capNom).toFixed(1).replace('.', ',') + ' kWh au total</div></div>' +
        '<div style="flex:1;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:15px;text-align:center">' +
        '<div style="font-size:30px;line-height:1">☀️</div>' +
        '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:23px;color:#0f172a;margin-top:5px">' + d.lit.nbPan + '</div>' +
-       '<div style="font-size:12px;color:#64748b">panneaux ' + d.lit.pan.w + 'W</div></div></div>';
+       '<div style="font-size:12px;color:#64748b">panneaux ' + d.lit.pan.w + 'W</div>' +
+       '<div style="font-size:11.5px;color:#f97316;font-weight:700;margin-top:3px">' + (d.lit.puissPV / 1000).toFixed(2).replace('.', ',') + ' kWc</div>' +
+       '<div style="font-size:11px;color:#94a3b8">' + d.lit.prodJour.toFixed(1).replace('.', ',') + ' kWh/jour</div></div></div>';
 
   var nuits = d.lit.autoH > 0 ? d.lit.autoH / d.hNuit : 0;
   if (nuits > 0) {
@@ -7934,8 +7941,12 @@ function simCalculer() {
   if (!apps.length) { alert('Verifiez les puissances saisies.'); return; }
 
   var whTot = whJ + whN;
-  var hSol  = parseFloat((document.getElementById('sim-loc') || {}).value) || 8.5;
-  var hNuit = 24 - hSol;
+  // hPSH = heures equivalent plein soleil (ensoleillement utile), PAS la duree du jour.
+  // La duree de la nuit est une convention d'usage fixe : ce que le client
+  // appelle "la nuit" quand il saisit ses heures d'utilisation.
+  var hPSH  = parseFloat((document.getElementById('sim-loc') || {}).value) || 5.0;
+  var hSol  = hPSH;                 // conserve pour compatibilite
+  var hNuit = SIM_H_NUIT_USAGE;
   var appelDem = puissSimult + supplementDem;
   var moteurs = apps.filter(function (a) { return a.fd > 1; });
 
@@ -7971,7 +7982,10 @@ function simCalculer() {
     }
 
     // Panneaux
-    var wcNecessaire = whTot / (hSol * SIM_PERTES_PV);
+    // L'energie de la nuit traverse en plus la batterie (charge + decharge),
+    // il faut donc en produire davantage que ce que le client consomme.
+    var besoinPV = whJ / SIM_REND_OND + whN / (SIM_REND_OND * SIM_REND_BAT);
+    var wcNecessaire = besoinPV / (hPSH * SIM_PERTES_PV);
     var nbPan   = Math.ceil(wcNecessaire / pan.w);
     var puissPV = nbPan * pan.w;
     var limitePV = ondW * 1.3;
@@ -7979,7 +7993,7 @@ function simCalculer() {
       alertes.push('Ces ' + nbPan + ' panneaux (' + (puissPV / 1000).toFixed(1) + ' kWc) depassent l\'entree solaire du ' +
                    fmtOnd(ondW) + ' (' + (limitePV / 1000).toFixed(1) + ' kWc max) : prevoir l\'onduleur superieur.');
     }
-    var prodJour = puissPV * hSol * SIM_PERTES_PV / 1000;
+    var prodJour = puissPV * hPSH * SIM_PERTES_PV / 1000;
 
     return { pan: pan, bat: bat, nbBat: nbBat, nbSerie: nbSerie, capNom: capNom, capUtile: capUtile,
              autoH: autoH, nbPan: nbPan, puissPV: puissPV, prodJour: prodJour, alertes: alertes };
