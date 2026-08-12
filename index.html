@@ -7436,6 +7436,18 @@ var SIM_H_NUIT_USAGE = 15.5; // duree conventionnelle de "la nuit" pour la saisi
 // Appel au demarrage : un moteur (compresseur, pompe) reclame jusqu'a 3 fois
 // sa puissance nominale pendant 1 a 3 secondes. Ignorer cela, c'est vendre un
 // onduleur qui disjonctera des que le frigo redemarre.
+// Un appareil a thermostat ne consomme pas en continu : son compresseur
+// s'enclenche puis s'arrete. Declarer "frigo allume 20h" ne veut pas dire
+// 20h a pleine puissance. Ce facteur ne s'applique QU'A L'ENERGIE : au
+// demarrage et en pointe, l'appareil appelle bien toute sa puissance.
+function simFacteurCycle(nom) {
+  var n = (nom || '').toLowerCase();
+  if (/frigo|réfrig|refrig|congel|congél|vitrine|chambre froide|vaccin/.test(n)) return 0.45;
+  if (/clim/.test(n)) return 0.65;
+  if (/couveuse|chauffe/.test(n)) return 0.60;
+  return 1;
+}
+
 function simFacteurDemarrage(nom) {
   var n = (nom || '').toLowerCase();
   if (/pompe|moulin|compress|machine|scie|meule|soudure|perceuse|broyeur/.test(n)) return 3;
@@ -7589,7 +7601,7 @@ function simRendreEquip() {
       '<span style="font-size:21px;line-height:1">' + e.i + '</span>' +
       '<div style="flex:1;min-width:0">' +
       '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:#0f172a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + e.n + '</div>' +
-      '<button onclick="simBasculerReglage(' + i + ')" style="background:none;border:none;padding:0;color:#94a3b8;font-size:11px;cursor:pointer;text-decoration:underline">' +
+      '<button id="sim-sum-' + i + '" onclick="simBasculerReglage(' + i + ')" style="background:none;border:none;padding:0;color:#94a3b8;font-size:11px;cursor:pointer;text-decoration:underline">' +
       e.w + ' W · ' + e.hj + 'h jour · ' + e.hn + 'h nuit</button></div>' +
       '<div style="display:flex;align-items:center;gap:7px;flex-shrink:0">' +
       '<button onclick="simQte(' + i + ',-1)" style="width:31px;height:31px;border-radius:9px;border:1px solid #e5e7eb;background:#f8fafc;font-size:17px;font-weight:700;color:#475569;cursor:pointer;touch-action:manipulation;line-height:1">−</button>' +
@@ -7623,7 +7635,20 @@ function simQte(i, d) {
   if (simEquip[i].q === 0) simEquip.splice(i, 1);
   simRendreEquip();
 }
-function simMaj(i, champ, v) { simEquip[i][champ] = Math.max(0, parseFloat(v) || 0); simRendreEquip(); }
+// On met a jour SEULEMENT la ligne concernee : redessiner toute la liste
+// refermait le volet des qu'on passait d'un champ a l'autre.
+function simMaj(i, champ, v) {
+  simEquip[i][champ] = Math.max(0, parseFloat(v) || 0);
+  var e = simEquip[i];
+  var r = document.getElementById('sim-sum-' + i);
+  if (r) r.textContent = e.w + ' W · ' + e.hj + 'h jour · ' + e.hn + 'h nuit';
+  simMajTotal();
+}
+function simMajTotal() {
+  var tot = simEquip.reduce(function (s, e) { return s + e.w * e.q; }, 0);
+  var c = document.getElementById('sim-eq-total');
+  if (c) c.textContent = simEquip.length ? tot.toLocaleString('fr-FR') + ' W au total' : '';
+}
 function simSupprEquip(i) { simEquip.splice(i, 1); simRendreEquip(); }
 
 function simChoisirLieu(k) {
@@ -7956,8 +7981,9 @@ function simCalculer() {
     var fd = simFacteurDemarrage(nom);
     // on suppose qu'un seul moteur demarre a la fois : on retient le pire
     if (fd > 1) supplementDem = Math.max(supplementDem, w * (fd - 1));
-    apps.push({ nom: nom, w: w, q: q, hj: hj, hn: hn, wt: wt, fd: fd, wj: wt * hj, wn: wt * hn });
-    puissSimult += wt; whJ += wt * hj; whN += wt * hn;
+    var cy = simFacteurCycle(nom);   // energie seulement, jamais la puissance de pointe
+    apps.push({ nom: nom, w: w, q: q, hj: hj, hn: hn, wt: wt, fd: fd, cy: cy, wj: wt * hj * cy, wn: wt * hn * cy });
+    puissSimult += wt; whJ += wt * hj * cy; whN += wt * hn * cy;
   }
   if (!apps.length) { alert('Verifiez les puissances saisies.'); return; }
 
