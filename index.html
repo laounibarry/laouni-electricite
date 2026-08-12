@@ -7715,14 +7715,22 @@ function simRendreSimple(d) {
        '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:30px;margin:6px 0">' + fmtOnd(d.ondW) + '</div>' +
        '<div style="font-size:13px;opacity:.92">onduleur hybride</div></div>';
 
+  // Cas ou un seul onduleur ne suffit pas : le dire clairement au client
+  if (d.insuffisant) {
+    h += '<div style="background:#fff7ed;border:2px solid #f97316;border-radius:14px;padding:14px;margin-bottom:12px;text-align:center">' +
+         '<div style="font-size:24px">🏗️</div>' +
+         '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#7c2d12;margin-top:4px">Installation importante</div>' +
+         '<div style="font-size:12.5px;color:#9a3412;margin-top:3px;line-height:1.5">Vos besoins depassent ce que fait un seul onduleur. Il en faudra plusieurs, montes ensemble. Nous etudions cela avec vous.</div></div>';
+  }
+
   h += '<div style="display:flex;gap:9px;margin-bottom:12px">' +
        '<div style="flex:1;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:15px;text-align:center">' +
        '<div style="font-size:30px;line-height:1">🔋</div>' +
-       '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:23px;color:#0f172a;margin-top:5px">' + c.nbBat + '</div>' +
-       '<div style="font-size:12px;color:#64748b">batterie' + (c.nbBat > 1 ? 's' : '') + (estGel ? ' GEL' : ' lithium') + '</div>' +
-       '<div style="font-size:11.5px;color:#f97316;font-weight:700;margin-top:3px">' + String(c.bat.v).replace('.', ',') + 'V ' +
+       '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:23px;color:#0f172a;margin-top:5px">' + (c.nbBat > 0 ? c.nbBat : '—') + '</div>' +
+       '<div style="font-size:12px;color:#64748b">' + (c.nbBat === 0 ? 'batterie optionnelle' : 'batterie' + (c.nbBat > 1 ? 's' : '') + (estGel ? ' GEL' : ' lithium')) + '</div>' +
+       (c.nbBat === 0 ? '<div style="font-size:11px;color:#94a3b8;margin-top:3px">aucun usage la nuit</div>' : '<div style="font-size:11.5px;color:#f97316;font-weight:700;margin-top:3px">' + String(c.bat.v).replace('.', ',') + 'V ' +
        Math.round(c.bat.kwh * 1000 / c.bat.v) + 'Ah</div>' +
-       '<div style="font-size:11px;color:#94a3b8">' + (c.capNom).toFixed(1).replace('.', ',') + ' kWh au total</div></div>' +
+       '<div style="font-size:11px;color:#94a3b8">' + (c.capNom).toFixed(1).replace('.', ',') + ' kWh au total</div>') + '</div>' +
        '<div style="flex:1;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:15px;text-align:center">' +
        '<div style="font-size:30px;line-height:1">☀️</div>' +
        '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:23px;color:#0f172a;margin-top:5px">' + c.nbPan + '</div>' +
@@ -8127,7 +8135,7 @@ function simCalculer() {
   // en mode simple, on masque le pavé technique et on affiche la version courte
   if (window._simModeSimple) {
     if (res) res.style.display = 'none';
-    simRendreSimple({ ondW: ondW, lit: cLit, gel: cGel, hNuit: hNuit, whTot: whTot, tension: tensionSys });
+    simRendreSimple({ ondW: ondW, lit: cLit, gel: cGel, hNuit: hNuit, whTot: whTot, tension: tensionSys, insuffisant: ondInsuffisant, pvPrevu: _pvPrevu });
   }
 }
 
