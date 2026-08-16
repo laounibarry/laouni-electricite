@@ -7774,7 +7774,8 @@ function simRendreSimple(d) {
       '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:26px;color:#0f172a">' + (dispo ? o.nbBat : '—') + '</div>' +
       '<div style="font-size:11.5px;color:#64748b">' + (o.bat.tech === "lithium" ? "lithium" : "batteries GEL") + '</div>' +
       '<div style="font-size:11.5px;font-weight:700;color:#c2410c;margin-top:4px">' + String(o.bat.v).replace(".",",") + 'V ' + Math.round(o.bat.kwh*1000/o.bat.v) + 'Ah</div>' +
-      (dispo ? '<div style="font-size:11px;color:#94a3b8">' + o.capNom.toFixed(1).replace(".",",") + ' kWh au total</div>' +
+      (dispo ? '<div style="font-size:11px;color:#94a3b8">' + o.capNom.toFixed(1).replace(".",",") + ' kWh achetés</div>' +
+               '<div style="font-size:11px;font-weight:700;color:#16a34a">' + o.capUtile.toFixed(1).replace(".",",") + ' kWh utilisables (' + Math.round(o.bat.dod*100) + ' %)</div>' +
                (o.nbSerie > 1 ? '<div style="font-size:10.5px;color:#94a3b8">' + Math.round(o.nbBat/o.nbSerie) + ' série(s) de ' + o.nbSerie + '</div>' : '') +
                '<div style="display:inline-block;background:#fff7ed;border-radius:8px;padding:4px 8px;margin-top:6px;font-size:11.5px;font-weight:800;color:#7c2d12">🌙 ' +
                (nu >= 1 ? "1 nuit couverte" : Math.round(o.autoH) + " h seulement") + '</div>'
