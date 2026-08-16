@@ -7615,7 +7615,7 @@ var SIM_EQ = {
   projo:   { i:'🔆', n:'Projecteur LED',   w:100 },
   tv:      { i:'📺', n:'Télévision',       w:80 },
   tvg:     { i:'📺', n:'Grande TV',        w:150 },
-  deco:    { i:'📡', n:'Décodeur',         w:20 },
+  deco:    { i:'📡', n:'Décodeur',         w:20, veille:5 },
   venti:   { i:'🌀', n:'Ventilateur',      w:60 },
   brasseur:{ i:'🌬️', n:'Brasseur d\'air',  w:90 },
   clim9:   { i:'❄️', n:'Clim 9000 BTU',    w:900 },
@@ -7645,7 +7645,9 @@ var SIM_EQ = {
   steril:  { i:'🏥', n:'Stérilisateur',    w:1200 },
   frigovac:{ i:'💉', n:'Frigo à vaccins',  w:250 },
   couveuse:{ i:'🐣', n:'Couveuse',         w:400 },
-  portail: { i:'🚧', n:'Portail automatique',   w:350 },
+  // 5 W en permanence : carte de commande et recepteur radio, jour et nuit.
+  // Cette veille pese 5 fois plus que les ouvertures elles-memes.
+  portail: { i:'🚧', n:'Portail automatique',   w:350, veille:5 },
   camera:  { i:'📹', n:'Caméra de surveillance',w:10 },
   plaque:  { i:'🍲', n:'Plaque de cuisson',     w:2000 },
   fontaine:{ i:'🚰', n:'Fontaine à eau',        w:100 },
@@ -7817,7 +7819,7 @@ function simRemplirDepuisLieu() {
   var f = (SIM_TAILLES.filter(function (x) { return x.k === simChoixTaille; })[0] || { f: 1 }).f;
   simEquip = lieu.base.map(function (b) {
     var e = SIM_EQ[b[0]];
-    return { cle: b[0], i: e.i, n: e.n, w: e.w, q: Math.max(1, Math.round(b[1] * f)), hj: b[2], hn: b[3] };
+    return { cle: b[0], i: e.i, n: e.n, w: e.w, veille: e.veille || 0, q: Math.max(1, Math.round(b[1] * f)), hj: b[2], hn: b[3] };
   });
 }
 
@@ -7845,7 +7847,7 @@ function simAjoutRapide(k) {
   if (!e) return;
   var deja = simEquip.filter(function (x) { return x.cle === k; })[0];
   if (deja) { deja.q++; }
-  else simEquip.push({ cle: k, i: e.i, n: e.n, w: e.w, q: 1, hj: 6, hn: 2 });
+  else simEquip.push({ cle: k, i: e.i, n: e.n, w: e.w, veille: e.veille || 0, q: 1, hj: 6, hn: 2 });
   simRendreEquip();
 }
 
@@ -7870,7 +7872,12 @@ function simSimpleCalculer() {
   var liste = document.getElementById('sim-list');
   if (liste) liste.innerHTML = '';
   SIM_N = 0;
-  simEquip.forEach(function (e) { if (e.w > 0 && e.q > 0) simAjouter(e.n, e.w, e.q, e.hj, e.hn); });
+  simEquip.forEach(function (e) {
+    if (e.w > 0 && e.q > 0) simAjouter(e.n, e.w, e.q, e.hj, e.hn);
+    // La veille tourne 24 h sur 24 : on l'ajoute comme une ligne a part
+    // entiere, sinon un portail est sous-estime de plus de 80 %.
+    if (e.veille > 0) simAjouter(e.n + ' (veille)', e.veille * e.q, 1, 24 - SIM_H_NUIT_USAGE, SIM_H_NUIT_USAGE);
+  });
   window._simModeSimple = true;
   simCalculer();
   window._simModeSimple = false;
