@@ -7405,10 +7405,10 @@ var SIM_P = [
 // Vos panneaux (full black, double face / bifacial)
 var SIM_PANS = [
   {w:300,  l:'300 Wc'},
-  {w:450,  l:'450 Wc full black'},
+  {w:450,  l:'450 Wc bifacial type N'},
   {w:545,  l:'545 Wc'},
   {w:700,  l:'700 Wc'},
-  {w:750,  l:'750 Wc full black'},
+  {w:750,  l:'750 Wc full black bifacial'},
 ];
 
 // Vos batteries : V x Ah / 1000 = kWh
@@ -7748,39 +7748,48 @@ function simRendreSimple(d) {
          '<div style="font-size:12.5px;color:#9a3412;margin-top:3px;line-height:1.5">Vos besoins depassent ce que fait un seul onduleur. Il en faudra plusieurs, montes ensemble. Nous etudions cela avec vous.</div></div>';
   }
 
-  h += '<div style="display:flex;gap:9px;margin-bottom:12px">' +
-       '<div style="flex:1;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:15px;text-align:center">' +
-       '<div style="font-size:30px;line-height:1">🔋</div>' +
-       '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:23px;color:#0f172a;margin-top:5px">' + (c.nbBat > 0 ? c.nbBat : '—') + '</div>' +
-       '<div style="font-size:12px;color:#64748b">' + (c.nbBat === 0 ? 'batterie optionnelle' : 'batterie' + (c.nbBat > 1 ? 's' : '') + (estGel ? ' GEL' : ' lithium')) + '</div>' +
-       (c.nbBat === 0 ? '<div style="font-size:11px;color:#94a3b8;margin-top:3px">aucun usage la nuit</div>' : '<div style="font-size:11.5px;color:#f97316;font-weight:700;margin-top:3px">' + String(c.bat.v).replace('.', ',') + 'V ' +
-       Math.round(c.bat.kwh * 1000 / c.bat.v) + 'Ah</div>' +
-       '<div style="font-size:11px;color:#94a3b8">' + (c.capNom).toFixed(1).replace('.', ',') + ' kWh au total</div>') + '</div>' +
-       '<div style="flex:1;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:15px;text-align:center">' +
-       '<div style="font-size:30px;line-height:1">☀️</div>' +
-       '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:23px;color:#0f172a;margin-top:5px">' + c.nbPan + '</div>' +
-       '<div style="font-size:12px;color:#64748b">panneaux ' + c.pan.w + 'W</div>' +
-       '<div style="font-size:11.5px;color:#f97316;font-weight:700;margin-top:3px">' + (c.puissPV / 1000).toFixed(2).replace('.', ',') + ' kWc</div>' +
-       '<div style="font-size:11px;color:#94a3b8">' + c.prodJour.toFixed(1).replace('.', ',') + ' kWh/jour</div></div></div>';
-
-  // Sur une petite installation, expliquer pourquoi ce n'est pas du lithium
-  if (estGel) {
-    h += '<div style="background:#f8fafc;border:1px dashed #cbd5e1;border-radius:12px;padding:12px;margin-bottom:12px;font-size:12.5px;color:#475569;line-height:1.5">' +
-         "💡 Vos besoins sont modestes : l'onduleur 1,2 kW suffit, et il fonctionne avec des batteries GEL 12V. " +
-         "Pour passer au <b>lithium</b> (4 fois plus durable, se vide sans s'abîmer), il faut l'onduleur <b>3,6 kW</b> — " +
-         "nous en parlons ensemble sur WhatsApp.</div>";
+  // ── LES PANNEAUX : les deux formats, au choix du client ──
+  function _cartePan(o, vedette) {
+    return '<div style="flex:1;background:#fff;border:' + (vedette ? '2px solid #f97316' : '1px solid #e5e7eb') +
+      ';border-radius:14px;padding:14px;text-align:center">' +
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:26px;color:#0f172a">' + o.nbPan + '</div>' +
+      '<div style="font-size:11.5px;color:#64748b">panneaux</div>' +
+      '<div style="font-size:11.5px;font-weight:700;color:#c2410c;margin-top:4px;line-height:1.3">' + o.pan.l + '</div>' +
+      '<div style="font-size:11px;color:#94a3b8;margin-top:4px">' + (o.puissPV/1000).toFixed(2).replace(".",",") + ' kWc</div>' +
+      '<div style="font-size:11px;color:#94a3b8">' + o.prodJour.toFixed(1).replace(".",",") + ' kWh/jour</div></div>';
   }
+  h += '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;margin:16px 0 2px">☀️ Vos panneaux</div>' +
+       '<div style="font-size:12px;color:#64748b;margin-bottom:8px">Deux formats possibles, à vous de choisir</div>' +
+       '<div style="display:flex;gap:9px;margin-bottom:12px">' + _cartePan(c, true) + (d.alt ? _cartePan(d.alt, false) : '') + '</div>';
 
-  var nuits = c.autoH > 0 ? c.autoH / d.hNuit : 0;
-  if (nuits > 0) {
-    h += '<div style="background:#fff7ed;border:1px solid rgba(249,115,22,.3);border-radius:14px;padding:14px;text-align:center;margin-bottom:12px">' +
-         '<div style="font-size:26px">🌙</div>' +
-         '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:17px;color:#7c2d12;margin-top:3px">' +
-         (nuits >= 1 ? nuits.toFixed(1).replace('.', ',') + (nuits >= 2 ? ' nuits' : ' nuit') : Math.round(c.autoH) + ' heures') +
-         ' sans soleil</div>' +
-         '<div style="font-size:12.5px;color:#9a3412">vous continuez à avoir du courant</div></div>';
+  // ── LES BATTERIES : les deux technologies, comparées ──
+  function _carteBat(o, dispo, vedette, motif) {
+    var nu = (o.autoH > 0 && d.hNuit > 0) ? o.autoH / d.hNuit : 0;
+    return '<div style="flex:1;background:#fff;border:' + (vedette ? '2px solid #16a34a' : '1px solid #e5e7eb') +
+      ';border-radius:14px;padding:14px;text-align:center;opacity:' + (dispo ? '1' : '.55') + '">' +
+      (vedette ? '<div style="display:inline-block;background:#16a34a;color:#fff;font-size:9px;font-weight:900;padding:2px 8px;border-radius:20px;margin-bottom:7px">CONSEILLÉ</div>' : '') +
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:26px;color:#0f172a">' + (dispo ? o.nbBat : '—') + '</div>' +
+      '<div style="font-size:11.5px;color:#64748b">' + (o.bat.tech === "lithium" ? "lithium" : "batteries GEL") + '</div>' +
+      '<div style="font-size:11.5px;font-weight:700;color:#c2410c;margin-top:4px">' + String(o.bat.v).replace(".",",") + 'V ' + Math.round(o.bat.kwh*1000/o.bat.v) + 'Ah</div>' +
+      (dispo ? '<div style="font-size:11px;color:#94a3b8">' + o.capNom.toFixed(1).replace(".",",") + ' kWh au total</div>' +
+               (o.nbSerie > 1 ? '<div style="font-size:10.5px;color:#94a3b8">' + Math.round(o.nbBat/o.nbSerie) + ' série(s) de ' + o.nbSerie + '</div>' : '') +
+               '<div style="display:inline-block;background:#fff7ed;border-radius:8px;padding:4px 8px;margin-top:6px;font-size:11.5px;font-weight:800;color:#7c2d12">🌙 ' +
+               (nu >= 1 ? nu.toFixed(1).replace(".",",") + (nu >= 2 ? " nuits" : " nuit") : Math.round(o.autoH) + " h") + '</div>'
+            : '<div style="font-size:10.5px;color:#64748b;margin-top:6px;line-height:1.4">' + motif + '</div>') +
+      '</div>';
   }
-
+  if (d.lit.nbBat > 0 || d.gel.nbBat > 0) {
+    var litOk = (d.tension === 48);
+    h += '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;margin:18px 0 2px">🔋 Vos batteries</div>' +
+         '<div style="font-size:12px;color:#64748b;margin-bottom:8px">Le lithium coûte plus cher, mais tient bien plus longtemps</div>' +
+         '<div style="display:flex;gap:9px;margin-bottom:12px">' +
+         _carteBat(d.lit, litOk, litOk, "Le lithium 51,2V demande un onduleur 48V. Avec le 1,2 kW, seules les batteries GEL conviennent.") +
+         _carteBat(d.gel, true, !litOk, "") + '</div>';
+  } else {
+    h += '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px;text-align:center;margin-bottom:12px">' +
+         '<div style="font-size:26px">🔋</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px">Batterie optionnelle</div>' +
+         '<div style="font-size:12.5px;color:#64748b;line-height:1.5">Vous ne consommez rien la nuit : les panneaux suffisent en journée.</div></div>';
+  }
   // L'argument qui déclenche l'achat
   h += '<div style="background:#0f172a;border-radius:16px;padding:18px;color:#fff;margin-bottom:12px">' +
        '<div style="text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#4ade80;margin-bottom:12px">Ce que vous arrêtez de payer</div>' +
@@ -8161,7 +8170,7 @@ function simCalculer() {
   // en mode simple, on masque le pavé technique et on affiche la version courte
   if (window._simModeSimple) {
     if (res) res.style.display = 'none';
-    simRendreSimple({ ondW: ondW, lit: cLit, gel: cGel, hNuit: hNuit, whTot: whTot, tension: tensionSys, insuffisant: ondInsuffisant, pvPrevu: _pvPrevu });
+    simRendreSimple({ ondW: ondW, lit: cLit, gel: cGel, hNuit: hNuit, whTot: whTot, tension: tensionSys, insuffisant: ondInsuffisant, pvPrevu: _pvPrevu, alt: cAlt });
   }
 }
 
