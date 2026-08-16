@@ -2279,39 +2279,59 @@ function switchLoginRole(r) {
   }
 }
 
-function doLogin() {
-  // Rate limit anti-brute force
+// La vérification du mot de passe se fait desormais SUR LE SERVEUR.
+// Avant, le navigateur telechargeait tous les mots de passe puis comparait
+// lui-meme : n'importe quel visiteur pouvait les lire dans le code source.
+async function doLogin() {
   var rateCheck = window._checkLoginRateLimit();
-  if(rateCheck.blocked) {
+  if (rateCheck.blocked) {
     notify('🚨 Trop de tentatives ! Attendez ' + rateCheck.wait + 's.', true);
     window._logSecurity('BRUTE_FORCE', 'Connexion bloquée');
     return;
   }
-  const id = (document.getElementById('loginId').value || '').trim();
-  const pw = (document.getElementById('loginPw').value || '').trim();
-  if(!id || !pw) { notify(LANG==='fr'?'Remplir tous les champs.':'Fill all fields.', true); return; }
-  // Valider les inputs (anti-injection)
-  if(!/^[A-Za-z0-9\-_]{1,30}$/.test(id)) {
+  var id = (document.getElementById('loginId').value || '').trim();
+  var pw = (document.getElementById('loginPw').value || '').trim();
+  if (!id || !pw) { notify(LANG === 'fr' ? 'Remplir tous les champs.' : 'Fill all fields.', true); return; }
+  if (!/^[A-Za-z0-9-_]{1,30}$/.test(id)) {
     notify('🚨 Identifiant invalide.', true);
-    window._logSecurity('INJECTION', 'Input suspect: ' + id.substring(0,20));
+    window._logSecurity('INJECTION', 'Input suspect: ' + id.substring(0, 20));
     return;
   }
-  if(loginRole === 'admin' && id === 'admin' && pw === DB.adminPass) {
+
+  var btn = document.getElementById('loginBtn');
+  var libelle = btn ? btn.textContent : null;
+  if (btn) { btn.disabled = true; btn.textContent = 'Vérification…'; }
+
+  var rep = null;
+  try {
+    var res = await SB.rpc('verifier_acces', { p_code: id, p_mot_de_passe: pw });
+    rep = (res.data && res.data[0]) || null;
+    if (res.error) throw res.error;
+  } catch (e) {
+    if (btn) { btn.disabled = false; btn.textContent = libelle; }
+    notify('Connexion au serveur impossible. Vérifiez votre réseau.', true);
+    return;
+  }
+  if (btn) { btn.disabled = false; btn.textContent = libelle; }
+
+  if (rep && rep.ok === true && rep.role === 'admin') {
     window._resetLoginRateLimit();
     window._securityLevel = 'admin';
-    currentUser = {role:'admin', name:'Administrateur'};
+    currentUser = { role: 'admin', name: 'Administrateur' };
     closeLoginModal();
     showAdminPanel();
     logAction('CONNEXION', 'Connexion Admin', 'Administrateur', null);
     notify('✅ Bienvenue Administrateur !');
     return;
   }
-  if(loginRole === 'gerant') {
-    const mg = DB.magasins.find(m => m.actif && m.code === id && m.pass === pw);
-    if(mg) {
+
+  if (rep && rep.ok === true && rep.role === 'gerant') {
+    var mg = DB.magasins.find(function (m) { return String(m.id) === String(rep.magasin_id); })
+          || DB.magasins.find(function (m) { return (m.code || '').toLowerCase() === id.toLowerCase(); });
+    if (mg) {
       window._resetLoginRateLimit();
       window._securityLevel = 'gerant';
-      currentUser = {role:'gerant', magId:mg.id, name:mg.name};
+      currentUser = { role: 'gerant', magId: mg.id, name: mg.name };
       closeLoginModal();
       showAdminPanel();
       logAction('CONNEXION', 'Connexion Gérant', mg.name, mg.id);
@@ -2319,9 +2339,9 @@ function doLogin() {
       return;
     }
   }
-  // Échec connexion
+
   window._logSecurity('ECHEC_LOGIN', 'Tentative échouée: ' + id);
-  notify(LANG==='fr'?'❌ Identifiants incorrects.':'❌ Incorrect credentials.', true);
+  notify(LANG === 'fr' ? '❌ Identifiants incorrects.' : '❌ Incorrect credentials.', true);
 }
 
 function retourSite() {
