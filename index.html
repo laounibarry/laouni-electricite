@@ -7428,7 +7428,10 @@ var SIM_ONDS = [1200, 3600, 5500, 6200, 11000];
 
 // Rendements et marges reels
 var SIM_REND_OND  = 0.92;  // pertes de conversion continu -> alternatif
-var SIM_PERTES_PV = 0.75;  // cables, chaleur, poussiere, vieillissement
+var SIM_PERTES_PV = 0.80;  // champ solaire SEUL : chaleur, poussiere, cables, vieillissement.
+                           // La conversion de l'onduleur est comptee a part (SIM_REND_OND) ;
+                           // la compter deux fois surdimensionnait le champ d'environ 8 %.
+var SIM_GAIN_BIFACIAL = 1.05; // panneaux double face : lumiere reflechie captee en plus (5 a 15 %)
 var SIM_MARGE_OND = 1.20;  // marge de securite sur la puissance continue
 var SIM_REND_BAT  = 0.90;  // rendement aller-retour de la batterie (charge puis decharge)
 var SIM_H_NUIT_USAGE = 15.5; // duree conventionnelle de "la nuit" pour la saisie des heures
@@ -7774,7 +7777,7 @@ function simRendreSimple(d) {
       (dispo ? '<div style="font-size:11px;color:#94a3b8">' + o.capNom.toFixed(1).replace(".",",") + ' kWh au total</div>' +
                (o.nbSerie > 1 ? '<div style="font-size:10.5px;color:#94a3b8">' + Math.round(o.nbBat/o.nbSerie) + ' série(s) de ' + o.nbSerie + '</div>' : '') +
                '<div style="display:inline-block;background:#fff7ed;border-radius:8px;padding:4px 8px;margin-top:6px;font-size:11.5px;font-weight:800;color:#7c2d12">🌙 ' +
-               (nu >= 1 ? nu.toFixed(1).replace(".",",") + (nu >= 2 ? " nuits" : " nuit") : Math.round(o.autoH) + " h") + '</div>'
+               (nu >= 1 ? "1 nuit couverte" : Math.round(o.autoH) + " h seulement") + '</div>'
             : '<div style="font-size:10.5px;color:#64748b;margin-top:6px;line-height:1.4">' + motif + '</div>') +
       '</div>';
   }
@@ -8014,7 +8017,7 @@ function simCalculer() {
   // Sans cela, on recommande des panneaux qu'il est impossible de raccorder.
   var _panPrinc = SIM_PANS.filter(function (p) { return p.w === 750; })[0] || SIM_PANS[SIM_PANS.length - 1];
   var _besoinPV = whJ / SIM_REND_OND + whN / (SIM_REND_OND * SIM_REND_BAT);
-  var _pvPrevu  = Math.ceil((_besoinPV / (hPSH * SIM_PERTES_PV)) / _panPrinc.w) * _panPrinc.w;
+  var _pvPrevu  = Math.ceil((_besoinPV / (hPSH * SIM_PERTES_PV * SIM_GAIN_BIFACIAL)) / _panPrinc.w) * _panPrinc.w;
 
   var ondW = 0;
   for (var oi = 0; oi < SIM_ONDS.length; oi++) {
@@ -8052,7 +8055,7 @@ function simCalculer() {
     // L'energie de la nuit traverse en plus la batterie (charge + decharge),
     // il faut donc en produire davantage que ce que le client consomme.
     var besoinPV = whJ / SIM_REND_OND + whN / (SIM_REND_OND * SIM_REND_BAT);
-    var wcNecessaire = besoinPV / (hPSH * SIM_PERTES_PV);
+    var wcNecessaire = besoinPV / (hPSH * SIM_PERTES_PV * SIM_GAIN_BIFACIAL);
     var nbPan   = Math.ceil(wcNecessaire / pan.w);
     var puissPV = nbPan * pan.w;
     var limitePV = ondW * 1.3;
@@ -8060,7 +8063,7 @@ function simCalculer() {
       alertes.push('Ces ' + nbPan + ' panneaux (' + (puissPV / 1000).toFixed(1) + ' kWc) depassent l\'entree solaire du ' +
                    fmtOnd(ondW) + ' (' + (limitePV / 1000).toFixed(1) + ' kWc max) : prevoir l\'onduleur superieur.');
     }
-    var prodJour = puissPV * hPSH * SIM_PERTES_PV / 1000;
+    var prodJour = puissPV * hPSH * SIM_PERTES_PV * SIM_GAIN_BIFACIAL / 1000;
 
     return { pan: pan, bat: bat, nbBat: nbBat, nbSerie: nbSerie, capNom: capNom, capUtile: capUtile,
              autoH: autoH, nbPan: nbPan, puissPV: puissPV, prodJour: prodJour, alertes: alertes };
