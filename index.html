@@ -7573,7 +7573,11 @@ var SIM_PERTES_PV = 0.80;  // champ solaire SEUL : chaleur, poussiere, cables, v
 var SIM_GAIN_BIFACIAL = 1.05; // panneaux double face : lumiere reflechie captee en plus (5 a 15 %)
 var SIM_MARGE_OND = 1.20;  // marge de securite sur la puissance continue
 var SIM_REND_BAT  = 0.90;  // rendement aller-retour de la batterie (charge puis decharge)
-var SIM_H_NUIT_USAGE = 15.5; // duree conventionnelle de "la nuit" pour la saisie des heures
+var SIM_H_NUIT_USAGE = 15.5;
+// Un onduleur hybride ne s'eteint jamais : il surveille le solaire, gere la
+// batterie et tient les prises pretes. Environ 15 W sur un 1,2 kW, 50 W sur
+// un 11 kW — soit 0,4 a 1,2 kWh par jour, loin d'etre negligeable.
+function simConsoOnduleur(w) { return 10 + 0.0036 * w; } // duree conventionnelle de "la nuit" pour la saisie des heures
 
 // Appel au demarrage : un moteur (compresseur, pompe) reclame jusqu'a 3 fois
 // sa puissance nominale pendant 1 a 3 secondes. Ignorer cela, c'est vendre un
@@ -7954,6 +7958,19 @@ function simRendreSimple(d) {
          '<div style="font-size:12.5px;color:#64748b;line-height:1.5">Vous ne consommez rien la nuit : les panneaux suffisent en journée.</div></div>';
   }
   // L'argument qui déclenche l'achat
+  // Expliquer au client ce qu'il ne voit sur aucune facture d'appareil :
+  // l'onduleur consomme pour lui-meme, en permanence.
+  h += '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:15px;margin-bottom:12px">' +
+       '<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">' +
+       '<span style="font-size:20px">⚡</span>' +
+       '<span style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;flex:1">L\'onduleur consomme aussi</span>' +
+       '<span style="font-weight:800;font-size:14px;color:#c2410c">' + Math.round(d.consoOnd) + ' W</span></div>' +
+       '<div style="font-size:12.5px;line-height:1.55;color:#475569">' +
+       'Un onduleur ne s\'éteint jamais : il surveille le soleil, gère la charge de vos batteries ' +
+       'et tient vos prises pretes, jour et nuit. Il consomme donc ' + Math.round(d.consoOnd) + ' W en permanence, soit ' +
+       (d.whOnd/1000).toFixed(2).replace('.', ',') + ' kWh par jour. C\'est compté dans votre installation — ' +
+       'tous les onduleurs du marché font pareil.</div></div>';
+
   h += '<div style="background:#0f172a;border-radius:16px;padding:18px;color:#fff;margin-bottom:12px">' +
        '<div style="text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#4ade80;margin-bottom:12px">Ce que vous arrêtez de payer</div>' +
        '<div style="display:flex;gap:10px;text-align:center">' +
@@ -8179,14 +8196,28 @@ function simCalculer() {
   var _besoinPV = whJ / SIM_REND_OND + whN / (SIM_REND_OND * SIM_REND_BAT);
   var _pvPrevu  = Math.ceil((_besoinPV / (hPSH * SIM_PERTES_PV * SIM_GAIN_BIFACIAL)) / _panPrinc.w) * _panPrinc.w;
 
-  var ondW = 0;
-  for (var oi = 0; oi < SIM_ONDS.length; oi++) {
-    // trois conditions : le regime continu, l'appel de demarrage (un onduleur
-    // encaisse environ 2x sa puissance quelques secondes), et l'entree solaire
-    if (SIM_ONDS[oi] >= besoinContinu && SIM_ONDS[oi] * 2 >= appelDem && SIM_ONDS[oi] * 1.3 >= _pvPrevu) {
-      ondW = SIM_ONDS[oi]; break;
+  // Si rien ne tourne la nuit, l'onduleur est simplement eteint : on ne va
+  // pas imposer des batteries pour l'alimenter lui-meme dans le noir.
+  var tourneLaNuit = whN > 0, consoOnd = 0, ondW = 0;
+  for (var passe = 0; passe < 2; passe++) {
+    var _bj = whJ + consoOnd * (24 - SIM_H_NUIT_USAGE);
+    var _bn = whN + (tourneLaNuit ? consoOnd * SIM_H_NUIT_USAGE : 0);
+    var _bPV = _bj / SIM_REND_OND + _bn / (SIM_REND_OND * SIM_REND_BAT);
+    _pvPrevu = Math.ceil((_bPV / (hPSH * SIM_PERTES_PV * SIM_GAIN_BIFACIAL)) / _panPrinc.w) * _panPrinc.w;
+    ondW = 0;
+    for (var oi = 0; oi < SIM_ONDS.length; oi++) {
+      // trois conditions : regime continu, appel de demarrage (un onduleur
+      // encaisse environ 2x sa puissance quelques secondes), entree solaire
+      if (SIM_ONDS[oi] >= besoinContinu && SIM_ONDS[oi] * 2 >= appelDem && SIM_ONDS[oi] * 1.3 >= _pvPrevu) {
+        ondW = SIM_ONDS[oi]; break;
+      }
     }
+    consoOnd = simConsoOnduleur(ondW || SIM_ONDS[SIM_ONDS.length - 1]);
   }
+  whJ += consoOnd * (24 - SIM_H_NUIT_USAGE);
+  if (tourneLaNuit) whN += consoOnd * SIM_H_NUIT_USAGE;
+  whTot = whJ + whN;
+  var whOnd = consoOnd * (tourneLaNuit ? 24 : 24 - SIM_H_NUIT_USAGE);
   var ondInsuffisant = false;
   if (!ondW) { ondW = SIM_ONDS[SIM_ONDS.length - 1]; ondInsuffisant = true; }
   var tensionSys = ondW <= 1200 ? 12 : 48;
@@ -8333,7 +8364,7 @@ function simCalculer() {
   // en mode simple, on masque le pavé technique et on affiche la version courte
   if (window._simModeSimple) {
     if (res) res.style.display = 'none';
-    simRendreSimple({ ondW: ondW, lit: cLit, gel: cGel, hNuit: hNuit, whTot: whTot, tension: tensionSys, insuffisant: ondInsuffisant, pvPrevu: _pvPrevu, alt: cAlt });
+    simRendreSimple({ ondW: ondW, lit: cLit, gel: cGel, hNuit: hNuit, whTot: whTot, tension: tensionSys, insuffisant: ondInsuffisant, pvPrevu: _pvPrevu, alt: cAlt, consoOnd: consoOnd, whOnd: whOnd });
   }
 }
 
