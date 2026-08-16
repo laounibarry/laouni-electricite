@@ -2133,11 +2133,13 @@ let DB = {
     }
   ],
   gerantInfosPending: [],
-  adminPass: "Laouni2024!",
+  // Le mot de passe ne vit plus ici : il est verifie par le serveur
+  // (fonction verifier_acces). Ne JAMAIS remettre de valeur en clair.
+  adminPass: null,
   magasins: [
-    {id:"mg1",name:"Conakry",ville:"Conakry",tel:"+224 629 415 967",code:"MGC",pass:"conakry2024",actif:true,adresse:"Quartier Kaloum, Conakry",maps:"https://maps.google.com/?q=Kaloum+Conakry",horaires:"Lun-Sam: 08h-19h | Dim: 10h-15h"},
-    {id:"mg2",name:"Labé",ville:"Labé",tel:"+224 610 111 015",code:"MGL",pass:"labe2024",actif:true,gerantNom:"",gerantPrenom:"",gerantTel:"+224 610 111 015",gerantMail:""},
-    {id:"mg3",name:"Lelouma",ville:"Lelouma",tel:"+224 621 861 912",code:"MGLL",pass:"lelouma2024",actif:true,gerantNom:"",gerantPrenom:"",gerantTel:"+224 621 861 912",gerantMail:""},
+    {id:"mg1",name:"Conakry",ville:"Conakry",tel:"+224 629 415 967",code:"MGC",pass:null,actif:true,adresse:"Quartier Kaloum, Conakry",maps:"https://maps.google.com/?q=Kaloum+Conakry",horaires:"Lun-Sam: 08h-19h | Dim: 10h-15h"},
+    {id:"mg2",name:"Labé",ville:"Labé",tel:"+224 610 111 015",code:"MGL",pass:null,actif:true,gerantNom:"",gerantPrenom:"",gerantTel:"+224 610 111 015",gerantMail:""},
+    {id:"mg3",name:"Lelouma",ville:"Lelouma",tel:"+224 621 861 912",code:"MGLL",pass:null,actif:true,gerantNom:"",gerantPrenom:"",gerantTel:"+224 621 861 912",gerantMail:""},
   ],
   produits: [
     {id:"p1",nom:"Onduleur Hybride 5.5kW",ref:"OND-5500-MPPT",barcode:"6901234567890",cat:"Onduleur",marque:"Laouni",prix:8500000,desc:"Onduleur hybride MPPT 5.5kW - Entrée solaire 120A",photo:null,video:"",actif:true,date:"2024-01-10"},
@@ -5859,16 +5861,25 @@ function changerMonMdp() {
   if(!old_ || !nw || !conf) { notify('Remplir tous les champs.', true); return; }
   if(nw.length < 6) { notify('Minimum 6 caracteres.', true); return; }
   if(nw !== conf) { notify('Les mots de passe ne correspondent pas.', true); return; }
-  if(currentUser.role === 'admin') {
-    if(old_ !== DB.adminPass) { notify('Ancien mot de passe incorrect.', true); return; }
-    DB.adminPass = nw;
-  } else {
-    var mg = DB.magasins.find(function(m){ return m.id === currentUser.magId; });
-    if(!mg || old_ !== mg.pass) { notify('Ancien mot de passe incorrect.', true); return; }
-    mg.pass = nw;
+  // Le changement se fait SUR LE SERVEUR : l'ancien mot de passe y est
+  // verifie, le nouveau y est transforme en empreinte. Avant, cette
+  // fonction ne modifiait que la memoire du navigateur — le mot de passe
+  // redevenait l'ancien au rechargement de la page.
+  var code = currentUser.role === 'admin' ? 'ADMIN' : null;
+  if (!code) {
+    var mg = DB.magasins.find(function (m) { return m.id === currentUser.magId; });
+    code = mg ? mg.code : null;
   }
-  ['pw-old','pw-new','pw-confirm'].forEach(function(id){ var e=document.getElementById(id); if(e)e.value=''; });
-  notify('Mot de passe change avec succes !');
+  if (!code) { notify('Compte introuvable.', true); return; }
+
+  SB.rpc('changer_mot_de_passe', { p_code: code, p_ancien: old_, p_nouveau: nw })
+    .then(function (res) {
+      var r = (res.data && res.data[0]) || null;
+      if (res.error || !r) { notify('Serveur injoignable. Reessayez.', true); return; }
+      if (!r.ok) { notify(r.message, true); return; }
+      ['pw-old','pw-new','pw-confirm'].forEach(function(id){ var e=document.getElementById(id); if(e)e.value=''; });
+      notify('Mot de passe change avec succes !');
+    });
 }
 
 function changerMdpAdmin() {
@@ -5877,10 +5888,19 @@ function changerMdpAdmin() {
   if(!nw || !conf) { notify('Remplir les champs.', true); return; }
   if(nw.length < 6) { notify('Minimum 6 caracteres.', true); return; }
   if(nw !== conf) { notify('Mots de passe differents.', true); return; }
-  DB.adminPass = nw;
-  var e1=document.getElementById('adm-new'); if(e1)e1.value='';
-  var e2=document.getElementById('adm-confirm'); if(e2)e2.value='';
-  notify('Mot de passe administrateur change !');
+  // On exige l'ancien mot de passe : sans session serveur, c'est la seule
+  // preuve que la personne devant l'ecran est bien la bonne.
+  var ancien = prompt('Pour confirmer, tapez votre mot de passe actuel :');
+  if (!ancien) return;
+  SB.rpc('changer_mot_de_passe', { p_code: 'ADMIN', p_ancien: ancien, p_nouveau: nw })
+    .then(function (res) {
+      var r = (res.data && res.data[0]) || null;
+      if (res.error || !r) { notify('Serveur injoignable. Reessayez.', true); return; }
+      if (!r.ok) { notify(r.message, true); return; }
+      var e1=document.getElementById('adm-new'); if(e1)e1.value='';
+      var e2=document.getElementById('adm-confirm'); if(e2)e2.value='';
+      notify('Mot de passe administrateur change !');
+    });
 }
 
 function renderPublicData() {
