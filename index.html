@@ -7598,6 +7598,8 @@ var SIM_EQ = {
   plaque:  { i:'🍲', n:'Plaque de cuisson',     w:2000 },
   fontaine:{ i:'🚰', n:'Fontaine à eau',        w:100 },
   creme:   { i:'🍦', n:'Machine à crème',       w:1500 },
+  spot:    { i:'🔅', n:'Spot LED',              w:12 },
+  corde:   { i:'✨', n:'Corde lumineuse',       w:30 },
 };
 
 // Chaque lieu : ses équipements de base [clé, quantité, heures jour, heures nuit]
@@ -7768,9 +7770,14 @@ function simRemplirDepuisLieu() {
 }
 
 // ── ajout d'équipement ───────────────────────────────────────
+// Toujours proposes, quel que soit le lieu : on doit pouvoir rajouter une
+// lampe qu'on vient de retirer, dans une mosquee comme dans un atelier.
+var SIM_ECLAIRAGE = ['lampe','neon','spot','projo','corde','charge'];
+
 function simOuvrirAjout() {
   var lieu = SIM_LIEUX.filter(function (x) { return x.k === simChoixLieu; })[0];
-  var cles = lieu ? lieu.sugg : Object.keys(SIM_EQ).slice(0, 10);
+  var cles = (lieu ? lieu.sugg : []).concat(SIM_ECLAIRAGE)
+    .filter(function (k, i, t) { return t.indexOf(k) === i; });
   var z = document.getElementById('sim-ajout-liste');
   if (z) z.innerHTML = cles.map(function (k) {
     var e = SIM_EQ[k];
