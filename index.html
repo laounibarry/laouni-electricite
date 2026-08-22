@@ -4606,6 +4606,16 @@ function ouvrirActionsLot(lotId) {
 }
 
 function validerReceptionLot(lotId) {
+  // NEUTRALISE le 22/08/2026. Cette fonction creditait le stock du magasin
+  // de la personne CONNECTEE et non celui du lot : un gerant de Labe qui
+  // validait un arrivage de Conakry faisait monter le stock de Labe. Elle
+  // n ecrivait rien en base, et un double appui ajoutait deux fois la
+  // quantite. Les arrivages passent desormais par l application, ou la
+  // reception est idempotente et credite le bon magasin.
+  notify('La reception se fait dans l application Laouni, onglet Gerer > Arrivages.', true);
+  return;
+
+  // eslint-disable-next-line no-unreachable
   var lot = DB.lots.find(function(l){return l.id===lotId;});
   if(!lot) return;
   var prod = getProdById(lot.pid);
@@ -4788,6 +4798,15 @@ function ouvrirFormLot(lotId) {
 }
 
 function creerLot() {
+  // NEUTRALISE le 22/08/2026. Cette fonction n appelait jamais sbSaveLot :
+  // le lot n existait que dans la memoire du navigateur et disparaissait a
+  // la fermeture de l onglet. Elle acceptait aussi un lot sans magasin, qui
+  // apparaissait alors chez TOUS les gerants, le premier a valider encaissant
+  // la totalite de la quantite. La creation se fait dans l application.
+  notify('La creation d un arrivage se fait dans l application Laouni, onglet Gerer > Arrivages.', true);
+  return;
+
+  // eslint-disable-next-line no-unreachable
   var nom    = ((document.getElementById('fl_nom')||{}).value||'').trim();
   var ref    = ((document.getElementById('fl_ref')||{}).value||'').trim();
   var pid    = ((document.getElementById('fl_pid')||{}).value||'');
@@ -4953,6 +4972,15 @@ function confirmerSuppLot(lotId) {
 }
 
 function ouvrirVenteLot(lotId) {
+  // NEUTRALISE le 22/08/2026. Cette fonction ne verifiait pas que le lot
+  // avait ete receptionne : on pouvait vendre une unite jamais recue. Et la
+  // vente debitait le magasin de la personne connectee, pas celui du lot.
+  // Aucune vente du site n arrivait de toute facon en base : sbSaveVente
+  // n est appelee nulle part. Les ventes passent par l application.
+  notify('Les ventes se font dans l application Laouni, bouton Vendre.', true);
+  return;
+
+  // eslint-disable-next-line no-unreachable
   var lot = DB.lots.find(function(l){return l.id===lotId;});
   if(!lot) { notify('Lot introuvable.',true); return; }
   var prod = getProdById(lot.pid);
