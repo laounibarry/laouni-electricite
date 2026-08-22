@@ -804,6 +804,8 @@ img { loading: lazy; }
     <a href="#produits" id="nav-produits">Produits</a>
     <a href="#verifier" id="nav-verifier">Vérifier</a>
     <a href="#simulation" id="nav-sim">Simulateur</a>
+    <a href="#autonomie" id="nav-auto">Autonomie</a>
+    <a href="#economie" id="nav-eco">Économie</a>
     <a href="#guide" id="nav-guide">Guide</a>
     <a href="#magasins" id="nav-mag">Magasins</a>
     <a href="#contact" id="nav-contact">Contact</a>
@@ -829,6 +831,8 @@ img { loading: lazy; }
     <a href="#produits" onclick="toggleMobileMenu()">📦 Produits</a>
     <a href="#verifier" onclick="toggleMobileMenu()">🔍 Vérifier un produit</a>
     <a href="#simulation" onclick="toggleMobileMenu()">⚡ Simulateur solaire</a>
+    <a href="#autonomie" onclick="toggleMobileMenu()">🔋 Autonomie de ma batterie</a>
+    <a href="#economie" onclick="toggleMobileMenu()">⛽ Groupe ou solaire ?</a>
     <a href="#guide" onclick="toggleMobileMenu()">📋 Guide électrique</a>
     <a href="#magasins" onclick="toggleMobileMenu()">🏪 Nos magasins</a>
     <a href="#contact" onclick="toggleMobileMenu()">📞 Contact</a>
@@ -1118,6 +1122,252 @@ img { loading: lazy; }
     </div>
   </div>
 </section>
+
+
+<!-- ═══ AUTONOMIE D'UNE BATTERIE ═══ -->
+<section class="section" id="autonomie" style="background:linear-gradient(135deg,#0f172a,#1e293b)">
+  <div class="section-inner" style="max-width:760px">
+    <div class="section-tag" style="color:#f97316">La question qu'on nous pose le plus</div>
+    <h2 class="section-title" style="color:#fff">Votre batterie tient combien de temps&nbsp;?</h2>
+    <p class="section-sub" style="color:#94a3b8">Choisissez votre batterie, cochez ce qui tourne la nuit. La réponse est immédiate — et elle tient compte de ce que l'onduleur consomme pour lui-même.</p>
+
+    <div style="background:#fff;border-radius:16px;padding:clamp(14px,3vw,22px)">
+
+      <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#0f172a;margin-bottom:8px">1. Votre batterie</div>
+      <div id="autoBats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:14px"></div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <div style="flex:1;min-width:160px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:11px;padding:9px 13px;display:flex;align-items:center;gap:8px">
+          <span style="font-size:13px;font-weight:600;color:#334155;flex:1">Nombre</span>
+          <button onclick="autoNb(-1)" style="width:30px;height:30px;border-radius:8px;border:1px solid #e5e7eb;background:#fff;font-size:17px;cursor:pointer;line-height:1">−</button>
+          <span id="autoNbTxt" style="min-width:26px;text-align:center;font-family:Syne,sans-serif;font-weight:900;font-size:17px">1</span>
+          <button onclick="autoNb(1)" style="width:30px;height:30px;border-radius:8px;border:1px solid rgba(249,115,22,.4);background:#fff7ed;color:#f97316;font-size:17px;cursor:pointer;line-height:1">+</button>
+        </div>
+        <div style="flex:1;min-width:160px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:11px;padding:9px 13px;display:flex;align-items:center;gap:8px">
+          <span style="font-size:13px;font-weight:600;color:#334155;flex:1">Onduleur</span>
+          <select id="autoOnd" class="sel" onchange="autoCalc()" style="border:none;background:transparent;font-weight:700"></select>
+        </div>
+      </div>
+
+      <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#0f172a;margin-bottom:8px">2. Ce qui tourne la nuit</div>
+      <div id="autoChips" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px"></div>
+      <div style="font-size:11.5px;color:#94a3b8;margin-bottom:16px">Cliquez pour ajouter. Le petit − retire.</div>
+
+      <div id="autoResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CE QUE COUTE UN GROUPE ELECTROGENE ═══ -->
+<section class="section" id="economie" style="background:#f8fafc">
+  <div class="section-inner" style="max-width:760px">
+    <div class="section-tag">Comparez avant d'acheter</div>
+    <h2 class="section-title">Groupe électrogène ou solaire&nbsp;?</h2>
+    <p class="section-sub">Le prix d'achat d'un groupe se voit une fois. Le carburant, lui, part tous les jours. Voici le total.</p>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:clamp(14px,3vw,22px)">
+      <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#0f172a;margin-bottom:4px">Combien de carburant par jour&nbsp;?</div>
+      <div id="ecoLitres" style="font-family:Syne,sans-serif;font-weight:900;font-size:30px;color:#ea580c;line-height:1.2">10 litres</div>
+      <input type="range" id="ecoSlider" min="1" max="100" value="10" oninput="ecoCalc()" style="width:100%;margin:10px 0 4px;accent-color:#f97316">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#94a3b8;margin-bottom:16px"><span>1 L</span><span>100 L</span></div>
+
+      <div id="ecoResult"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   Deux outils qui repondent aux questions posees en magasin.
+   Ils reutilisent EXACTEMENT les constantes du simulateur : une
+   reponse qui contredirait le simulateur ferait perdre la vente.
+   ═══════════════════════════════════════════════════════════════ */
+
+var AUTO_BAT = 'l314';
+var AUTO_NB  = 1;
+var AUTO_OND = 5500;
+var AUTO_SEL = { lampe:6, venti:1, tv:1 };
+
+// Choix volontairement court : au-dela de quinze lignes, plus personne ne remplit.
+var AUTO_PROPOSES = ['lampe','spot','venti','brasseur','tv','deco','frigo','congel',
+                     'clim9','clim12','charge','camera','pompe','ordi','vitrine','corde'];
+
+function autoFmt(n) {
+  var s = Math.round(n).toString(), r = '';
+  for (var i = 0; i < s.length; i++) { if (i > 0 && (s.length - i) % 3 === 0) r += ' '; r += s[i]; }
+  return r;
+}
+
+function autoDuree(h) {
+  if (!(h > 0)) return '—';
+  if (h >= 48) return (h / 24).toFixed(1) + ' jours';
+  var e = Math.floor(h), m = Math.round((h - e) * 60);
+  return m === 0 ? e + ' h' : e + ' h ' + m + ' min';
+}
+
+function autoBat() {
+  for (var i = 0; i < SIM_BATS.length; i++) if (SIM_BATS[i].k === AUTO_BAT) return SIM_BATS[i];
+  return SIM_BATS[0];
+}
+
+function autoChargeW() {
+  var t = 0;
+  for (var k in AUTO_SEL) { if (SIM_EQ[k]) t += SIM_EQ[k].w * AUTO_SEL[k]; }
+  return t;
+}
+
+function autoNb(d) {
+  AUTO_NB = Math.min(12, Math.max(1, AUTO_NB + d));
+  document.getElementById('autoNbTxt').textContent = AUTO_NB;
+  autoCalc();
+}
+
+function autoChoisirBat(k) { AUTO_BAT = k; autoRendreBats(); autoCalc(); }
+function autoAjouter(k)    { AUTO_SEL[k] = (AUTO_SEL[k] || 0) + 1; autoRendreChips(); autoCalc(); }
+function autoRetirer(k, ev) {
+  if (ev) ev.stopPropagation();
+  if (!AUTO_SEL[k]) return;
+  AUTO_SEL[k]--;
+  if (AUTO_SEL[k] <= 0) delete AUTO_SEL[k];
+  autoRendreChips(); autoCalc();
+}
+
+function autoRendreBats() {
+  var d = document.getElementById('autoBats');
+  if (!d) return;
+  d.innerHTML = SIM_BATS.map(function(b) {
+    var a = b.k === AUTO_BAT;
+    return '<div onclick="autoChoisirBat(\'' + b.k + '\')" style="cursor:pointer;padding:11px 13px;border-radius:12px;border:' +
+      (a ? '2px solid #f97316;background:#fff7ed' : '1px solid #e5e7eb;background:#fff') + '">' +
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:13px;color:' + (a ? '#ea580c' : '#0f172a') + '">🔋 ' + b.l + '</div>' +
+      '<div style="font-size:11.5px;color:#64748b;margin-top:2px">' + b.kwh.toFixed(1) + ' kWh · ' + (b.tech === 'gel' ? 'décharge 50 %' : 'décharge 90 %') + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function autoRendreChips() {
+  var d = document.getElementById('autoChips');
+  if (!d) return;
+  d.innerHTML = AUTO_PROPOSES.map(function(k) {
+    var m = SIM_EQ[k]; if (!m) return '';
+    var q = AUTO_SEL[k] || 0, a = q > 0;
+    return '<span onclick="autoAjouter(\'' + k + '\')" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:8px 11px;border-radius:10px;border:' +
+      (a ? '1.6px solid rgba(249,115,22,.6);background:#fff7ed' : '1px solid #e5e7eb;background:#fff') + ';font-size:12.5px;font-weight:' + (a ? '800' : '500') + '">' +
+      m.i + ' ' + m.n +
+      (a ? '<b style="background:#f97316;color:#fff;border-radius:10px;padding:1px 7px;font-size:11px">' + q + '</b>' +
+           '<b onclick="autoRetirer(\'' + k + '\',event)" style="color:#94a3b8;padding:0 3px;font-size:15px">−</b>' : '') +
+      '</span>';
+  }).join('');
+}
+
+function autoCalc() {
+  var d = document.getElementById('autoResult');
+  if (!d) return;
+  var ondSel = document.getElementById('autoOnd');
+  if (ondSel) AUTO_OND = parseInt(ondSel.value, 10) || AUTO_OND;
+
+  var b = autoBat(), charge = autoChargeW();
+  if (charge <= 0) {
+    d.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:22px;font-size:13.5px">Cochez au moins un appareil pour voir l&#39;autonomie.</div>';
+    return;
+  }
+
+  // Meme chaine de pertes que le dimensionnement : profondeur de decharge,
+  // rendement de la batterie, puis conversion de l'onduleur.
+  var utileWh = AUTO_NB * b.kwh * 1000 * b.dod * SIM_REND_BAT * SIM_REND_OND;
+  var veille  = simConsoOnduleur(AUTO_OND);
+  var heures  = utileWh / (charge + veille);
+  var nuits   = heures / SIM_H_NUIT_USAGE;
+  var partV   = Math.round(veille / (charge + veille) * 100);
+
+  d.innerHTML =
+    '<div style="background:linear-gradient(135deg,#1E5C2E,#2D7A3E);border-radius:16px;padding:20px;text-align:center;margin-bottom:12px">' +
+      '<div style="color:rgba(255,255,255,.7);font-size:10.5px;letter-spacing:1.5px;font-weight:700">AUTONOMIE SANS SOLEIL</div>' +
+      '<div style="color:#fff;font-family:Syne,sans-serif;font-weight:900;font-size:clamp(26px,7vw,36px);line-height:1.2">' + autoDuree(heures) + '</div>' +
+      '<div style="color:rgba(255,255,255,.75);font-size:13px">' +
+        (nuits >= 1 ? nuits.toFixed(1) + ' nuit' + (nuits >= 2 ? 's' : '') + ' complète' + (nuits >= 2 ? 's' : '')
+                    : 'soit ' + Math.round(nuits * 100) + ' % d&#39;une nuit') +
+      '</div>' +
+    '</div>' +
+    '<div style="font-size:13px;color:#334155;line-height:2">' +
+      '<div style="display:flex;justify-content:space-between"><span style="color:#64748b">Puissance branchée</span><b>' + autoFmt(charge) + ' W</b></div>' +
+      '<div style="display:flex;justify-content:space-between"><span style="color:#64748b">L&#39;onduleur pour lui-même</span><b>' + Math.round(veille) + ' W (' + partV + ' %)</b></div>' +
+      '<div style="display:flex;justify-content:space-between"><span style="color:#64748b">Énergie réellement disponible</span><b>' + (utileWh / 1000).toFixed(1) + ' kWh</b></div>' +
+    '</div>' +
+    '<div style="background:#fff7ed;border:1px solid rgba(249,115,22,.35);border-radius:12px;padding:13px;margin:12px 0;font-size:12.5px;line-height:1.65;color:#7c2d12">' +
+      (b.tech === 'gel'
+        ? 'Une batterie GEL ne se vide qu&#39;à moitié : la vider entièrement la détruit en quelques mois. C&#39;est pourquoi le lithium, à capacité annoncée égale, tient presque deux fois plus longtemps.'
+        : 'Le lithium se vide à 90 % sans s&#39;abîmer, et tient plus de 6 000 cycles. C&#39;est ce qui explique l&#39;écart avec une batterie GEL de même capacité annoncée.') +
+    '</div>' +
+    '<a href="https://wa.me/' + ((typeof DB !== 'undefined' && DB.siteConfig && DB.siteConfig.wa) || '224610111015') +
+      '?text=' + encodeURIComponent('Bonjour Laouni Électricité, je voudrais le prix de : ' + AUTO_NB + ' × ' + b.l +
+        ' avec un onduleur ' + (AUTO_OND / 1000) + ' kW. Pour ' + Math.round(charge) + ' W la nuit, soit ' + autoDuree(heures) + ' d\'autonomie.') +
+      '" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:.5rem;background:#25D366;color:#fff;padding:.85rem 1rem;border-radius:12px;font-weight:700;font-size:14px;text-decoration:none">💬 Demander le prix sur WhatsApp</a>';
+}
+
+/* ── Ce que coute un groupe electrogene ── */
+
+function ecoCalc() {
+  var s = document.getElementById('ecoSlider'), d = document.getElementById('ecoResult');
+  if (!s || !d) return;
+  var litres = parseFloat(s.value) || 0;
+  document.getElementById('ecoLitres').textContent = litres + ' litres';
+
+  var jour = litres * SIM_PRIX_CARBURANT;
+  var mois = jour * 30, an = jour * 365, cinq = an * 5;
+  var kwhJour = litres / SIM_CONSO_GROUPE;
+  // Traduit le besoin en materiel de la marque, sans donner de prix.
+  var panneaux = Math.ceil(kwhJour * 1000 / (5.0 * SIM_PERTES_PV * SIM_GAIN_BIFACIAL * 750));
+
+  d.innerHTML =
+    '<div style="background:linear-gradient(135deg,#991B1B,#DC2626);border-radius:16px;padding:20px;text-align:center;margin-bottom:12px">' +
+      '<div style="color:rgba(255,255,255,.7);font-size:10.5px;letter-spacing:1.5px;font-weight:700">CARBURANT SUR 5 ANS</div>' +
+      '<div style="color:#fff;font-family:Syne,sans-serif;font-weight:900;font-size:clamp(24px,6.5vw,34px);line-height:1.25">' + autoFmt(cinq) + ' GNF</div>' +
+      '<div style="color:rgba(255,255,255,.75);font-size:13px">' + autoFmt(litres * 365 * 5) + ' litres brûlés</div>' +
+    '</div>' +
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">' +
+      ['Par jour', 'Par mois', 'Par an'].map(function(l, i) {
+        var v = [jour, mois, an][i];
+        return '<div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:11px;padding:11px 8px;text-align:center">' +
+          '<div style="font-size:9px;color:#94a3b8;letter-spacing:1px;font-weight:800;text-transform:uppercase">' + l + '</div>' +
+          '<div style="font-family:Syne,sans-serif;font-weight:900;font-size:13px;margin-top:3px">' + autoFmt(v) + '</div>' +
+          '<div style="font-size:9.5px;color:#94a3b8">GNF</div></div>';
+      }).join('') +
+    '</div>' +
+    '<div style="background:linear-gradient(135deg,#1E5C2E,#2D7A3E);border-radius:16px;padding:17px;margin-bottom:10px">' +
+      '<div style="color:#fff;font-family:Syne,sans-serif;font-weight:800;font-size:15px;margin-bottom:9px">La même énergie, sans un litre de carburant</div>' +
+      [['Votre groupe produit', kwhJour.toFixed(1) + ' kWh par jour'],
+       ['Il faudrait environ', panneaux + ' panneaux de 750 Wc'],
+       ['Carburant nécessaire', '0 litre'],
+       ['Bruit la nuit', 'aucun']].map(function(r) {
+        return '<div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:5px">' +
+          '<span style="color:rgba(255,255,255,.7);font-size:12.5px">' + r[0] + '</span>' +
+          '<b style="color:#fff;font-size:13px">' + r[1] + '</b></div>';
+      }).join('') +
+      '<div style="color:rgba(255,255,255,.7);font-size:12.5px;line-height:1.55;margin-top:8px">Nos onduleurs hybrides et nos batteries sont de notre marque : c&#39;est nous qui garantissons, et c&#39;est nous qui dépannons, à Conakry, Labé et Lelouma.</div>' +
+    '</div>' +
+    '<div style="font-size:11.5px;color:#94a3b8;line-height:1.5;margin-bottom:14px">Ce calcul ne compte que le carburant. Les vidanges, les réparations et le remplacement du groupe s&#39;ajoutent.</div>' +
+    '<a href="https://wa.me/' + ((typeof DB !== 'undefined' && DB.siteConfig && DB.siteConfig.wa) || '224610111015') +
+      '?text=' + encodeURIComponent('Bonjour Laouni Électricité, mon groupe consomme ' + litres + ' litres par jour, soit ' +
+        autoFmt(an) + ' GNF de carburant par an. Je voudrais un devis pour passer au solaire (environ ' + kwhJour.toFixed(1) + ' kWh par jour).') +
+      '" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:.5rem;background:#25D366;color:#fff;padding:.85rem 1rem;border-radius:12px;font-weight:700;font-size:14px;text-decoration:none">💬 Demander mon devis</a>';
+}
+
+// SIM_EQ et SIM_BATS sont declares plus bas dans la page : on attend que
+// tout soit lu avant de dessiner.
+window.addEventListener('DOMContentLoaded', function() {
+  var sel = document.getElementById('autoOnd');
+  if (sel && typeof SIM_ONDS !== 'undefined') {
+    sel.innerHTML = SIM_ONDS.map(function(w) {
+      return '<option value="' + w + '"' + (w === AUTO_OND ? ' selected' : '') + '>' + (w / 1000) + ' kW</option>';
+    }).join('');
+  }
+  autoRendreBats();
+  autoRendreChips();
+  autoCalc();
+  ecoCalc();
+});
+</script>
 
 <!-- GUIDE SÉCURITÉ -->
 <!-- ═══ BIEN INSTALLER SES PANNEAUX ═══ -->
