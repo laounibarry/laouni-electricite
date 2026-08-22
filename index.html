@@ -3363,9 +3363,23 @@ function sauvegarderProduit(pid) {
   var file = document.getElementById('fp_photo').files[0];
   function doSave(photo) {
     if(pid) {
-    DB.produits = DB.produits.map(function(p) {
-    return p.id === pid ? Object.assign({}, p, {nom:nom, ref:ref, barcode:bc, cat:cat, marque:marque, prix:prix, showPrix:show, video:video, desc:desc, photo:photo||p.photo}) : p;
+    // Le code barre et la reference servent de cle au scan en caisse et a la
+    // verification client. Le site ne les controlait qu'a la creation : deux
+    // produits pouvaient finir avec le meme, et c'est le mauvais qui remontait.
+    var conflit = DB.produits.find(function(p){
+    return p.id !== pid && (p.barcode === bc || (p.ref||'').toLowerCase() === ref.toLowerCase());
     });
+    if(conflit) { notify('Ce code barre ou cette reference est deja celui de "'+conflit.nom+'".', true); return; }
+    var maj = null;
+    DB.produits = DB.produits.map(function(p) {
+    if(p.id !== pid) return p;
+    maj = Object.assign({}, p, {nom:nom, ref:ref, barcode:bc, cat:cat, marque:marque, prix:prix, showPrix:show, video:video, desc:desc, photo:photo||p.photo});
+    return maj;
+    });
+    // Sans cette ligne, la modification ne quittait jamais le navigateur :
+    // le site annoncait « Produit mis a jour » et tout etait perdu au
+    // rechargement de la page.
+    if(maj) sbSaveProduit(maj);
     notify('Produit mis a jour !');
     } else {
     if(DB.produits.find(function(p){return p.barcode===bc;})) { notify('Ce code barre existe deja.', true); return; }
@@ -3775,8 +3789,17 @@ function sauvegarderMagasin(mid) {
     if(!mg) return;
     var conflict = DB.magasins.find(function(m){return m.id!==mid && m.code===code;});
     if(conflict){notify('Cet identifiant est deja utilise par '+conflict.name+'.',true);return;}
+    // Le controle de longueur passe AVANT toute ecriture : le site posait
+    // deja le nouvel identifiant, puis refusait le mot de passe et sortait,
+    // laissant le magasin avec un identifiant change et un mot de passe qui
+    // ne correspondait plus.
+    if(pass && pass.length < 4){notify('Mot de passe trop court (min 4).',true);return;}
     mg.name=nom; mg.ville=ville; mg.tel=tel; mg.code=code; mg.horaires=horaires;
-    if(pass){if(pass.length<4){notify('Mot de passe trop court.',true);return;} mg.pass=pass;}
+    mg.adresse=adresse; mg.maps=maps;
+    // On ne remet plus de mot de passe en clair dans la base : il est garde
+    // par Supabase depuis le verrouillage du 17/08.
+    if(pass){notify('Le mot de passe ne se change plus ici — demandez la ligne a coller.',true);}
+    sbSaveMagasin(mg);
     notify('Magasin '+nom+' mis a jour !');
   } else {
     if(!pass){notify('Mot de passe obligatoire.',true);return;}
@@ -3800,7 +3823,15 @@ function sauvegarderMagasin(mid) {
 
 function toggleMag(mid,actif){
   var mg=getMagById(mid);
-  if(mg){mg.actif=actif;notify(actif?'Magasin reactive.':'Magasin desactive.');renderMagasinsTab(document.getElementById('admContent'));renderPublicData();}
+  if(mg){
+    mg.actif=actif;
+    sbSaveMagasin(mg);  // sans cela, le magasin reapparaissait au rechargement
+    // « Desactiver » ne retire le magasin que du site public : le vendeur
+    // garde sa connexion, qui depend de son compte Supabase.
+    notify(actif?'Magasin remis sur le site.':'Magasin retire du site (le vendeur garde son acces).');
+    renderMagasinsTab(document.getElementById('admContent'));
+    renderPublicData();
+  }
 }
 
 function supprimerMag(mid){
@@ -6780,10 +6811,15 @@ function scrollToSection(id) {
 }
 
 function toggleProduit(pid, actif) {
+  var maj = null;
   DB.produits = DB.produits.map(function(p){
-    return p.id === pid ? Object.assign({}, p, {actif: actif}) : p;
+    if(p.id !== pid) return p;
+    maj = Object.assign({}, p, {actif: actif});
+    return maj;
   });
-  notify(actif ? '↩ Produit restauré.' : '🗑 Produit archivé.');
+  // Sans cette ligne, le produit archive reapparaissait au rechargement.
+  if(maj) sbSaveProduit(maj);
+  notify(actif ? '↩ Produit remis en vente.' : '🗑 Produit retiré de la vente.');
   renderDash('produits');
 }
 
