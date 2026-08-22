@@ -1875,7 +1875,7 @@ async function sbLoadAll() {
   // 3. Charger les données admin en arrière-plan (sans bloquer)
   setTimeout(async () => {
     try {
-      const [lots, unites, mvts, ventes, contacts, chats, journal, verifs] = await Promise.all([
+      const [lots, unites, mvts, ventes, contacts, chats, journal, verifs, rech] = await Promise.all([
         SB.from('lots').select('*'),
         SB.from('lot_unites').select('*'),
         SB.from('mouvements').select('*').order('created_at',{ascending:false}).limit(200),
@@ -1884,16 +1884,35 @@ async function sbLoadAll() {
         SB.from('chat_messages').select('*').order('created_at',{ascending:true}),
         SB.from('journal').select('*').order('created_at',{ascending:false}).limit(500),
         SB.from('verifications').select('*').order('created_at',{ascending:false}).limit(200),
+        SB.from('recherches').select('*').order('created_at',{ascending:false}).limit(1000),
       ]);
 
       if(lots.data)   DB.lots = lots.data;
       if(unites.data) DB.lots.forEach(l => { l.unites = unites.data.filter(u => u.lot_id === l.id); });
       if(mvts.data)   DB.mouvements = mvts.data.map(m=>({...m, user:m.user_action, date:m.created_at?.split('T')[0]}));
-      if(ventes.data) DB.ventes = ventes.data;
+      // La base ne stocke que le prix unitaire et la quantite : le montant se
+      // recalcule ici. Sans cela le chiffre d'affaires retombait a zero des
+      // qu'on rechargeait la page.
+      if(ventes.data) DB.ventes = ventes.data.map(v=>({...v,
+        montant: (v.prix_vente||0)*(v.qte||1),
+        date: (v.created_at||'').split('T')[0],
+        user: v.user_action||'',
+        clientNom: v.client_nom||'',
+        clientTel: v.client_tel||'',
+        barcode: v.barcode_unite||''}));
       if(contacts.data) DB.clients = contacts.data;
       if(chats.data)  DB.chatsAdmin = chats.data;
       if(journal.data) DB.journal = journal.data.map(j=>({...j, user:j.user_action}));
       if(verifs.data) DB.verifs = verifs.data;
+      // Ce que les clients ont cherche, y compris avant aujourd'hui : c'est
+      // la liste de ce qu'il faut commander.
+      if(rech.data) DB.recherches = rech.data.map(r=>({
+        id: r.id,
+        q: r.terme||'',
+        count: 1,
+        trouve: (r.resultats||0) > 0,
+        date: (r.created_at||'').split('T')[0],
+        lastAt: (r.created_at||'').replace('T',' ').substring(0,19)}));
 
       
     } catch(e) {
@@ -8774,6 +8793,17 @@ function pubRechercher(q) {
 function pubEnregistrerRecherche(q, resultats) {
   var now2 = now ? now() : new Date().toISOString().replace('T',' ').substring(0,19);
   var dateJ = today();
+
+  // On l'ecrit aussi dans la base. Sinon la recherche disparait des que le
+  // visiteur ferme son navigateur, et le magasin ne saura jamais ce que les
+  // clients lui ont demande sans l'avoir. L'echec est silencieux : cela ne
+  // doit jamais empecher l'affichage du resultat.
+  try {
+    if(typeof SB !== 'undefined' && SB && q && q.trim().length >= 2) {
+      SB.from('recherches').insert({terme: q.trim(), resultats: resultats.length})
+        .then(function(r){ if(r && r.error) console.warn('recherche non enregistree:', r.error.message); });
+    }
+  } catch(e) { console.warn('recherche non enregistree:', e.message); }
 
   // Chercher si cette recherche existe déjà aujourd'hui
   var existing = null;
