@@ -6788,15 +6788,31 @@ function toggleProduit(pid, actif) {
 }
 
 function envoyerContact() {
-  var nom  = ((document.getElementById('contact_nom')||{}).value||'').trim();
-  var msg  = ((document.getElementById('contact_msg')||{}).value||'').trim();
-  var tel  = ((document.getElementById('contact_tel')||{}).value||'').trim();
+  // Les champs du formulaire s'appellent cf-nom / cf-tel / cf-msg. Cette
+  // fonction cherchait contact_nom / contact_msg / contact_tel, qui
+  // n'existent nulle part : elle ne trouvait donc jamais rien et repondait
+  // « Remplir nom et message » meme sur un formulaire correctement rempli.
+  // Aucun message envoye par le formulaire du site n'est jamais parti.
+  var nom  = ((document.getElementById('cf-nom')||{}).value||'').trim();
+  var tel  = ((document.getElementById('cf-tel')||{}).value||'').trim();
+  var msg  = ((document.getElementById('cf-msg')||{}).value||'').trim();
   if(!nom || !msg) { notify('Remplir nom et message.', true); return; }
+
+  // On garde le message dans la base avant d'ouvrir WhatsApp : si le client
+  // ferme WhatsApp sans envoyer, le magasin a quand meme son nom et son
+  // numero. C'est ce que fait deja l'application.
+  try {
+    if(typeof SB !== 'undefined' && SB) {
+      SB.from('contacts').insert({nom:nom, tel:tel, email:'', sujet:'Formulaire du site', message:msg})
+        .then(function(r){ if(r && r.error) console.warn('contact non enregistre:', r.error.message); });
+    }
+  } catch(e) { console.warn('contact non enregistre:', e.message); }
+
   var cfg  = DB.siteConfig || {};
-  var wa   = (cfg.wa || '+224629415967').replace(/[^0-9]/g,'');
+  var wa   = (cfg.wa || '224610111015').replace(/[^0-9]/g,'');
   var text = encodeURIComponent('Bonjour LAOUNI,\n\nNom: ' + nom + (tel?'\nTél: '+tel:'') + '\n\nMessage: ' + msg);
   window.open('https://wa.me/' + wa + '?text=' + text, '_blank');
-  notify('✅ Redirection WhatsApp !');
+  notify('✅ Message envoyé — nous vous rappelons.');
 }
 
 function validerMvt(mvId) {
