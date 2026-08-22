@@ -75,6 +75,24 @@ if('serviceWorker' in navigator) {
       .then(function(reg) { })
       .catch(function(err) { });
   });
+
+  // La page enregistree s'affiche tout de suite ; la version fraiche arrive
+  // derriere. Quand elle differe, on propose de recharger au lieu de le
+  // faire de force : le visiteur peut etre en train de remplir le
+  // simulateur ou le formulaire de contact.
+  navigator.serviceWorker.addEventListener('message', function(e) {
+    if(!e.data || e.data.type !== 'nouvelle-version') return;
+    if(document.getElementById('bandeauMaj')) return;
+    var b = document.createElement('div');
+    b.id = 'bandeauMaj';
+    b.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#0F172A;color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;font-size:.85rem;box-shadow:0 -4px 16px rgba(0,0,0,.25)';
+    b.innerHTML = '<span style="flex:1">Une version plus récente du site est disponible.</span>' +
+      '<button id="majPlusTard" style="background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;padding:7px 12px;border-radius:8px;font-size:.8rem;cursor:pointer">Plus tard</button>' +
+      '<button id="majMaintenant" style="background:#f97316;border:none;color:#fff;padding:7px 14px;border-radius:8px;font-weight:700;font-size:.8rem;cursor:pointer">Actualiser</button>';
+    document.body.appendChild(b);
+    document.getElementById('majMaintenant').onclick = function(){ location.reload(); };
+    document.getElementById('majPlusTard').onclick = function(){ b.remove(); };
+  });
 }
 </script>
 
@@ -200,114 +218,25 @@ window.addEventListener('appinstalled', function() {
 }
 </script>
 
-<!-- 
-     GOOGLE — Search Console + Analytics
- -->
-<!-- 1. Remplace le content par ton code Google Search Console -->
+<!--
+     SUIVI PUBLICITAIRE — RETIRE LE 22/08/2026
+
+     Six pixels etaient charges a chaque visite : Google Analytics,
+     Facebook, TikTok, Snapchat, Bing et Pinterest. Aucun n etait
+     configure : les identifiants etaient restes G-XXXXXXXXXX,
+     XXXXXXXXXXXXXXXX, etc. — quatorze emplacements a remplir.
+
+     Ils telechargeaient donc six scripts externes a chaque ouverture du
+     site, envoyaient les donnees des visiteurs a six societes, et ne
+     renvoyaient AUCUNE statistique en echange. Sur une connexion
+     guineenne, cela retardait l affichage de plusieurs secondes pour
+     rien.
+
+     Pour les remettre : fournir les vrais identifiants, et seulement
+     ceux des reseaux reellement utilises. Le code d origine est dans
+     l historique git, commit precedant celui-ci.
+-->
 <meta name="google-site-verification" content="COLLE_ICI_TON_CODE_GOOGLE_SEARCH_CONSOLE">
-
-<!-- 2. Google Analytics GA4 — remplace G-XXXXXXXXXX par ton ID -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX', {
-    page_title: 'Laouni Electricité Moderne',
-    page_location: 'https://www.laouni-electricitemoderne.com/'
-  });
-</script>
-
-<!-- 
-     FACEBOOK / INSTAGRAM — Meta Pixel
-     Remplace XXXXXXXXXXXXXXXX par ton Pixel ID
-     (Gestionnaire de publicités → Pixels)
- -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', 'XXXXXXXXXXXXXXXX');
-fbq('track', 'PageView');
-fbq('track', 'ViewContent', {
-  content_name: 'Laouni Electricité Moderne',
-  content_category: 'Énergie Solaire Guinée',
-  content_ids: ['onduleur','batterie','panneau'],
-  content_type: 'product'
-});
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXXX&ev=PageView&noscript=1"/></noscript>
-
-<!-- 
-     TIKTOK — Pixel
-     Remplace XXXXXXXXXXXXXXXXXX par ton TikTok Pixel ID
-     (TikTok Ads Manager → Assets → Events)
- -->
-<script>
-!function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];
-ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];
-ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};
-for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
-ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e};
-ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";
-ttq._i=ttq._i||{};ttq._i[e]=[];ttq._i[e]._u=i;ttq._t=ttq._t||{};ttq._t[e]=+new Date;
-ttq._o=ttq._o||{};ttq._o[e]=n||{};var o=document.createElement("script");
-o.type="text/javascript";o.async=!0;o.src=i+"?sdkid="+e+"&lib="+t;
-var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
-ttq.load('XXXXXXXXXXXXXXXXXX');
-ttq.page();
-}(window,document,'ttq');
-</script>
-
-<!-- 
-     SNAPCHAT — Pixel
-     Remplace avec ton Snap Pixel ID
- -->
-<script>
-(function(e,t,n){if(e.snaptr)return;var a=e.snaptr=function(){a.handleRequest?
-a.handleRequest.apply(a,arguments):a.queue.push(arguments)};a.queue=[];
-var s='script';r=t.createElement(s);r.async=!0;r.src=n;
-var u=t.getElementsByTagName(s)[0];u.parentNode.insertBefore(r,u);
-})(window,document,'https://sc-static.net/scevent.min.js');
-snaptr('init','XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX',{
-  'user_email': '__INSERT_USER_EMAIL__'
-});
-snaptr('track','PAGE_VIEW');
-</script>
-
-<!-- 
-     MICROSOFT / BING — UET Tag
-     Remplace XXXXXXX par ton UET Tag ID
-     (Microsoft Advertising → Conversion Tracking)
- -->
-<script>
-(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"XXXXXXX"};
-o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,
-n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;
-s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},
-i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,
-"script","//bat.bing.com/bat.js","uetq");
-</script>
-
-<!-- 
-     PINTEREST — Tag
-     Remplace XXXXXXXXXXXXXXXXX par ton Pinterest Tag ID
- -->
-<script>
-!function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(
-Array.prototype.slice.call(arguments))};var n=window.pintrk;n.queue=[],n.version="3.0";
-var t=document.createElement("script");t.async=!0,t.src=e;
-var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}
-("https://s.pinimg.com/ct/core.js");
-pintrk('load','XXXXXXXXXXXXXXXXX');
-pintrk('page');
-</script>
-<noscript><img height="1" width="1" style="display:none;" alt=""
-src="https://ct.pinterest.com/v3/?tid=XXXXXXXXXXXXXXXXX&noscript=1"/></noscript>
-
 <!-- 
      CHATGPT / IA — SearchGPT & Bing AI
      (Déjà couvert par sitemap + schema.org)
@@ -336,7 +265,25 @@ src="https://ct.pinterest.com/v3/?tid=XXXXXXXXXXXXXXXXX&noscript=1"/></noscript>
 <meta name="msapplication-TileColor" content="#f97316">
 <meta name="msapplication-TileImage" content="https://www.laouni-electricitemoderne.com/logo-144.png">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- Le generateur de QR code ne sert QUE dans l espace admin, pour les
+     etiquettes produits et les arrivages. Le charger dans l en-tete faisait
+     attendre chaque visiteur du site public pour une bibliotheque qu il
+     n utilisera jamais. Il est desormais telecharge a la demande. -->
+<script>
+var _qrPret = null;
+function chargerQR() {
+  if (_qrPret) return _qrPret;
+  _qrPret = new Promise(function(ok, non) {
+    if (window.QRCode) return ok();
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    s.onload = function(){ ok(); };
+    s.onerror = function(){ _qrPret = null; non(new Error('QR indisponible')); };
+    document.head.appendChild(s);
+  });
+  return _qrPret;
+}
+</script>
 <style id="dynamicStyle">
 :root{
   /*  AFRIVORA-STYLE LIGHT THEME  */
@@ -3609,7 +3556,9 @@ function genQRProduit(pid) {
   setTimeout(function(){
     var d = document.getElementById('qrDiv');
     if(!d) return;
-    if(typeof QRCode !== 'undefined') {
+    d.innerHTML = '<div style="color:#94a3b8;font-size:12px;padding:20px">Préparation du QR…</div>';
+    chargerQR().then(function(){
+    d.innerHTML = '';
     new QRCode(d, {
     text: qrData,
     width: 180,
@@ -3618,9 +3567,9 @@ function genQRProduit(pid) {
     colorLight: '#ffffff',
     correctLevel: QRCode.CorrectLevel.H
     });
-    } else {
-    d.innerHTML = '<div style="color:#333;font-size:12px;padding:20px">QRCode lib non chargee.</div>';
-    }
+    }).catch(function(){
+    d.innerHTML = '<div style="color:#B91C1C;font-size:12px;padding:20px">QR indisponible — connexion trop faible. Réessayez plus tard.</div>';
+    });
   }, 150);
 }
 
@@ -4892,9 +4841,11 @@ function afficherQRLot(lotId) {
   setTimeout(function(){
     var d = document.getElementById('qrLotDiv');
     if(!d) return;
-    if(typeof QRCode !== 'undefined') {
+    chargerQR().then(function(){
     new QRCode(d, {text:qrData, width:180, height:180, colorDark:'#0A0F0D', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.H});
-    }
+    }).catch(function(){
+    d.innerHTML = '<div style="color:#B91C1C;font-size:12px;padding:20px">QR indisponible — connexion trop faible.</div>';
+    });
   }, 150);
 }
 
