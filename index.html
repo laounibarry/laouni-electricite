@@ -1459,16 +1459,18 @@ window.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
 
+    <!-- UN SEUL fichier. Il etait auparavant decoupe par architecture pour
+         etre plus leger : les telephones recents, qui ont abandonne le 32
+         bits, refusaient la version « anciens telephones » avec un message
+         « incompatible avec votre telephone » qui n expliquait rien. Un
+         fichier qui ne s installe pas ne pese pas 20 Mo, il ne vaut rien. -->
     <a href="/app/Laouni-Electricite.apk" download
        style="display:block;background:linear-gradient(135deg,#f97316,#d94608);color:#fff;text-decoration:none;padding:17px;border-radius:14px;font-family:Syne,sans-serif;font-weight:800;font-size:16px;text-align:center;box-shadow:0 6px 20px rgba(249,115,22,.35)">
-      ⬇️ Télécharger l'application &nbsp;·&nbsp; 24 Mo
+      ⬇️ Télécharger l'application &nbsp;·&nbsp; 50 Mo
     </a>
 
-    <div style="text-align:center;margin-top:12px">
-      <a href="/app/Laouni-Electricite-anciens-telephones.apk" download
-         style="color:#94a3b8;font-size:12.5px;text-decoration:underline">
-        Mon téléphone refuse ce fichier — version pour appareils plus anciens (20 Mo)
-      </a>
+    <div style="text-align:center;margin-top:12px;color:#94a3b8;font-size:12.5px">
+      Un seul fichier, pour tous les téléphones Android.
     </div>
 
     <div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.22);border-radius:12px;padding:13px;margin-top:16px">
