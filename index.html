@@ -2805,7 +2805,18 @@ async function sbSaveContact(c) {
 
 //  SAUVEGARDE chat 
 async function sbSaveChatMsg(msg) {
-  const row = {session_id:msg.sessionId||msg.session_id||'anon', visiteur_nom:msg.nom||'Visiteur', de:msg.de||'visiteur', message:msg.message||msg.msg||''};
+  // Le magasin destinataire voyage avec le message. Sans lui, les trois
+  // gerants voyaient la meme liste et chacun pouvait croire qu elle etait
+  // pour l autre.
+  const mag = (typeof CHAT_MAGASIN !== 'undefined' && CHAT_MAGASIN) ? CHAT_MAGASIN : null;
+  const row = {
+    session_id: msg.sessionId||msg.session_id||'anon',
+    visiteur_nom: msg.nom||'Visiteur',
+    de: msg.de||'visiteur',
+    message: msg.message||msg.msg||'',
+    mag_id: msg.magId || (mag ? mag.id : null),
+    mag_nom: msg.magNom || (mag ? mag.name : null)
+  };
   const {error} = await SB.from('chat_messages').insert(row);
   if(error) console.error('sbSaveChatMsg:', error.message);
   return !error;
@@ -9883,7 +9894,9 @@ function chatInitList(){
   if(!el) return;
   var contacts=[{id:"admin",nom:"Administration",ville:"Service central",icon:"&#x1F6E1;",tel:"224610111015"}];
   DB.magasins.filter(function(m){return m.actif;}).forEach(function(m){
-    contacts.push({id:m.id,nom:"Magasin "+m.name,ville:m.ville,icon:"&#x1F3EA;",tel:(m.tel||"224610111015").replace(/[^0-9]/g,"")});
+    // villeSeule : le nom sans le mot « Magasin » devant, pour l enregistrer
+    // tel quel comme destinataire du message.
+    contacts.push({id:m.id,nom:"Magasin "+m.name,villeSeule:m.name,ville:m.ville,icon:"&#x1F3EA;",tel:(m.tel||"224610111015").replace(/[^0-9]/g,"")});
   });
   el.innerHTML=contacts.map(function(c){
     return "<div id='cc"+c.id+"' style='background:#f9fafb;border:1px solid rgba(249,115,22,.15);border-radius:9px;padding:10px;margin-bottom:7px;display:flex;align-items:center;gap:9px;cursor:pointer'>"+
@@ -9998,6 +10011,26 @@ function chatEnvoyer(){
   // Aussi dans DB.chatsClient pour affichage côté visiteur
   DB.chatsClient.push({id:"cc"+Date.now(),cid:_chatContact.id,from:"client",msg:txt,heure:h});
   chatClientSave();
+
+  // ENVOI REEL, avec le magasin destinataire.
+  //
+  // Le visiteur choisit deja son interlocuteur a l ecran precedent — le
+  // magasin de Conakry, de Labe, de Lelouma, ou l administration. Ce choix
+  // ne partait nulle part : le message arrivait en base sans destinataire,
+  // et les trois gerants voyaient la meme liste sans savoir pour qui.
+  //
+  // « admin » n est pas un magasin : on laisse le destinataire vide, et
+  // c est l administrateur qui voit tout.
+  var estMagasin = _chatContact.id !== 'admin';
+  sbSaveChatMsg({
+    sessionId: CHAT_SESSION_ID,
+    nom: vName,
+    de: 'visiteur',
+    message: txt,
+    magId: estMagasin ? _chatContact.id : null,
+    magNom: estMagasin ? (_chatContact.villeSeule || _chatContact.nom) : null
+  });
+
   inp.value="";
   chatAfficher(_chatContact.id);
 }
