@@ -1,23 +1,4 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-
-  "//": [
-    "Une seule adresse pour un seul site.",
-    "",
-    "laouni-electricite.vercel.app servait exactement le meme contenu que",
-    "www.laouni-electricitemoderne.com, en repondant 200. Google voyait donc",
-    "deux sites identiques et devait choisir lequel montrer : la balise",
-    "canonical le lui disait, mais une redirection ne se discute pas, alors",
-    "qu une balise est un conseil qu il peut ignorer.",
-    "",
-    "Le domaine du client (l apex, sans www) redirigeait deja tout seul :",
-    "Vercel s en charge. Rien a ajouter pour lui.",
-    "",
-    "laouni-electricite-moderne.com, chez Hostinger, n est pas concerne : il",
-    "n affiche qu une page « domaine parque » et ne duplique donc rien. Le",
-    "proprietaire n y a plus acces de toute facon."
-  ],
-
   "redirects": [
     {
       "source": "/(.*)",
@@ -26,15 +7,12 @@
       "permanent": true
     }
   ],
-
   "headers": [
     {
-      "//": "Le fichier du site change souvent : il ne doit jamais rester en cache chez le visiteur. Le service worker s occupe de le montrer hors ligne.",
       "source": "/index.html",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
     },
     {
-      "//": "Les images et icones, elles, ne changent jamais : un an de cache economise autant de telechargements sur une connexion guineenne.",
       "source": "/(.*).(png|ico|svg|jpg|jpeg|webp)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     }
