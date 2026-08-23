@@ -968,10 +968,10 @@ const MARQUES = [
     intro:
       'Parmi les plus grands fabricants mondiaux de modules. Leur nom se vend tout seul : c\'est exactement ce qui en fait des cibles.',
     liste: [
-      ['LONGi', 'Chine', 'Parmi les tout premiers fabricants mondiaux de modules et de plaquettes de silicium.'],
-      ['JinkoSolar', 'Chine', 'Autre géant du module solaire, présent sur tous les continents.'],
-      ['Trina Solar', 'Chine', 'Fabricant historique de modules, très largement diffusé.'],
-      ['Canadian Solar', 'Canada / Chine', 'Fabricant de modules bien implanté à l\'international.'],
+      ['LONGi', 'Chine', 'Parmi les tout premiers fabricants mondiaux de modules et de plaquettes de silicium.', 'https://www.longi.com'],
+      ['JinkoSolar', 'Chine', 'Autre géant du module solaire, présent sur tous les continents.', 'https://www.jinkosolar.com'],
+      ['Trina Solar', 'Chine', 'Fabricant historique de modules, très largement diffusé.', 'https://www.trinasolar.com'],
+      ['Canadian Solar', 'Canada / Chine', 'Fabricant de modules bien implanté à l\'international.', 'https://www.canadiansolar.com'],
     ],
   },
   {
@@ -979,12 +979,12 @@ const MARQUES = [
     intro:
       'La pièce qui transforme le courant continu des panneaux et des batteries en courant utilisable, et qui bascule quand le réseau part.',
     liste: [
-      ['Huawei', 'Chine', 'L\'un des deux plus gros fabricants mondiaux d\'onduleurs solaires. Gamme FusionSolar, du résidentiel aux grandes centrales.'],
-      ['Sungrow', 'Chine', 'L\'autre géant mondial de l\'onduleur, présent du toit de maison à la centrale au sol.'],
-      ['Deye', 'Chine', 'Devenu une référence de l\'onduleur HYBRIDE — celui qui gère à la fois les panneaux, les batteries et le réseau. Très répandu dans les installations africaines hors réseau ou à réseau instable.'],
-      ['Growatt', 'Chine', 'Très présent sur le résidentiel et l\'hybride, avec une large gamme de petites et moyennes puissances. Une des marques les plus vues en Afrique de l\'Ouest.'],
-      ['SMA', 'Allemagne', 'Le fabricant historique de l\'onduleur solaire, référence de longévité et de documentation technique. Gammes Sunny Boy et Sunny Island.'],
-      ['Fronius', 'Autriche', 'Fabricant européen reconnu pour sa qualité de fabrication et le suivi des installations.'],
+      ['Huawei', 'Chine', 'L\'un des deux plus gros fabricants mondiaux d\'onduleurs solaires. Gamme FusionSolar, du résidentiel aux grandes centrales.', 'https://solar.huawei.com'],
+      ['Sungrow', 'Chine', 'L\'autre géant mondial de l\'onduleur, présent du toit de maison à la centrale au sol.', 'https://en.sungrowpower.com'],
+      ['Deye', 'Chine', 'Devenu une référence de l\'onduleur HYBRIDE — celui qui gère à la fois les panneaux, les batteries et le réseau. Très répandu dans les installations africaines hors réseau ou à réseau instable.', 'https://www.deyeinverter.com'],
+      ['Growatt', 'Chine', 'Très présent sur le résidentiel et l\'hybride, avec une large gamme de petites et moyennes puissances. Une des marques les plus vues en Afrique de l\'Ouest.', 'https://www.growatt.com'],
+      ['SMA', 'Allemagne', 'Le fabricant historique de l\'onduleur solaire, référence de longévité et de documentation technique. Gammes Sunny Boy et Sunny Island.', 'https://www.sma.de'],
+      ['Fronius', 'Autriche', 'Fabricant européen reconnu pour sa qualité de fabrication et le suivi des installations.', 'https://www.fronius.com'],
     ],
   },
   {
@@ -992,11 +992,11 @@ const MARQUES = [
     intro:
       'Attention à la distinction : certains fabriquent les CELLULES, d\'autres assemblent des batteries à partir de cellules achetées. Ce ne sont pas les mêmes chiffres.',
     liste: [
-      ['CATL', 'Chine', 'Le plus gros fabricant mondial de cellules de batteries, tous usages confondus.'],
-      ['BYD', 'Chine', 'Fabricant de cellules et de systèmes de stockage complets.'],
-      ['EVE Energy', 'Chine', 'Fabricant de cellules prismatiques LiFePO₄, dont les références servent de base à une grande partie du stockage solaire.'],
-      ['Pylontech', 'Chine', 'Spécialiste des batteries lithium en rack pour le stockage résidentiel.'],
-      ['Victron Energy', 'Pays-Bas', 'Référence de l\'installation hors réseau : onduleurs-chargeurs, régulateurs, batteries et supervision. Documentation technique très complète, souvent citée par les installateurs.'],
+      ['CATL', 'Chine', 'Le plus gros fabricant mondial de cellules de batteries, tous usages confondus.', 'https://www.catl.com'],
+      ['BYD', 'Chine', 'Fabricant de cellules et de systèmes de stockage complets.', 'https://www.bydbatterybox.com'],
+      ['EVE Energy', 'Chine', 'Fabricant de cellules prismatiques LiFePO₄, dont les références servent de base à une grande partie du stockage solaire.', 'https://www.evebattery.com'],
+      ['Pylontech', 'Chine', 'Spécialiste des batteries lithium en rack pour le stockage résidentiel.', 'https://www.pylontech.com.cn'],
+      ['Victron Energy', 'Pays-Bas', 'Référence de l\'installation hors réseau : onduleurs-chargeurs, régulateurs, batteries et supervision. Documentation technique très complète, souvent citée par les installateurs.', 'https://www.victronenergy.com'],
     ],
   },
 ];
@@ -1019,9 +1019,10 @@ ${CONTREFACON}
 ${MARQUES.map((f) => `
 <h2>${f.famille}</h2>
 <p>${f.intro}</p>
-${f.liste.map(([nom, pays, quoi]) => `<div class="encadre" style="margin:.7rem 0">
+${f.liste.map(([nom, pays, quoi, site]) => `<div class="encadre" style="margin:.7rem 0">
   <h3 style="margin-top:0">${nom} <span style="font-weight:400;font-size:.8rem;color:#64748b">— ${pays}</span></h3>
-  <p style="margin-bottom:0">${quoi}</p>
+  <p>${quoi}</p>
+  <a href="${site}" target="_blank" rel="noopener nofollow" style="display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:700;color:#ea580c;text-decoration:none;border:1px solid #e2e8f0;background:#f8fafc;border-radius:9px;padding:.4rem .7rem">↗ ${site.replace(/^https?:\/\//, '').replace('www.', '')}</a>
 </div>`).join('\n')}`).join('\n')}
 
 <h2>Trois métiers, à ne pas confondre</h2>
