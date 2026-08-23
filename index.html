@@ -1139,8 +1139,21 @@ img { loading: lazy; }
       <div style="display:flex;justify-content:space-between;font-size:11px;color:#94a3b8;margin-bottom:18px"><span>1 kWh</span><span>30 kWh</span></div>
 
       <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#0f172a;margin-bottom:4px">Température du local à batteries</div>
-      <div style="font-size:12px;color:#64748b;line-height:1.6;margin-bottom:9px">Pas la météo&nbsp;: la température là où les batteries sont posées. Un cagibi fermé sous tôle passe la journée à 35&nbsp;°C, et le plomb y perd la moitié de sa vie.</div>
-      <div id="batTemps" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px"></div>
+      <div style="font-size:12px;color:#64748b;line-height:1.6;margin-bottom:9px">Pas la météo&nbsp;: la température là où les batteries sont posées. Et la moyenne de la journée, pas le pic de quinze heures — un bac de plomb est lourd, il ne suit pas les à-coups de l'air.</div>
+      <div id="batTemps" style="display:flex;flex-wrap:wrap;gap:7px"></div>
+      <div id="batTempLieu" style="font-size:12.5px;color:#64748b;margin:7px 0 18px">Local maçonné fermé, peu ventilé — Conakry</div>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:15px;margin-bottom:18px">
+        <div style="font-family:Syne,sans-serif;font-weight:900;font-size:15px;margin-bottom:9px">🔄 Un cycle, c'est quoi&nbsp;?</div>
+        <div style="font-size:13px;line-height:1.7;color:#374151">
+          Un cycle, c'est <b>UNE charge suivie d'UNE décharge</b>. Ce n'est pas une journée.<br><br>
+          Si vous chargez aujourd'hui et que la batterie ne se vide qu'après-demain, vous n'avez consommé qu'un seul cycle en deux jours. Votre batterie durera donc <b>deux fois plus longtemps</b> en années.<br><br>
+          Une batterie annoncée à 6&nbsp;000 cycles, vidée chaque nuit, c'est 365 cycles par an — soit <b>seize ans de nuits</b>. C'est pour cela qu'on ne compare jamais deux batteries sur leur prix d'achat.
+        </div>
+        <div style="font-family:Syne,sans-serif;font-weight:800;font-size:13.5px;margin:14px 0 8px">À quelle fréquence videz-vous la batterie&nbsp;?</div>
+        <div id="batFreqs" style="display:flex;flex-wrap:wrap;gap:7px"></div>
+        <div id="batFreqDetail" style="font-size:12.5px;color:#64748b;margin-top:7px">365 cycles par an</div>
+      </div>
 
       <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#0f172a;margin-bottom:4px">Sur combien d'années comparer</div>
       <div id="batHorizons" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px"></div>
@@ -1175,18 +1188,52 @@ var BAT_TECHNOS = [
   // « designation » est le nom tel qu on le dit dans une phrase : le sigle en
   // minuscules donnait « que le acide », une faute qui discredite le calcul.
   { sigle:'Lithium', nom:'Lithium LiFePO₄', designation:'lithium', resume:'Lithium fer phosphate avec BMS intégré',
-    dod:0.90, rendement:0.95, cycles:4000, calendaire:15, whkg:110, auto:0.02, chargeC:0.50, chaleur:1.2, entretien:false },
+    // 6000 cycles : le chiffre des cellules prismatiques de qualite A. Les
+    // fiches le donnent a decharge complete ; le retenir a 90 % de decharge
+    // est donc prudent — on promet moins que la fiche.
+    // chaleur 1,8 et non 1,2 : la litterature sur le LiFePO4 donne une
+    // energie d activation de 24 a 30 kJ/mol, soit une division par environ
+    // 2 tous les 10 C. Annoncer 1,2 revenait a pretendre qu un local a 45 C
+    // ne coute que 30 % de vie au lithium quand il en coute 75 % au plomb.
+    // calendaire 12 et non 15 : les fabricants ecrivent « 15+ years design
+    // life » sur la plaquette et garantissent 10 ans sur le contrat.
+    dod:0.90, rendement:0.95, cycles:6000, calendaire:12, whkg:110, auto:0.02, chargeC:0.50, chaleurCy:1.2, chaleurAge:1.7, entretien:false,
+    condition:'6000 cycles à 100 % de décharge, 0,5 C, 25 °C, fin de vie à 80 % de capacité' },
   { sigle:'GEL', nom:'Plomb GEL', designation:'GEL', resume:'Plomb étanche, électrolyte gélifié, sans entretien',
-    dod:0.50, rendement:0.85, cycles:1100, calendaire:12, whkg:32, auto:0.03, chargeC:0.20, chaleur:2.0, entretien:false },
+    // whkg 38 et non 32 : Victron 12 V/220 Ah pese 66 kg, soit 40 Wh/kg.
+    // Annoncer 32 gonflait le poids du parc GEL de 25 %, en notre faveur.
+    dod:0.50, rendement:0.85, cycles:1100, calendaire:10, whkg:38, auto:0.03, chargeC:0.20, chaleurCy:1.4, chaleurAge:2.0, entretien:false,
+    condition:'750 (Victron) à 1200 (Ultracell) cycles à 50 % de décharge, 25 °C, fin de vie à 80 % — 1100 retenu' },
   { sigle:'Acide', nom:'Plomb ouvert (acide)', designation:'plomb ouvert', resume:'Plomb à bouchons, niveau d\'eau à refaire',
-    dod:0.50, rendement:0.80, cycles:600, calendaire:8, whkg:35, auto:0.05, chargeC:0.13, chaleur:2.0, entretien:true }
+    // whkg 45 et non 35 : une Trojan T-105 fait 1350 Wh pour 28 kg, soit
+    // 48 Wh/kg. Le plomb ouvert est plus leger que le GEL, pas plus lourd.
+    dod:0.50, rendement:0.80, cycles:600, calendaire:6, whkg:45, auto:0.05, chargeC:0.13, chaleurCy:1.4, chaleurAge:2.0, entretien:true,
+    condition:'600 cycles à 50 % de décharge, 25 °C — monobloc 12 V de magasin. Une Trojan T-105 en 6 V en tient le double' }
 ];
 
 // Prix relatifs par kWh d etiquette, plomb ouvert = 1. Ce ne sont pas des
 // prix : ce sont des rapports.
 var BAT_PRIX_GEL = 1.35;
 
-var BAT_T = 32, BAT_H = 10;
+var BAT_T = 33, BAT_H = 10, BAT_CY = 365;
+
+// Sans libelle, le visiteur cochait au hasard et le resultat variait du
+// simple au double. C est la moyenne sur la journee des BACS qu on demande,
+// pas le pic de l air a quinze heures.
+var BAT_LOCAUX = [
+  { t:25, lieu:'Local climatisé ou cave — rare en Guinée' },
+  { t:30, lieu:'Local maçonné, à l\'ombre, ventilé — Labé, Lelouma' },
+  { t:33, lieu:'Local maçonné fermé, peu ventilé — Conakry' },
+  { t:36, lieu:'Cagibi sous tôle, fermé — le cas le plus courant' },
+  { t:40, lieu:'Sous tôle, sans air, batteries collées entre elles' }
+];
+
+var BAT_FREQ = [
+  { parAn:730, texte:'2 fois par jour',       detail:'730 cycles par an' },
+  { parAn:365, texte:'Chaque nuit',           detail:'365 cycles par an' },
+  { parAn:182, texte:'Un jour sur deux',      detail:'182 cycles par an' },
+  { parAn:104, texte:'Deux fois par semaine', detail:'104 cycles par an' }
+];
 
 var BAT_CAS = [
   { kwh:2,  cas:'Studio : éclairage, ventilateur, téléphone' },
@@ -1236,23 +1283,30 @@ var BAT_CONTRE = {
 function batCyclesA(t, temp) {
   var ecart = (temp - 25) / 10;
   if (ecart <= 0) return t.cycles;
-  return Math.round(t.cycles / Math.pow(t.chaleur, ecart));
+  return Math.round(t.cycles / Math.pow(t.chaleurCy, ecart));
 }
 
 function batCalendaireA(t, temp) {
   var ecart = (temp - 25) / 10;
   if (ecart <= 0) return t.calendaire;
-  return t.calendaire / Math.pow(t.chaleur, ecart);
+  return t.calendaire / Math.pow(t.chaleurAge, ecart);
 }
 
-function batBilan(t, besoin, temp, horizon, rapportLi) {
+function batBilan(t, besoin, temp, horizon, rapportLi, cyclesParAn) {
   var b = besoin > 0 ? besoin : 0;
   // La profondeur decide de ce qu il faut acheter, le rendement de ce qu il
   // faut produire.
   var nominale = b / t.dod;
   var aCharger = b / t.rendement;
   var cy = batCyclesA(t, temp);
-  var annees = Math.min(cy / 365, batCalendaireA(t, temp));
+  // Un cycle, c est UNE charge suivie d UNE decharge — pas une journee.
+  // Vider la batterie un jour sur deux, c est 182 cycles par an et non 365,
+  // donc deux fois plus d annees… jusqu au plafond d age, qui finit toujours
+  // par tomber : une batterie vieillit aussi en restant chargee.
+  var parAn = (cyclesParAn > 0) ? cyclesParAn : 365;
+  var usure = cy / parAn;
+  var plafond = batCalendaireA(t, temp);
+  var annees = Math.min(usure, plafond);
   var prix = t.sigle === 'Lithium' ? rapportLi : (t.sigle === 'GEL' ? BAT_PRIX_GEL : 1);
   // Non arrondi : arrondir creerait une marche absurde entre 9,9 et 10,1 ans.
   var parcs = annees <= 0 ? 0 : horizon / annees;
@@ -1263,7 +1317,11 @@ function batBilan(t, besoin, temp, horizon, rapportLi) {
     poids: nominale * 1000 / t.whkg,
     cycles: cy,
     annees: annees,
-    kwhVie: nominale * t.dod * cy,
+    usure: usure,                 // ce que les seuls cycles permettraient
+    limiteAge: plafond < usure,   // l age decide, pas l usure
+    // Les cycles reellement consommes, pas ceux disponibles : une batterie
+    // qui meurt de vieillesse n aura jamais fait tous ses cycles.
+    kwhVie: nominale * t.dod * Math.min(cy, annees * parAn),
     remplacements: annees <= 0 ? 0 : Math.max(0, Math.ceil(horizon / annees) - 1),
     cout: nominale * prix * parcs,
     heuresCharge: t.chargeC <= 0 ? Infinity : aCharger / (nominale * t.chargeC)
@@ -1299,6 +1357,7 @@ function batPuce(txt, actif, action) {
 
 function batSetT(t) { BAT_T = t; batCalc(); }
 function batSetH(h) { BAT_H = h; batCalc(); }
+function batSetCy(c) { BAT_CY = c; batCalc(); }
 
 function batCalc() {
   var besoin  = +document.getElementById('batSlider').value;
@@ -1314,14 +1373,21 @@ function batCalc() {
   document.getElementById('batCas').textContent =
     Math.abs(proche.kwh - besoin) <= 1.5 ? proche.cas : 'À vous de régler la barre';
 
-  document.getElementById('batTemps').innerHTML = [25,30,32,35,40].map(function(t){
-    return batPuce(t + ' °C', BAT_T === t, 'batSetT(' + t + ')');
+  document.getElementById('batTemps').innerHTML = BAT_LOCAUX.map(function(x){
+    return batPuce(x.t + ' °C', BAT_T === x.t, 'batSetT(' + x.t + ')');
   }).join('');
+  var lo = BAT_LOCAUX.filter(function(x){ return x.t === BAT_T; })[0] || BAT_LOCAUX[2];
+  document.getElementById('batTempLieu').textContent = lo.lieu;
   document.getElementById('batHorizons').innerHTML = [5,10,15].map(function(h){
     return batPuce(h + ' ans', BAT_H === h, 'batSetH(' + h + ')');
   }).join('');
+  document.getElementById('batFreqs').innerHTML = BAT_FREQ.map(function(f){
+    return batPuce(f.texte, BAT_CY === f.parAn, 'batSetCy(' + f.parAn + ')');
+  }).join('');
+  var fq = BAT_FREQ.filter(function(f){ return f.parAn === BAT_CY; })[0] || BAT_FREQ[1];
+  document.getElementById('batFreqDetail').textContent = fq.detail;
 
-  var l = BAT_TECHNOS.map(function(t){ return batBilan(t, besoin, BAT_T, BAT_H, rapport); });
+  var l = BAT_TECHNOS.map(function(t){ return batBilan(t, besoin, BAT_T, BAT_H, rapport, BAT_CY); });
   var classes = l.slice().sort(function(a,b){ return a.cout - b.cout; });
   var meilleur = classes[0], pire = classes[classes.length - 1];
 
@@ -1355,11 +1421,26 @@ function batCalc() {
       '<div style="height:100%;width:' + (part * 100) + '%;background:' + (part < 0.5 ? '#15803d' : '#f97316') + '"></div></div>' +
       ligne('À acheter pour ce besoin', b.nominale.toFixed(1) + ' kWh') +
       ligne('Poids du parc', Math.round(b.poids) + ' kg') +
+      ligne('Cycles annoncés (25 °C)', b.t.cycles) +
+      ligne('Cycles tenus à cette température', b.cycles, b.cycles < b.t.cycles * 0.7) +
       ligne('Durée avant remplacement', batDuree(b.annees)) +
+      // Le calcul ecrit en toutes lettres. Un client qui lit « 6000 cycles »
+      // puis « 13 ans » sans comprendre la division croit qu on lui retire
+      // quelque chose.
+      '<div style="font-size:11.5px;line-height:1.55;color:#64748b;padding:4px 0 6px">' +
+      (b.limiteAge
+        ? b.cycles + ' cycles ÷ ' + BAT_CY + ' par an = ' + b.usure.toFixed(1) +
+          ' ans d\'usure. Mais une batterie vieillit aussi en restant chargée : c\'est l\'âge qui décide ici, pas l\'usure.'
+        : b.cycles + ' cycles ÷ ' + BAT_CY + ' par an = ' + b.annees.toFixed(1) +
+          ' ans. C\'est l\'usure qui décide : moins vous la videz, plus elle dure.') +
+      '</div>' +
       ligne('Rachats sur ' + BAT_H + ' ans', b.remplacements === 0 ? 'aucun' : b.remplacements + ' fois', b.remplacements >= 3) +
-      ligne('Cycles tenus à cette température', b.cycles) +
       ligne('Énergie rendue sur toute sa vie', Math.round(b.kwhVie) + ' kWh') +
       ligne('Temps de charge à plein courant', b.heuresCharge.toFixed(1) + ' h', b.heuresCharge > 4) +
+      // La condition de la fiche technique. Sans elle, comparer 6000 cycles
+      // pris a decharge complete avec 600 cycles pris a moitie serait une
+      // tricherie, et le premier installateur qui la repere nous discredite.
+      '<div style="font-size:11px;line-height:1.5;color:#94a3b8;padding-top:8px">Fiche technique : ' + b.t.condition + '</div>' +
       '</div>';
   }).join('');
 
@@ -3038,7 +3119,7 @@ function showAdminPanel() {
     ['recherches','🔍 Recherches'+(function(){var r=DB.recherches.filter(function(x){return !x.trouve;}).length;return r>0?' <span style="background:#EF4444;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px">'+r+'</span>':'';})()+' '],
     ['ca','💰 CA & Ventes'],
     ['journal',  '📋 Journal'],
-    ['galerie',  '🖼️ Galerie'],
+    ['galerie',  '🏡 Chez nos clients'],
     ['params',   '⚙️ Parametres']
   ] : [
     ['vente',    '🛒 Vente'],
@@ -3057,7 +3138,7 @@ function showAdminPanel() {
     })()],
     ['monprofil', '👤 Mon Profil'],
     ['recherches','🔍 Recherches'+(function(){var r=DB.recherches.filter(function(x){return !x.trouve;}).length;return r>0?' <span style="background:#EF4444;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px">'+r+'</span>':'';})()+' '],
-    ['galerie',  '🖼️ Galerie'],
+    ['galerie',  '🏡 Chez nos clients'],
     ['journal',  '📋 Mon Journal'],
     ['params',   '⚙️ Parametres']
   ];
@@ -3128,7 +3209,7 @@ function renderGalerieTab(div) {
 
   div.innerHTML =
     '<div class="adm-card">' +
-    '<div class="adm-sl">🖼️ GALERIE PHOTOS - Visible sur le site public</div>' +
+    '<div class="adm-sl">🏡 CHEZ NOS CLIENTS - Photos et vidéos visibles sur le site</div>' +
 
     // Upload zone
     '<div style="background:#fff7ed;border:2px dashed rgba(249,115,22,.4);border-radius:12px;padding:1.5rem;text-align:center;margin-bottom:1rem;cursor:pointer" onclick="document.getElementById(\'galInput\').click()">' +
@@ -3153,11 +3234,22 @@ function renderGalerieTab(div) {
 
     // Vidéo : le champ n'existait nulle part et n'était jamais envoyé à la
     // base. Le vendeur n'avait aucun moyen de publier une vidéo de chantier.
-    '<div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;align-items:center">' +
-    '<input id="galVideo" class="inp" placeholder="Lien vidéo YouTube / Facebook / TikTok (optionnel)" style="flex:2;min-width:220px">' +
-    '<button onclick="galerieAjouterVideo()" style="padding:.55rem 1rem;border-radius:10px;border:1px solid #dc2626;background:#fff;color:#dc2626;font-weight:700;font-size:.8rem;cursor:pointer">▶ Publier la vidéo seule</button>' +
+    // Choisir un FICHIER video sur l appareil. Coller un lien suppose
+    // d avoir deja publie la video ailleurs — ce que personne ne fait avant
+    // de vouloir montrer un chantier.
+    '<div style="background:#fef2f2;border:2px dashed rgba(220,38,38,.35);border-radius:12px;padding:1.2rem;text-align:center;margin-bottom:1rem;cursor:pointer" onclick="document.getElementById(\'galVideoFichier\').click()">' +
+    '<div style="font-size:30px;margin-bottom:6px">🎬</div>' +
+    '<div style="font-family:Syne,sans-serif;font-weight:700;color:#dc2626;margin-bottom:3px">Choisir une vidéo sur l\'appareil</div>' +
+    '<div style="font-size:12px;color:#94a3b8">MP4, MOV, 3GP — 25 Mo au maximum, soit environ une minute</div>' +
+    '<input type="file" id="galVideoFichier" accept="video/*" style="display:none" onchange="galerieEnvoyerVideo(this)">' +
     '</div>' +
-    '<div style="font-size:11.5px;color:#94a3b8;margin:-.5rem 0 1rem;line-height:1.6">La photo montre le résultat, la vidéo montre le travail. Collez le lien puis choisissez une photo — ou publiez la vidéo seule, sans photo.</div>' +
+    '<div id="galVideoEtat" style="display:none;font-size:12.5px;color:#64748b;margin-bottom:1rem;line-height:1.6"></div>' +
+
+    '<div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;align-items:center">' +
+    '<input id="galVideo" class="inp" placeholder="…ou collez un lien YouTube / Facebook / TikTok" style="flex:2;min-width:220px">' +
+    '<button onclick="galerieAjouterVideo()" style="padding:.55rem 1rem;border-radius:10px;border:1px solid #dc2626;background:#fff;color:#dc2626;font-weight:700;font-size:.8rem;cursor:pointer">▶ Publier ce lien</button>' +
+    '</div>' +
+    '<div style="font-size:11.5px;color:#94a3b8;margin:-.5rem 0 1rem;line-height:1.6">La photo montre le résultat, la vidéo montre le travail. Un lien ne coûte aucune donnée, ni à vous ni au client : préférez-le quand la vidéo est déjà en ligne.</div>' +
 
     // Grille photos
     '<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:#64748b;margin-bottom:8px">PHOTOS PUBLIÉES ('+DB.galerie.length+')</div>' +
@@ -3248,7 +3340,68 @@ async function sbSaveGalerie(photo) {
   } catch(e) {}
 }
 
-// Publier une vidéo sans photo.
+// Envoyer un fichier video pris sur l appareil.
+//
+// La video ne va PAS dans la base : elle va dans le magasin de fichiers de
+// Supabase. Trente secondes filmees pesent cinq cents fois une photo de
+// produit ; dans une colonne, elles seraient retelechargees a chaque
+// ouverture du catalogue, par chaque client.
+async function galerieEnvoyerVideo(input) {
+  const f = input.files && input.files[0];
+  input.value = '';                       // pour pouvoir reprendre le meme fichier
+  if(!f) return;
+
+  const etat = document.getElementById('galVideoEtat');
+  const dire = function(t){ if(etat){ etat.style.display='block'; etat.innerHTML=t; } };
+
+  const MAX = 25 * 1024 * 1024;
+  if(f.size > MAX) {
+    dire('❌ Vidéo trop lourde : <b>'+(f.size/1048576).toFixed(0)+' Mo</b>. Le maximum est 25 Mo, soit environ une minute. Refilmez plus court — et pensez à ce que coûte le téléchargement à vos clients.');
+    return;
+  }
+  if(!currentUser || !currentUser.role) {
+    dire('❌ Reconnectez-vous : l\'envoi d\'une vidéo demande un compte.');
+    return;
+  }
+
+  dire('⏳ Envoi de <b>'+(f.size/1048576).toFixed(1)+' Mo</b>… Sur un réseau faible cela peut prendre plusieurs minutes. Ne fermez pas cette page.');
+
+  try {
+    const ext = (f.name.split('.').pop()||'mp4').toLowerCase();
+    const nom = genId() + '.' + (['mp4','mov','3gp','mkv','webm','avi'].indexOf(ext)>=0 ? ext : 'mp4');
+    const up = await SB.storage.from('videos').upload(nom, f, {cacheControl:'31536000', upsert:false});
+    if(up.error) throw up.error;
+
+    const lien = SB.storage.from('videos').getPublicUrl(nom).data.publicUrl;
+
+    const isAdmin = currentUser.role === 'admin';
+    const magId = currentUser.magId || 'admin';
+    const photo = {
+      id: genId(), url: '',
+      cat: document.getElementById('galCat').value,
+      legende: document.getElementById('galLegende').value,
+      magId: magId,
+      magName: isAdmin ? 'Admin' : (DB.magasins.find(m=>m.id===magId)||{name:'?'}).name,
+      date: today(), video: lien, publie: true
+    };
+    if(!DB.galerie) DB.galerie = [];
+    DB.galerie.unshift(photo);
+    await sbSaveGalerie(photo);
+    dire('✅ Vidéo publiée.');
+    notify('✅ Vidéo publiée !');
+    renderDash('galerie');
+    renderGaleriePublique();
+  } catch(e) {
+    // Le bac manquant est l erreur la plus probable, et la seule que le
+    // proprietaire peut corriger lui-meme. Le dire, plutot que « echec ».
+    const m = (e && e.message) ? e.message : String(e);
+    dire(/Bucket not found|404/.test(m)
+      ? '❌ Le stockage des vidéos n\'existe pas encore. Passez le fichier <b>laouni-videos-telephone.sql</b> dans Supabase, puis réessayez.'
+      : '❌ Envoi impossible : '+m+'. Rien n\'a été publié.');
+  }
+}
+
+// Publier une vidéo déjà en ligne, par son lien.
 //
 // Le seul point d'entrée de la galerie était « ajouter des photos » : pour
 // montrer un chantier filmé, il fallait d'abord photographier quelque chose.
@@ -3317,8 +3470,8 @@ function renderGaleriePublique() {
   el.innerHTML =
     '<div class="section" style="background:#f8f8f8">' +
     '<div class="section-inner">' +
-    '<div class="section-tag">📸 Nos Photos</div>' +
-    '<h2 class="section-title">Galerie</h2>' +
+    '<div class="section-tag">📸 Nos installations posées</div>' +
+    '<h2 class="section-title">Chez nos clients</h2>' +
     '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem" id="galFilterBtns">' +
     cats.map(c =>
       '<button onclick="filtrerGalerie(\''+c+'\')" id="gf-'+c+'" style="padding:.4rem 1rem;border-radius:20px;border:1px solid '+(c==='tous'?'#f97316':'#e5e7eb')+';background:'+(c==='tous'?'rgba(249,115,22,.1)':'#fff')+';color:'+(c==='tous'?'#f97316':'#64748b')+';font-size:.78rem;font-weight:600;cursor:pointer">'+catLabels[c]+'</button>'
