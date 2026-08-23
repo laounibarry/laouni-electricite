@@ -13,8 +13,20 @@
  * lieu de le bloquer. C'est le compromis honnête — il voit le site en une
  * seconde, et il n'est jamais coincé sur une vieille version sans le savoir.
  */
-const VERSION = 'laouni-v2';
-const PAGE = '/';
+/* v3 — le site n'a plus une seule page.
+ *
+ * La v2 gardait LA page sous une clé unique, « / ». Tant qu'il n'y avait
+ * qu'une adresse, cela marchait. Dès qu'il y en a plusieurs, c'était cassé
+ * deux fois :
+ *   celui qui ouvrait /magasin-conakry/ recevait la page d'accueil gardée en
+ *   mémoire, quelle que soit l'adresse demandée ;
+ *   et la page reçue derrière était réenregistrée sous la clé « / », donc
+ *   l'accueil affichait ensuite la page du magasin.
+ *
+ * Chaque page a maintenant sa propre clé. Changer le numéro de version vide
+ * l'ancienne mémoire, y compris celle qui a été melangée.
+ */
+const VERSION = 'laouni-v3';
 const STATIQUES = [
   '/manifest.json',
   '/favicon.ico',
@@ -71,8 +83,15 @@ self.addEventListener('fetch', (e) => {
 
   // La page : on rend ce qu'on a, on va chercher la suite derrière.
   if (req.mode === 'navigate') {
+    // La clé est l'ADRESSE demandée, jamais une constante. Sans le
+    // « pathname » seul, deux visites de la même page avec des paramètres
+    // différents (?fbclid=..., ?utm_source=...) rempliraient la mémoire de
+    // copies du même document — et les liens partagés sur WhatsApp et
+    // Facebook en portent toujours.
+    const cle = url.pathname;
+
     e.respondWith(
-      caches.match(PAGE).then((gardee) => {
+      caches.match(cle).then((gardee) => {
         const frais = fetch(req)
           .then((res) => {
             if (res.ok) {
@@ -84,7 +103,7 @@ self.addEventListener('fetch', (e) => {
                   const [a, b] = await Promise.all([gardee.clone().text(), copie.clone().text()]);
                   if (a !== b) signalerMiseAJour();
                 }
-                c.put(PAGE, copie);
+                c.put(cle, copie);
               });
             }
             return res;

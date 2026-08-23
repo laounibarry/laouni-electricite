@@ -7,6 +7,10 @@
 <meta name="theme-color" content="#f97316">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<!-- fonts.googleapis.com est le PREMIER hote contacte, et il n etait pas
+     preconnecte : chaque visiteur payait une poignee de main complete avant
+     le premier pixel. Sur une connexion guineenne cela se voit. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <!-- 
@@ -303,20 +307,23 @@ window.addEventListener('appinstalled', function() {
      ceux des reseaux reellement utilises. Le code d origine est dans
      l historique git, commit precedant celui-ci.
 -->
-<meta name="google-site-verification" content="COLLE_ICI_TON_CODE_GOOGLE_SEARCH_CONSOLE">
-<!-- 
-     CHATGPT / IA — SearchGPT & Bing AI
-     (Déjà couvert par sitemap + schema.org)
-     Balises supplémentaires pour indexation IA
- -->
-<meta name="ai-content-declaration" content="human-created">
-<meta name="revisit-after" content="3 days">
-<meta name="rating" content="general">
-<meta name="coverage" content="Worldwide">
+<!-- SEARCH CONSOLE — la balise de validation.
+     Elle contenait « COLLE_ICI_TON_CODE_GOOGLE_SEARCH_CONSOLE » : tant que
+     ce texte y etait, la validation echouait a coup sur. Mieux vaut aucune
+     balise qu une fausse.
+     Pour la remettre : Search Console -> Ajouter une propriete -> « Prefixe
+     d URL » -> https://www.laouni-electricitemoderne.com/ -> methode
+     « Balise HTML ». Google donne alors un code : c est lui qui se colle
+     ci-dessous, a la place de la ligne commentee.
+<meta name="google-site-verification" content="LE-CODE-DONNE-PAR-GOOGLE">
+-->
+
+<!-- Balises retirees, aucun moteur ne les lit depuis quinze ans et elles
+     n ont jamais fait monter personne : revisit-after, rating, coverage,
+     classification, HandheldFriendly, MobileOptimized, ai-content-
+     declaration. La balise « viewport », elle, fait le vrai travail pour le
+     telephone, et elle est en haut du fichier. -->
 <meta name="category" content="Énergie solaire, Commerce, Technologie">
-<meta name="classification" content="Business/Energy">
-<meta name="HandheldFriendly" content="True">
-<meta name="MobileOptimized" content="320">
 
 <!-- 
      SITEMAP & INDEXATION RAPIDE
@@ -327,7 +334,8 @@ window.addEventListener('appinstalled', function() {
      WHATSAPP — Rich Preview (déjà via OG tags)
      YOUTUBE — Schema vidéo si tu as des vidéos
  -->
-<meta property="og:video" content="">
+<!-- og:video etait vide. Une propriete Open Graph vide est une erreur pour
+     Facebook et WhatsApp : ils cherchent une video et ne trouvent rien. -->
 <meta name="application-name" content="Laouni Electricité Moderne">
 <meta name="msapplication-TileColor" content="#f97316">
 <meta name="msapplication-TileImage" content="https://www.laouni-electricitemoderne.com/logo-144.png">
@@ -884,7 +892,7 @@ img { loading: lazy; }
   </svg>
   <div style="position:relative;z-index:1;max-width:1400px;margin:0 auto;width:100%">
     <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);padding:.35rem 1rem;border-radius:100px;font-size:.75rem;font-weight:600;color:#ea580c;margin-bottom:1.8rem;" id="heroBadge">🌱 Spécialiste énergie solaire en Guinée</div>
-    <h1 style="font-family:'Syne',sans-serif;font-size:clamp(1.8rem,7vw,4.8rem);line-height:1.05;font-weight:800;margin-bottom:1.2rem;color:#111827;" id="heroTitle">L'ÉNERGIE<br><span style="color:#f97316" id="heroTitle2">SOLAIRE</span><br><span style="color:#ea580c" id="heroTitle3">POUR TOUS</span></h1>
+    <h1 style="font-family:'Syne',sans-serif;font-size:clamp(1.8rem,7vw,4.8rem);line-height:1.05;font-weight:800;margin-bottom:1.2rem;color:#111827;" id="heroTitle">L'ÉNERGIE SOLAIRE<br><span style="color:#f97316" id="heroTitle2">EN GUINÉE</span><br><span style="color:#ea580c" id="heroTitle3">POUR TOUS</span></h1>
     <p style="font-size:.9rem;color:#64748b;line-height:1.6;margin-bottom:1.8rem;max-width:520px;" id="heroDesc">Onduleurs hybrides MPPT, batteries lithium, panneaux solaires — Produits certifiés et authentifiés dans nos 3 magasins : Conakry, Labé, Lelouma.</p>
     <div style="display:flex;gap:.8rem;flex-wrap:wrap">
       <a href="#produits" onclick="scrollToSection('produits')" style="background:linear-gradient(135deg,#ea580c,#f97316);color:#fff;padding:.85rem 2rem;border-radius:12px;font-weight:700;font-size:.95rem;text-decoration:none;display:flex;align-items:center;gap:.5rem;" id="heroCta1">⚡ <span id="heroCta1Txt">Voir nos produits</span></a>
@@ -1952,6 +1960,30 @@ window.addEventListener('DOMContentLoaded', function() {
     <div class="section-tag" id="p-tag">Catalogue</div>
     <h2 class="section-title" id="p-title">Nos Produits</h2>
     <p class="section-sub" id="p-sub">Onduleurs hybrides, batteries lithium, panneaux solaires — Tous certifiés authentiques.</p>
+
+    <!-- Les sept familles, ECRITES EN DUR.
+         La grille de produits juste en dessous arrive de la base par
+         JavaScript : elle s affiche bien pour le visiteur, mais le fichier
+         livre a Google ne contenait aucun nom de produit. Le site avait donc
+         un vrai catalogue et une vraie marque, et Google n y voyait qu une
+         brochure. Ce texte-ci ne bouge pas, ne depend d aucune connexion, et
+         ne contient aucun prix. -->
+    <ul style="max-width:760px;margin:1.4rem auto 0;text-align:left;line-height:1.75;font-size:.93rem;color:#374151;padding-left:1.2rem">
+      <li><b>Onduleurs hybrides MPPT</b> — ils prennent le courant du panneau, chargent la batterie et alimentent la maison. Quand le courant du réseau part, ils basculent tout seuls.</li>
+      <li><b>Batteries lithium LiFePO<sub>4</sub></b> — notre marque. On en sort 90 % de ce qu'il y a dedans, et elles tiennent des milliers de cycles.</li>
+      <li><b>Batteries GEL</b> — plomb étanche, sans entretien, pour les onduleurs 12 V et 24 V.</li>
+      <li><b>Panneaux solaires</b> — de l'éclairage d'une pièce à l'alimentation d'une maison entière.</li>
+      <li><b>Câbles solaires et câbles de batterie</b> — la section compte : un câble trop fin chauffe et fait perdre de l'énergie.</li>
+      <li><b>Disjoncteurs, coffrets et parafoudres</b> — c'est ce qui empêche un défaut de devenir un incendie.</li>
+      <li><b>Outillage d'électricien</b> — multimètre, pince ampèremétrique, testeur de câbles.</li>
+    </ul>
+    <p style="max-width:760px;margin:.9rem auto 0;font-size:.88rem;color:#64748b">
+      Nos prix sont donnés sur demande. Pour savoir ce qu'il vous faut avant d'écrire :
+      <a href="/#simulation" style="color:#ea580c;font-weight:600">le simulateur</a>,
+      <a href="/batterie-lithium-gel-ou-acide/" style="color:#ea580c;font-weight:600">quelle batterie choisir</a>,
+      <a href="/prix-solaire-conakry/" style="color:#ea580c;font-weight:600">ce qui fait le prix d'une installation</a>.
+    </p>
+
     <!-- BARRE DE RECHERCHE PUBLIQUE -->
     <div style="margin-top:1.5rem;margin-bottom:1rem">
       <div style="display:flex;gap:10px;max-width:560px;margin:0 auto">
@@ -2291,6 +2323,19 @@ window.addEventListener('DOMContentLoaded', function() {
     <div class="section-tag" id="mag-tag">Présence nationale</div>
     <h2 class="section-title" id="mag-title">Nos Magasins</h2>
     <p class="section-sub" id="mag-sub">Retrouvez-nous dans 3 villes en Guinée. Venez découvrir nos produits en démonstration.</p>
+
+    <!-- Liens EN DUR vers les pages de chaque magasin.
+         La grille ci-dessous est remplie par JavaScript : Google la voit,
+         mais elle n existe pas dans le fichier, donc elle ne transmet aucune
+         valeur aux pages de ville. Ces trois liens-la, si. Sans eux, les
+         nouvelles pages n existent que dans le plan du site et mettent des
+         mois de plus a se classer. -->
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin:1.4rem 0">
+      <a href="/magasin-conakry/" style="border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:.65rem 1.1rem;text-decoration:none;color:#0f172a;font-weight:700;font-size:.88rem">Le magasin de Conakry →</a>
+      <a href="/magasin-labe/" style="border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:.65rem 1.1rem;text-decoration:none;color:#0f172a;font-weight:700;font-size:.88rem">Le magasin de Labé →</a>
+      <a href="/magasin-lelouma/" style="border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:.65rem 1.1rem;text-decoration:none;color:#0f172a;font-weight:700;font-size:.88rem">Le magasin de Lelouma →</a>
+    </div>
+
     <div id="magasinsGrid" class="magasins-grid"></div>
   </div>
 </section>
@@ -2337,6 +2382,24 @@ window.addEventListener('DOMContentLoaded', function() {
     <div class="footer-col"><h4 id="f-mag">Magasins</h4><ul id="footerMagasins"></ul></div>
     <div class="footer-col"><h4 id="f-contact">Contact</h4><ul id="footerContact"></ul></div>
   </div>
+
+  <!-- Liens EN DUR vers les pages de conseil. Les trois colonnes ci-dessus
+       sont remplies par JavaScript : elles ne transmettent rien a Google.
+       Celles-ci sont dans le fichier, donc elles comptent. -->
+  <div style="border-top:1px solid rgba(255,255,255,.08);margin-top:1.6rem;padding-top:1.4rem">
+    <h4 style="font-family:'Syne',sans-serif;font-size:.72rem;font-weight:800;color:#f97316;letter-spacing:1.6px;text-transform:uppercase;margin-bottom:.9rem">Nos conseils</h4>
+    <div style="display:flex;gap:.55rem;flex-wrap:wrap">
+      <a href="/delestage-conakry/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Délestage : avoir le courant chez soi</a>
+      <a href="/batterie-lithium-gel-ou-acide/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Lithium, GEL ou acide ?</a>
+      <a href="/groupe-electrogene-ou-solaire/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Groupe électrogène ou solaire ?</a>
+      <a href="/prix-solaire-conakry/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Ce qui fait le prix d'une installation</a>
+      <a href="/panne-onduleur-batterie/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Mon onduleur bipe, ma batterie ne charge plus</a>
+      <a href="/magasin-conakry/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Magasin de Conakry</a>
+      <a href="/magasin-labe/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Magasin de Labé</a>
+      <a href="/magasin-lelouma/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Magasin de Lelouma</a>
+    </div>
+  </div>
+
   <div class="footer-bottom">
     <p id="footerCopy">© 2025 Laouni Electricité Moderne — Guinée. Tous droits réservés.</p>
     <div style="display:flex;align-items:center;gap:12px">
@@ -2408,7 +2471,12 @@ window.addEventListener('DOMContentLoaded', function() {
         <button type="button" onclick="togglePwVis('loginPw')" style="background:#f9fafb;border:2px solid #e5e7eb;color:#64748b;padding:12px 14px;border-radius:10px;cursor:pointer;font-size:16px">👁</button>
       </div>
     </div>
-    <div id="loginHint" style="background:#fff7ed;border:1px solid rgba(249,115,22,.2);color:#ea580c;padding:8px 12px;border-radius:8px;margin-bottom:16px;font-size:11px;line-height:1.6">Conakry: <b>MGC</b> · Labé: <b>MGL</b> · Lelouma: <b>MGLL</b></div>
+    <!-- Cette ligne affichait « Conakry: MGC · Labe: MGL · Lelouma: MGLL » a
+         tout visiteur. Vos trois gerants connaissent leur propre code : ce
+         rappel ne servait a personne d autre qu a celui qui essaie d entrer.
+         Il divisait par deux le travail d une tentative de connexion — il ne
+         restait plus qu a trouver le mot de passe. -->
+    <div id="loginHint" style="background:#fff7ed;border:1px solid rgba(249,115,22,.2);color:#ea580c;padding:8px 12px;border-radius:8px;margin-bottom:16px;font-size:11px;line-height:1.6">Espace reserve au personnel du magasin.</div>
     <button onclick="doLogin()" style="width:100%;background:linear-gradient(135deg,#ea580c,#f97316);color:#fff;border:none;padding:14px;border-radius:12px;font-family:Syne,sans-serif;font-weight:800;font-size:15px;cursor:pointer">Se connecter →</button>
   </div>
 </div>
@@ -2455,7 +2523,19 @@ function applySiteConfig() {
 
     // Hero
     setTxt('heroBadge', cfg.heroBadge);
-    setHtml('heroTitle2', cfg.heroT2);
+
+    // La deuxieme ligne du grand titre disait « SOLAIRE », juste apres une
+    // premiere ligne qui dit deja « L'ENERGIE SOLAIRE » : le mot le plus
+    // important de la page servait a se repeter, et le titre ne nommait
+    // aucun lieu. Il porte maintenant le pays.
+    //
+    // L ancienne valeur dort encore dans la base et reecrirait le titre au
+    // chargement. On l ignore — et seulement elle : le jour ou le magasin
+    // ecrit autre chose depuis l espace vendeur, sa valeur passe.
+    if (cfg.heroT2 && cfg.heroT2.trim().toUpperCase() !== 'SOLAIRE') {
+      setHtml('heroTitle2', cfg.heroT2);
+    }
+
     setTxt('heroTitle3', cfg.heroT3);
     setTxt('heroCta1Txt', cfg.heroCta1);
     setTxt('heroCta2Txt', cfg.heroCta2);
@@ -2819,6 +2899,7 @@ const T = {
     'nav-produits':'Produits','nav-verifier':'Vérifier','nav-sim':'Simulateur',
     'nav-guide':'Guide','nav-mag':'Magasins','nav-contact':'Contact',
     'heroBadge':'🌱 Spécialiste énergie solaire en Guinée',
+    'heroTitle2':'EN GUINÉE',
     'heroTitle3':'POUR TOUS',
     'heroDesc':'Onduleurs hybrides MPPT, batteries lithium, panneaux solaires - Produits certifiés et authentifiés dans nos magasins en Guinée.',
     'heroCta1Txt':'Voir nos produits','heroCta2Txt':'Vérifier mon produit',
@@ -2849,6 +2930,7 @@ const T = {
     'nav-produits':'Products','nav-verifier':'Verify','nav-sim':'Simulator',
     'nav-guide':'Guide','nav-mag':'Stores','nav-contact':'Contact',
     'heroBadge':'🌱 Solar energy specialist in Guinea',
+    'heroTitle2':'IN GUINEA',
     'heroTitle3':'FOR ALL',
     'heroDesc':'Hybrid MPPT inverters, lithium batteries, solar panels - Certified products in our stores in Guinea.',
     'heroCta1Txt':'View our products','heroCta2Txt':'Verify my product',
