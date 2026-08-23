@@ -45,23 +45,21 @@ delete from public.chat_messages where session_id in ('diag', 't');
 -- seul à l'avoir, il est enregistré chez lui. Ouvrir la table en lecture à
 -- tout le monde aurait laissé n'importe qui lire les conversations de tous
 -- les clients — leurs demandes, leurs noms, leurs numéros.
+-- « returns setof public.chat_messages » plutôt qu'une liste de colonnes
+-- écrite à la main.
+--
+-- La première version déclarait chaque colonne avec son type, et se trompait
+-- sur le premier : id est du texte, pas un nombre. Postgres refusait la
+-- fonction (« return type mismatch »). Ici le type de retour EST celui de la
+-- table : il ne peut plus diverger, et la fonction suivra toute seule si une
+-- colonne est ajoutée un jour.
 create or replace function public.lire_chat(p_session text)
-returns table (
-  id          bigint,
-  session_id  text,
-  visiteur_nom text,
-  de          text,
-  message     text,
-  mag_id      text,
-  mag_nom     text,
-  created_at  timestamptz
-)
+returns setof public.chat_messages
 language sql
 security definer
 set search_path = public
 as $$
-  select c.id, c.session_id, c.visiteur_nom, c.de, c.message,
-         c.mag_id, c.mag_nom, c.created_at
+  select c.*
   from public.chat_messages c
   where c.session_id = p_session
     -- Un identifiant trop court serait devinable : on refuse de répondre.
