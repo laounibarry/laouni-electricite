@@ -2483,6 +2483,7 @@ window.addEventListener('DOMContentLoaded', function() {
       <a href="/magasin-conakry/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Magasin de Conakry</a>
       <a href="/magasin-labe/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Magasin de Labé</a>
       <a href="/magasin-lelouma/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Magasin de Lelouma</a>
+      <a href="/comment-nos-produits-sont-fabriques/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Comment nos produits sont fabriqués</a>
       <a href="/choisir-panneau-solaire/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Bien choisir ses panneaux solaires</a>
       <a href="/grandes-marques-solaire/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Les grandes marques du solaire</a>
       <a href="/nos-methodes-de-calcul/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Comment nos calculs sont faits</a>
@@ -3513,6 +3514,11 @@ function renderGalerieTab(div) {
     '<option value="equipe">👥 Équipe</option>' +
     '<option value="installation">⚡ Installation</option>' +
     '<option value="promo">🎁 Promotion</option>' +
+    // Ces deux categories alimentent la page « Comment nos produits sont
+    // fabriques » : tout ce qui est publie dessous y apparait, sans qu il y
+    // ait un deuxieme endroit a apprendre.
+    '<option value="Fabrication">🏭 Fabrication</option>' +
+    '<option value="Contrôle qualité">🔬 Contrôle qualité</option>' +
     '</select>' +
     '<input id="galLegende" class="inp" placeholder="Légende (optionnel)" style="flex:2">' +
     '</div>' +

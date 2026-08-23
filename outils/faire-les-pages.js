@@ -202,6 +202,7 @@ ${MAGASINS.map((m) => `  <div class="mag"><b>${m.ville}</b><br>${m.adresse}<br>
     <a href="/delestage-conakry/">Délestage : avoir le courant chez soi<span>Ce que coûtent les coupures, et comment tenir la nuit</span></a>
     <a href="/batterie-lithium-gel-ou-acide/">Quelle batterie choisir<span>Lithium, GEL ou acide : laquelle dure vraiment ici</span></a>
     <a href="/panne-onduleur-batterie/">Mon onduleur bipe, ma batterie ne charge plus<span>Les pannes courantes et ce qu'il faut vérifier</span></a>
+    <a href="/comment-nos-produits-sont-fabriques/">Comment nos produits sont fabriqués<span>Les huit essais que passe chaque batterie avant de sortir</span></a>
     <a href="/choisir-panneau-solaire/">Bien choisir ses panneaux solaires<span>Grade A ou B, double face, noir ou bleu — ce que l'étiquette ne dit pas</span></a>
     <a href="/grandes-marques-solaire/">Les grandes marques du solaire<span>Panneaux, onduleurs, batteries — qui fabrique quoi, et gare aux copies</span></a>
     <a href="/nos-methodes-de-calcul/">Comment nos calculs sont faits<span>Les normes suivies, et quoi faire si un résultat vous étonne</span></a>
@@ -1056,6 +1057,112 @@ de chaque chiffre. Posez-nous la question aussi.</p>
 <div class="liens">
   <a href="/batterie-lithium-gel-ou-acide/">Lithium, GEL ou acide : laquelle dure vraiment<span>Chaque chiffre y est donné avec sa condition de mesure</span></a>
   <a href="/prix-solaire-conakry/">Ce qui fait le prix d'une installation<span>Et comment reconnaître un devis truqué</span></a>
+</div>`,
+});
+
+// ─────────── comment nos produits sont fabriques ───────────
+//
+// La reponse la plus forte a « une grande marque a prix casse » : un
+// revendeur de copies ne peut ni montrer son atelier, ni decrire un seul
+// essai. Chaque etape dit ce qui est MESURE — une etape sans grandeur
+// mesuree n est pas un essai, c est une affirmation.
+
+const ETAPES = [
+  {
+    titre: 'Réception des cellules',
+    quoi: 'Chaque cellule est sortie du carton et regardée une par une : bosses, traces de fuite, bornes tordues ou oxydées. Celles qui ont voyagé trop durement sont écartées avant tout le reste.',
+    pourquoi: 'Une cellule abîmée à la réception ne se répare pas. Montée quand même, elle emmène tout le parc avec elle.',
+    essai: 'Contrôle visuel, cellule par cellule.',
+  },
+  {
+    titre: 'Mesure et appairage',
+    quoi: 'On mesure la tension à vide et la résistance interne de chaque cellule. On ne monte ensemble que des cellules qui se ressemblent.',
+    pourquoi: 'C\'est l\'étape qui décide de la vie du parc. Les cellules sont branchées à la suite : le courant qui traverse l\'ensemble est celui que laisse passer la plus faible. Mélanger des cellules inégales, c\'est brider la meilleure au niveau de la pire — et les user toutes plus vite.',
+    essai: 'Tension à vide en volts, résistance interne en milliohms.',
+  },
+  {
+    titre: 'Assemblage et serrage',
+    quoi: 'Les barres de liaison sont serrées à la clé dynamométrique, au couple prescrit par le fabricant de cellules. Les cellules prismatiques sont maintenues en compression, comme sur leur fiche technique.',
+    pourquoi: 'Trop serré, la borne casse. Pas assez, le contact chauffe à chaque passage de courant, noircit, et finit par lâcher — c\'est une des premières causes de panne d\'un parc mal monté.',
+    essai: 'Couple de serrage en newtons-mètres, contrôlé à la clé.',
+  },
+  {
+    titre: 'Le BMS et son câblage',
+    quoi: 'Les fils d\'équilibrage sont posés dans l\'ordre, un par cellule, et vérifiés avant la mise sous tension. Le BMS est réglé : tension de coupure haute et basse, courant maximal, seuils de température.',
+    pourquoi: 'Une seule inversion sur ces fils détruit le BMS à l\'instant où on le branche. Et un BMS mal réglé laisse passer ce qu\'il devrait couper : c\'est lui qui protège la batterie quand quelque chose se passe mal.',
+    essai: 'Vérification fil par fil, puis lecture des seuils sur l\'écran du BMS.',
+  },
+  {
+    titre: 'Charge complète et équilibrage',
+    quoi: 'Le parc est chargé jusqu\'au bout, puis laissé s\'équilibrer. À la fin, toutes les cellules doivent afficher pratiquement la même tension.',
+    pourquoi: 'Un écart qui persiste entre cellules signifie qu\'une d\'elles ne suit pas. Mieux vaut le voir à l\'atelier que six mois plus tard chez le client.',
+    essai: 'Écart de tension entre la cellule la plus haute et la plus basse.',
+  },
+  {
+    titre: 'Essai de capacité',
+    quoi: 'Le parc est déchargé à courant constant, et on compte ce qui sort réellement.',
+    pourquoi: 'C\'est l\'essai qui prouve que la capacité écrite sur l\'étiquette est bien là. Sans lui, un assembleur ne fait que recopier le chiffre du carton — et c\'est exactement ce que fait un vendeur de copies.',
+    essai: 'Ampères-heures réellement restitués, comparés à la capacité annoncée.',
+  },
+  {
+    titre: 'Essai en courant et en température',
+    quoi: 'Le parc est mis à son courant de service pendant que l\'on surveille la tension et l\'échauffement des bornes et des liaisons.',
+    pourquoi: 'Une liaison mal faite ne se voit pas à vide : elle se voit quand le courant passe. Un point qui chauffe à l\'atelier chauffera davantage chez le client, avec un onduleur qui tire fort.',
+    essai: 'Chute de tension sous charge, température des liaisons.',
+  },
+  {
+    titre: 'Marquage et fiche d\'essai',
+    quoi: 'La batterie reçoit son numéro et son code-barres. Les mesures sont consignées et restent au magasin.',
+    pourquoi: 'C\'est ce qui permet, des mois plus tard, de savoir exactement ce qu\'on vous a vendu — et de le prouver.',
+    essai: 'Code-barres vérifiable par le client dans notre application.',
+  },
+];
+
+PAGES.push({
+  fichier: 'comment-nos-produits-sont-fabriques',
+  title: 'Comment nos batteries sont fabriquées et testées',
+  description:
+    'Les huit étapes de montage d\'une batterie lithium Laouni et les essais mesurés à chacune : appairage des cellules, couple de serrage, capacité réelle.',
+  h1: 'Comment nos produits sont fabriqués, et surtout comment ils sont testés',
+  corps: `
+<p class="chapeau">Les batteries lithium et les onduleurs Laouni sont notre propre marque.
+Voici comment ils sont montés, et comment ils sont testés avant de sortir. Un revendeur de
+copies ne peut ni vous montrer son atelier, ni vous décrire un seul essai — c'est la
+différence, et elle se vérifie.</p>
+
+<h2>Les étapes, une par une</h2>
+<p>Rien de secret : voici exactement ce qui se passe entre la cellule qui arrive et la
+batterie qui repart avec vous. Chaque étape indique <b>ce qui est mesuré</b> — une étape
+sans grandeur mesurée n'est pas un essai, c'est une affirmation.</p>
+
+${ETAPES.map((e, i) => `<div class="encadre">
+  <h3 style="margin-top:0">${i + 1}. ${e.titre}</h3>
+  <p>${e.quoi}</p>
+  <p style="font-size:.88rem;color:#475569"><b>Pourquoi ça compte :</b> ${e.pourquoi}</p>
+  <p style="margin-bottom:0;font-size:.88rem;color:#ea580c;font-weight:600">📏 ${e.essai}</p>
+</div>`).join('\n')}
+
+<h2>Le code-barres relie le produit à son essai</h2>
+<div class="vert">
+<p>Chaque batterie et chaque onduleur repart avec un code-barres. Vous le tapez sur la page
+d'accueil, à la section « Vérifier », et vous savez immédiatement si le produit sort bien
+de chez nous.</p>
+<p style="margin-bottom:0">C'est la seule preuve qui vaut quelque chose sur un marché où
+circulent des batteries reconditionnées vendues pour neuves — et aucun vendeur de copies ne
+peut la donner.</p>
+</div>
+
+<h2>Venez voir</h2>
+<p>Les vidéos de l'atelier sont publiées dans notre galerie, sous les catégories
+« Fabrication » et « Contrôle qualité ». Et vous pouvez passer au magasin : nous montrons
+les appareils de mesure et la fiche d'essai d'une batterie en stock.</p>
+
+${RAPPEL_CONTREFACON}
+
+<div class="liens">
+  <a href="/#verifier">Vérifier un produit par son code-barres<span>La preuve qu'il sort bien de chez nous</span></a>
+  <a href="/batterie-lithium-gel-ou-acide/">Lithium, GEL ou acide<span>Ce que chaque technologie rend vraiment</span></a>
+  <a href="/grandes-marques-solaire/">Les grandes marques du solaire<span>Qui fabrique quoi, et comment ne pas acheter une copie</span></a>
 </div>`,
 });
 
