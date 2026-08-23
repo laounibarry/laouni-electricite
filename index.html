@@ -1581,6 +1581,47 @@ function batCalc() {
     '<div style="color:#94a3b8;font-size:12px;line-height:1.55">C\'est aussi pourquoi le rapport de prix se règle plus haut : si le lithium cesse d\'être le meilleur choix avec vos chiffres, cette page vous le dira.</div>' +
     '</div>';
 
+  // LES TROIS FOURNISSEURS DU MARCHE GUINEEN, Laouni en tete.
+  //
+  // UNE SEULE COLONNE EST REMPLIE, la notre, et c est volontaire. Nous ne
+  // savons pas ce que nos confreres proposent, et remplir leurs colonnes a
+  // leur place serait doublement mauvais : deloyal envers eux, et dangereux
+  // pour nous — le premier client qui verifie et trouve le contraire ne
+  // croit plus une seule ligne de la page, y compris les calculs qui sont
+  // justes.
+  //
+  // La phrase sous le tableau dit que les colonnes vides sont NOTRE choix,
+  // et non un manque de leur part. C est ce qui separe une comparaison
+  // loyale d une attaque — et devant un client, cela se lit comme de
+  // l assurance plutot que comme de la peur.
+  var CRITERES = [
+    ['Fabricant de sa propre marque', 'Oui — batteries lithium et onduleurs'],
+    ['Code-barres vérifiable par le client', 'Oui, sur chaque produit'],
+    ['Magasins où nous retrouver', 'Trois : Conakry, Labé, Lelouma'],
+    ['Conditions de mesure publiées', 'Oui, à côté de chaque chiffre'],
+    ['Pose et service après-vente', 'Oui, par nos équipes'],
+    ['Outils de calcul gratuits', 'Oui, site et application']
+  ];
+  html += '<div style="font-family:Syne,sans-serif;font-weight:900;font-size:15px;margin:22px 0 8px">Choisir son fournisseur en Guinée</div>' +
+    '<div style="font-size:13.5px;line-height:1.6;color:#374151;margin-bottom:12px">Le matériel compte, le fournisseur aussi : c\'est lui qui reste quand quelque chose ne va pas. Voici les questions à poser — à nous comme aux autres.</div>' +
+    '<div style="border:1px solid #e5e7eb;border-radius:14px;overflow:hidden">' +
+    '<div style="background:#0f172a;display:flex;padding:10px 12px;gap:6px">' +
+      '<div style="flex:5"></div>' +
+      '<div style="flex:5;text-align:center;color:#f97316;font-size:11.5px;font-weight:900;letter-spacing:.8px">LAOUNI</div>' +
+      '<div style="flex:3;text-align:center;color:#94a3b8;font-size:10.5px;font-weight:700">Felicity</div>' +
+      '<div style="flex:3;text-align:center;color:#94a3b8;font-size:10.5px;font-weight:700">C Worth</div>' +
+    '</div>' +
+    CRITERES.map(function(c){
+      return '<div style="display:flex;gap:6px;padding:10px 12px;border-top:1px solid #f1f5f9;align-items:flex-start">' +
+        '<div style="flex:5;font-size:11.5px;line-height:1.4;color:#64748b">' + c[0] + '</div>' +
+        '<div style="flex:5;text-align:center;font-size:11.5px;line-height:1.4;font-weight:800;color:#15803d">' + c[1] + '</div>' +
+        '<div style="flex:3;text-align:center;font-size:10px;line-height:1.35;color:#94a3b8">à leur<br>demander</div>' +
+        '<div style="flex:3;text-align:center;font-size:10px;line-height:1.35;color:#94a3b8">à leur<br>demander</div>' +
+        '</div>';
+    }).join('') +
+    '</div>' +
+    '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:13px;margin-top:10px;font-size:12.3px;line-height:1.6;color:#475569">Nous ne remplissons pas les colonnes de nos confrères : nous ne parlons que de ce que nous pouvons prouver. Posez-leur exactement les mêmes questions — et posez-les-nous aussi.</div>';
+
   var li = l[0];
   html += '<a href="https://wa.me/224610111015?text=' +
     encodeURIComponent('Bonjour Laouni Électricité. J\'ai comparé les batteries sur votre site : il me faut ' +
@@ -2417,6 +2458,8 @@ window.addEventListener('DOMContentLoaded', function() {
       <a href="/magasin-conakry/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Magasin de Conakry</a>
       <a href="/magasin-labe/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Magasin de Labé</a>
       <a href="/magasin-lelouma/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Magasin de Lelouma</a>
+      <a href="/grandes-marques-solaire/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Les grandes marques mondiales du solaire</a>
+      <a href="/nos-methodes-de-calcul/" style="color:#cbd5e1;text-decoration:none;font-size:.82rem;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:.45rem .85rem">Comment nos calculs sont faits</a>
     </div>
   </div>
 
