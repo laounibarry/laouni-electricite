@@ -1197,18 +1197,21 @@ var BAT_TECHNOS = [
     // ne coute que 30 % de vie au lithium quand il en coute 75 % au plomb.
     // calendaire 12 et non 15 : les fabricants ecrivent « 15+ years design
     // life » sur la plaquette et garantissent 10 ans sur le contrat.
-    dod:0.90, rendement:0.95, cycles:6000, calendaire:12, whkg:110, auto:0.02, chargeC:0.50, chaleurCy:1.2, chaleurAge:1.7, entretien:false,
-    condition:'6000 cycles à 100 % de décharge, 0,5 C, 25 °C, fin de vie à 80 % de capacité' },
+    dod:0.90, rendement:0.94, cycles:6000, calendaire:15, whkg:105, auto:0.03, chargeC:0.50, chaleurCy:1.2, chaleurAge:1.7, entretien:false,
+    condition:'6000 cycles à 100 % de décharge, 0,5 C, 25 °C, fin de vie à 80 % — fiche de CELLULE prismatique de qualité A, mesurée sous presse. Un pack assemblé meurt avec sa cellule la plus faible : comptez un quart de moins. Utilisés ici à 90 % de décharge, gain non crédité',
+    conditionAge:'durée de conception à 25 °C. La garantie du contrat, elle, est de 10 ans ou 3 MWh par kWh, à 70 % de capacité restante' },
   { sigle:'GEL', nom:'Plomb GEL', designation:'GEL', resume:'Plomb étanche, électrolyte gélifié, sans entretien',
     // whkg 38 et non 32 : Victron 12 V/220 Ah pese 66 kg, soit 40 Wh/kg.
     // Annoncer 32 gonflait le poids du parc GEL de 25 %, en notre faveur.
-    dod:0.50, rendement:0.85, cycles:1100, calendaire:10, whkg:38, auto:0.03, chargeC:0.20, chaleurCy:1.4, chaleurAge:2.0, entretien:false,
-    condition:'750 (Victron) à 1200 (Ultracell) cycles à 50 % de décharge, 25 °C, fin de vie à 80 % — 1100 retenu' },
+    dod:0.50, rendement:0.85, cycles:1000, calendaire:12, whkg:40, auto:0.03, chargeC:0.20, chaleurCy:1.4, chaleurAge:2.0, entretien:false,
+    condition:'750 (Victron) à 1200 (Ultracell) cycles à 50 % de décharge à 20-25 °C, fin de vie à 80 % — 1000 retenu, le milieu des deux seules fiches publiques',
+    conditionAge:'12 ans en flottement à 20 °C, batterie maintenue chargée et jamais cyclée (Victron)' },
   { sigle:'Acide', nom:'Plomb ouvert (acide)', designation:'plomb ouvert', resume:'Plomb à bouchons, niveau d\'eau à refaire',
     // whkg 45 et non 35 : une Trojan T-105 fait 1350 Wh pour 28 kg, soit
     // 48 Wh/kg. Le plomb ouvert est plus leger que le GEL, pas plus lourd.
-    dod:0.50, rendement:0.80, cycles:600, calendaire:6, whkg:45, auto:0.05, chargeC:0.13, chaleurCy:1.4, chaleurAge:2.0, entretien:true,
-    condition:'600 cycles à 50 % de décharge, 25 °C — monobloc 12 V de magasin. Une Trojan T-105 en 6 V en tient le double' }
+    dod:0.50, rendement:0.80, cycles:600, calendaire:8, whkg:45, auto:0.05, chargeC:0.13, chaleurCy:1.4, chaleurAge:2.0, entretien:true,
+    condition:'600 cycles à 50 % de décharge, 25 °C — monobloc 12 V de magasin. Une Trojan T-105 en 6 V en tient le double',
+    conditionAge:'8 ans en flottement à 25 °C, sans décharge profonde et avec le niveau d\'eau tenu à jour' }
 ];
 
 // Prix relatifs par kWh d etiquette, plomb ouvert = 1. Ce ne sont pas des
@@ -1440,7 +1443,7 @@ function batCalc() {
       // La condition de la fiche technique. Sans elle, comparer 6000 cycles
       // pris a decharge complete avec 600 cycles pris a moitie serait une
       // tricherie, et le premier installateur qui la repere nous discredite.
-      '<div style="font-size:11px;line-height:1.5;color:#94a3b8;padding-top:8px">Fiche technique : ' + b.t.condition + '</div>' +
+      '<div style="font-size:11px;line-height:1.5;color:#94a3b8;padding-top:8px">Cycles : ' + b.t.condition + '.<br>Durée : ' + b.t.conditionAge + '.</div>' +
       '</div>';
   }).join('');
 
