@@ -1123,6 +1123,297 @@ img { loading: lazy; }
   </div>
 </section>
 
+<!-- ═══ LITHIUM, GEL OU ACIDE ═══ -->
+<section class="section" id="batteries">
+  <div class="section-inner" style="max-width:900px">
+    <div class="section-tag">Le vrai coût d'une batterie</div>
+    <h2 class="section-title">Lithium, GEL ou acide&nbsp;?</h2>
+    <p class="section-sub">Le prix d'achat ne dit rien. Ce qui compte, c'est ce que la batterie vous rend avant de mourir — et combien de fois vous la rachetez.</p>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:clamp(14px,3vw,22px)">
+
+      <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#0f172a;margin-bottom:4px">Ce qu'il vous faut la nuit</div>
+      <div id="batBesoin" style="font-family:Syne,sans-serif;font-weight:900;font-size:30px;color:#ea580c;line-height:1.2">5 kWh</div>
+      <div id="batCas" style="font-size:12px;color:#64748b;margin-top:2px">Maison familiale : + télévision et congélateur</div>
+      <input type="range" id="batSlider" min="1" max="30" value="5" oninput="batCalc()" style="width:100%;margin:10px 0 4px;accent-color:#f97316">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#94a3b8;margin-bottom:18px"><span>1 kWh</span><span>30 kWh</span></div>
+
+      <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#0f172a;margin-bottom:4px">Température du local à batteries</div>
+      <div style="font-size:12px;color:#64748b;line-height:1.6;margin-bottom:9px">Pas la météo&nbsp;: la température là où les batteries sont posées. Un cagibi fermé sous tôle passe la journée à 35&nbsp;°C, et le plomb y perd la moitié de sa vie.</div>
+      <div id="batTemps" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px"></div>
+
+      <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#0f172a;margin-bottom:4px">Sur combien d'années comparer</div>
+      <div id="batHorizons" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px"></div>
+
+      <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#0f172a;margin-bottom:4px">Le lithium coûte combien de fois le plomb&nbsp;?</div>
+      <div style="font-size:12px;color:#64748b;line-height:1.6">Réglez-le vous-même. C'est le seul chiffre de cette page qui change d'un fournisseur à l'autre — et nous n'avons pas voulu choisir celui qui nous arrange.</div>
+      <div id="batRapportTxt" style="font-family:Syne,sans-serif;font-weight:900;font-size:22px;color:#ea580c;margin-top:6px">× 2,6</div>
+      <input type="range" id="batRapport" min="15" max="50" value="26" oninput="batCalc()" style="width:100%;margin:8px 0 22px;accent-color:#f97316">
+
+      <div id="batResult"></div>
+    </div>
+
+    <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:14px;padding:16px;margin-top:16px">
+      <div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;margin-bottom:7px">D'où viennent ces chiffres</div>
+      <div style="font-size:12.5px;line-height:1.7;color:#374151">
+        Profondeur de décharge, rendement aller-retour et nombre de cycles sont ceux des fiches techniques des fabricants, à 25&nbsp;°C. La correction en chaleur suit la règle des 10&nbsp;°C, admise pour le plomb depuis toujours&nbsp;: chaque dizaine de degrés au-dessus de 25&nbsp;°C divise la durée de vie par deux.<br><br>
+        Aucun prix n'apparaît ici&nbsp;: seulement des rapports. Le tarif du jour vous est donné sur demande.
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   Lithium, GEL, plomb ouvert.
+   Les memes constantes que lib/moteur_batteries.dart dans
+   l application : une page qui contredirait l application ferait
+   perdre la vente au lieu de la gagner.
+   ═══════════════════════════════════════════════════════════════ */
+
+var BAT_TECHNOS = [
+  // « designation » est le nom tel qu on le dit dans une phrase : le sigle en
+  // minuscules donnait « que le acide », une faute qui discredite le calcul.
+  { sigle:'Lithium', nom:'Lithium LiFePO₄', designation:'lithium', resume:'Lithium fer phosphate avec BMS intégré',
+    dod:0.90, rendement:0.95, cycles:4000, calendaire:15, whkg:110, auto:0.02, chargeC:0.50, chaleur:1.2, entretien:false },
+  { sigle:'GEL', nom:'Plomb GEL', designation:'GEL', resume:'Plomb étanche, électrolyte gélifié, sans entretien',
+    dod:0.50, rendement:0.85, cycles:1100, calendaire:12, whkg:32, auto:0.03, chargeC:0.20, chaleur:2.0, entretien:false },
+  { sigle:'Acide', nom:'Plomb ouvert (acide)', designation:'plomb ouvert', resume:'Plomb à bouchons, niveau d\'eau à refaire',
+    dod:0.50, rendement:0.80, cycles:600, calendaire:8, whkg:35, auto:0.05, chargeC:0.13, chaleur:2.0, entretien:true }
+];
+
+// Prix relatifs par kWh d etiquette, plomb ouvert = 1. Ce ne sont pas des
+// prix : ce sont des rapports.
+var BAT_PRIX_GEL = 1.35;
+
+var BAT_T = 32, BAT_H = 10;
+
+var BAT_CAS = [
+  { kwh:2,  cas:'Studio : éclairage, ventilateur, téléphone' },
+  { kwh:5,  cas:'Maison familiale : + télévision et congélateur' },
+  { kwh:10, cas:'Grande maison ou boutique' },
+  { kwh:20, cas:'Commerce avec froid : vitrine, chambre froide' }
+];
+
+var BAT_POUR = {
+  'Lithium':['90 % de la capacité réellement utilisable',
+    'Tient dix à quinze fois plus de cycles que le plomb ouvert',
+    'Cinq à six fois plus léger à capacité utile égale',
+    'Se recharge vite : le parc est plein avant midi',
+    'Ne craint pas d\'être laissé à moitié chargé',
+    'Aucun entretien, aucune vapeur d\'acide',
+    'Un BMS coupe avant la casse en cas de fausse manœuvre'],
+  'GEL':['Prix d\'achat nettement plus bas que le lithium',
+    'Aucun entretien : rien à remplir',
+    'Étanche, pas de dégagement d\'acide dans le local',
+    'Fonctionne avec les onduleurs 12 V et 24 V les plus courants',
+    'Se trouve partout, y compris à l\'intérieur du pays'],
+  'Acide':['Le moins cher à l\'achat, de loin',
+    'Se trouve dans n\'importe quelle ville',
+    'Se répare parfois : une eau refaite à temps rattrape une charge ratée',
+    'Aucune électronique à tomber en panne']
+};
+
+var BAT_CONTRE = {
+  'Lithium':['Deux à trois fois plus cher à l\'achat — c\'est le vrai obstacle',
+    'Demande un onduleur 48 V : le 12 V et le 24 V ne conviennent pas',
+    'Ne se répare pas : une cellule morte, c\'est le module à changer',
+    'Ne se recharge pas au-dessous de 0 °C — sans objet en Guinée'],
+  'GEL':['La moitié seulement de la capacité est utilisable',
+    'Une tension de charge trop haute la tue en quelques semaines',
+    'Perd la moitié de sa vie dans un local à 35 °C',
+    'Trois fois plus lourde à capacité utile égale',
+    'Se recharge lentement : il faut du soleil toute la journée'],
+  'Acide':['Meurt en un à deux ans dans un usage solaire quotidien',
+    'Le niveau d\'eau est à refaire — oublié une fois, la batterie est perdue',
+    'Dégage de l\'hydrogène : le local doit être ventilé',
+    'Rendement le plus faible : il faut le plus de panneaux',
+    'Une seule décharge profonde peut la détruire']
+};
+
+// Regle des 10 degres : chaque dizaine au-dessus de 25 divise la duree de
+// vie par le facteur de la technologie. En dessous, on ne promet rien.
+function batCyclesA(t, temp) {
+  var ecart = (temp - 25) / 10;
+  if (ecart <= 0) return t.cycles;
+  return Math.round(t.cycles / Math.pow(t.chaleur, ecart));
+}
+
+function batCalendaireA(t, temp) {
+  var ecart = (temp - 25) / 10;
+  if (ecart <= 0) return t.calendaire;
+  return t.calendaire / Math.pow(t.chaleur, ecart);
+}
+
+function batBilan(t, besoin, temp, horizon, rapportLi) {
+  var b = besoin > 0 ? besoin : 0;
+  // La profondeur decide de ce qu il faut acheter, le rendement de ce qu il
+  // faut produire.
+  var nominale = b / t.dod;
+  var aCharger = b / t.rendement;
+  var cy = batCyclesA(t, temp);
+  var annees = Math.min(cy / 365, batCalendaireA(t, temp));
+  var prix = t.sigle === 'Lithium' ? rapportLi : (t.sigle === 'GEL' ? BAT_PRIX_GEL : 1);
+  // Non arrondi : arrondir creerait une marche absurde entre 9,9 et 10,1 ans.
+  var parcs = annees <= 0 ? 0 : horizon / annees;
+  return {
+    t: t,
+    nominale: nominale,
+    aCharger: aCharger,
+    poids: nominale * 1000 / t.whkg,
+    cycles: cy,
+    annees: annees,
+    kwhVie: nominale * t.dod * cy,
+    remplacements: annees <= 0 ? 0 : Math.max(0, Math.ceil(horizon / annees) - 1),
+    cout: nominale * prix * parcs,
+    heuresCharge: t.chargeC <= 0 ? Infinity : aCharger / (nominale * t.chargeC)
+  };
+}
+
+function batConclusion(l, horizon) {
+  if (!l.length) return '';
+  var tries = l.slice().sort(function(a,b){ return a.cout - b.cout; });
+  var g = tries[0], p = tries[tries.length - 1];
+  if (g.cout <= 0 || p.cout <= 0) return '';
+  // « Moins cher de X % » se calcule sur le prix du plus cher : sinon on
+  // annonce « 200 % moins cher », qui ne veut rien dire.
+  var ecart = Math.round((1 - g.cout / p.cout) * 100);
+  if (ecart < 10) return 'Sur ' + horizon + ' ans, les technologies se tiennent : départagez sur le poids, la place et l\'entretien.';
+  var r = p.remplacements;
+  var cause = r > 0
+    ? 'parce qu\'il faut racheter ' + r + ' fois le parc en ' + p.t.designation + ' pendant ce temps'
+    : 'parce qu\'il faut en acheter deux fois plus pour sortir la même énergie chaque nuit';
+  return 'Sur ' + horizon + ' ans, le ' + g.t.designation + ' revient ' + ecart +
+         ' % moins cher que le ' + p.t.designation + ', malgré un prix d\'achat plus élevé — ' + cause + '.';
+}
+
+function batDuree(a) {
+  return a >= 1 ? a.toFixed(1) + ' ans' : Math.round(a * 12) + ' mois';
+}
+
+function batPuce(txt, actif, action) {
+  return '<button onclick="' + action + '" style="padding:.45rem 1rem;border-radius:20px;border:1px solid ' +
+    (actif ? '#f97316' : '#e5e7eb') + ';background:' + (actif ? 'rgba(249,115,22,.1)' : '#fff') +
+    ';color:' + (actif ? '#f97316' : '#64748b') + ';font-size:.8rem;font-weight:700;cursor:pointer">' + txt + '</button>';
+}
+
+function batSetT(t) { BAT_T = t; batCalc(); }
+function batSetH(h) { BAT_H = h; batCalc(); }
+
+function batCalc() {
+  var besoin  = +document.getElementById('batSlider').value;
+  var rapport = +document.getElementById('batRapport').value / 10;
+
+  document.getElementById('batBesoin').textContent = besoin + ' kWh';
+  document.getElementById('batRapportTxt').textContent = '× ' + rapport.toFixed(1).replace('.', ',');
+
+  var proche = BAT_CAS[0];
+  for (var i = 0; i < BAT_CAS.length; i++) {
+    if (Math.abs(BAT_CAS[i].kwh - besoin) < Math.abs(proche.kwh - besoin)) proche = BAT_CAS[i];
+  }
+  document.getElementById('batCas').textContent =
+    Math.abs(proche.kwh - besoin) <= 1.5 ? proche.cas : 'À vous de régler la barre';
+
+  document.getElementById('batTemps').innerHTML = [25,30,32,35,40].map(function(t){
+    return batPuce(t + ' °C', BAT_T === t, 'batSetT(' + t + ')');
+  }).join('');
+  document.getElementById('batHorizons').innerHTML = [5,10,15].map(function(h){
+    return batPuce(h + ' ans', BAT_H === h, 'batSetH(' + h + ')');
+  }).join('');
+
+  var l = BAT_TECHNOS.map(function(t){ return batBilan(t, besoin, BAT_T, BAT_H, rapport); });
+  var classes = l.slice().sort(function(a,b){ return a.cout - b.cout; });
+  var meilleur = classes[0], pire = classes[classes.length - 1];
+
+  var html =
+    '<div style="background:#f0fdf4;border:1.4px solid rgba(22,163,74,.4);border-radius:14px;padding:15px;margin-bottom:16px">' +
+    '<div style="font-family:Syne,sans-serif;font-weight:900;font-size:14.5px;color:#15803d;margin-bottom:8px">\u{1F3C6} Le meilleur choix : ' + meilleur.t.nom + '</div>' +
+    '<div style="font-size:13.5px;line-height:1.65;color:#374151">' + batConclusion(l, BAT_H) + '</div>' +
+    '</div>';
+
+  html += classes.map(function(b){
+    var part = pire.cout <= 0 ? 0 : Math.min(1, b.cout / pire.cout);
+    var gagnant = b === meilleur;
+    var couleur = part < 0.5 ? '#15803d' : '#b91c1c';
+    var ligne = function(g, d, alerte){
+      return '<div style="display:flex;justify-content:space-between;gap:10px;padding:4px 0">' +
+        '<span style="font-size:12.5px;color:#64748b">' + g + '</span>' +
+        '<span style="font-size:13px;font-weight:800;color:' + (alerte ? '#b91c1c' : '#0f172a') + '">' + d + '</span></div>';
+    };
+    return '<div style="background:#fff;border:' + (gagnant ? '1.7px solid rgba(21,128,61,.5)' : '1px solid #e5e7eb') +
+      ';border-radius:15px;padding:15px;margin-bottom:12px">' +
+      '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
+      '<span style="font-family:Syne,sans-serif;font-weight:900;font-size:15.5px">' + b.t.nom + '</span>' +
+      (gagnant ? '<span style="background:#15803d;color:#fff;border-radius:20px;padding:3px 9px;font-size:9.5px;font-weight:900;letter-spacing:.7px">LE MOINS CHER</span>' : '') +
+      '</div>' +
+      '<div style="font-size:12px;color:#64748b;margin-top:3px">' + b.t.resume + '</div>' +
+      '<div style="display:flex;justify-content:space-between;margin-top:12px">' +
+      '<span style="font-size:12.5px;font-weight:700">Coût total sur la durée</span>' +
+      '<span style="font-size:12.5px;font-weight:900;color:' + couleur + '">' + Math.round(part * 100) + ' % du plus cher</span>' +
+      '</div>' +
+      '<div style="height:9px;background:#f1f5f9;border-radius:6px;overflow:hidden;margin:6px 0 13px">' +
+      '<div style="height:100%;width:' + (part * 100) + '%;background:' + (part < 0.5 ? '#15803d' : '#f97316') + '"></div></div>' +
+      ligne('À acheter pour ce besoin', b.nominale.toFixed(1) + ' kWh') +
+      ligne('Poids du parc', Math.round(b.poids) + ' kg') +
+      ligne('Durée avant remplacement', batDuree(b.annees)) +
+      ligne('Rachats sur ' + BAT_H + ' ans', b.remplacements === 0 ? 'aucun' : b.remplacements + ' fois', b.remplacements >= 3) +
+      ligne('Cycles tenus à cette température', b.cycles) +
+      ligne('Énergie rendue sur toute sa vie', Math.round(b.kwhVie) + ' kWh') +
+      ligne('Temps de charge à plein courant', b.heuresCharge.toFixed(1) + ' h', b.heuresCharge > 4) +
+      '</div>';
+  }).join('');
+
+  // Le tableau : les quatre axes cote a cote.
+  var lignes = [
+    ['Décharge utilisable', l.map(function(b){ return Math.round(b.t.dod * 100) + ' %'; })],
+    ['Rendement',               l.map(function(b){ return Math.round(b.t.rendement * 100) + ' %'; })],
+    ['Cycles (25 °C)',     l.map(function(b){ return b.t.cycles; })],
+    ['Cycles ici',              l.map(function(b){ return b.cycles; })],
+    ['Durée',              l.map(function(b){ return batDuree(b.annees); })],
+    ['Énergie / kg',       l.map(function(b){ return b.t.whkg + ' Wh'; })],
+    ['Perte au repos',          l.map(function(b){ return Math.round(b.t.auto * 100) + ' %/mois'; })],
+    ['Entretien',               l.map(function(b){ return b.t.entretien ? 'Eau' : 'Aucun'; })]
+  ];
+  html += '<div style="font-family:Syne,sans-serif;font-weight:900;font-size:15px;margin:20px 0 10px">Le tableau, ligne par ligne</div>' +
+    '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px;min-width:340px">' +
+    '<tr><th></th>' + l.map(function(b){
+      return '<th style="text-align:right;padding:7px 6px;font-family:Syne,sans-serif;font-weight:900;color:' +
+        (b.t.sigle === 'Lithium' ? '#15803d' : '#0f172a') + '">' + b.t.sigle + '</th>';
+    }).join('') + '</tr>' +
+    lignes.map(function(r){
+      return '<tr style="border-top:1px solid #f1f5f9"><td style="padding:7px 6px;color:#64748b">' + r[0] + '</td>' +
+        r[1].map(function(v){ return '<td style="padding:7px 6px;text-align:right;font-weight:700">' + v + '</td>'; }).join('') + '</tr>';
+    }).join('') + '</table></div>';
+
+  // Avantages et inconvenients. Une comparaison qui ne dit que du bien de ce
+  // qu on vend n est pas crue — et le lithium a de vrais defauts.
+  html += '<div style="font-family:Syne,sans-serif;font-weight:900;font-size:15px;margin:22px 0 10px">Avantages et inconvénients</div>';
+  html += l.map(function(b){
+    var pts = function(arr, ok){
+      return (arr || []).map(function(x){
+        return '<div style="display:flex;gap:8px;margin-bottom:6px;line-height:1.5">' +
+          '<span style="color:' + (ok ? '#16a34a' : '#dc2626') + ';font-weight:900">' + (ok ? '✓' : '✗') + '</span>' +
+          '<span style="font-size:12.8px;color:#374151">' + x + '</span></div>';
+      }).join('');
+    };
+    return '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px;margin-bottom:12px">' +
+      '<div style="font-family:Syne,sans-serif;font-weight:900;font-size:14.5px;margin-bottom:10px">' + b.t.nom + '</div>' +
+      pts(BAT_POUR[b.t.sigle], true) + '<div style="height:6px"></div>' + pts(BAT_CONTRE[b.t.sigle], false) +
+      '</div>';
+  }).join('');
+
+  var li = l[0];
+  html += '<a href="https://wa.me/224610111015?text=' +
+    encodeURIComponent('Bonjour Laouni Électricité. J\'ai comparé les batteries sur votre site : il me faut ' +
+      besoin + ' kWh la nuit, soit environ ' + li.nominale.toFixed(1) + ' kWh en lithium. Quel est votre prix ?') +
+    '" target="_blank" rel="noopener" style="display:block;text-align:center;padding:.9rem;border-radius:13px;background:#25d366;color:#fff;font-weight:800;text-decoration:none;font-size:.95rem">Demander le prix de ce parc</a>';
+
+  document.getElementById('batResult').innerHTML = html;
+}
+
+batCalc();
+</script>
+
 <script>
 /* ═══════════════════════════════════════════════════════════════
    Deux outils qui repondent aux questions posees en magasin.
@@ -2860,6 +3151,14 @@ function renderGalerieTab(div) {
     '<input id="galLegende" class="inp" placeholder="Légende (optionnel)" style="flex:2">' +
     '</div>' +
 
+    // Vidéo : le champ n'existait nulle part et n'était jamais envoyé à la
+    // base. Le vendeur n'avait aucun moyen de publier une vidéo de chantier.
+    '<div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;align-items:center">' +
+    '<input id="galVideo" class="inp" placeholder="Lien vidéo YouTube / Facebook / TikTok (optionnel)" style="flex:2;min-width:220px">' +
+    '<button onclick="galerieAjouterVideo()" style="padding:.55rem 1rem;border-radius:10px;border:1px solid #dc2626;background:#fff;color:#dc2626;font-weight:700;font-size:.8rem;cursor:pointer">▶ Publier la vidéo seule</button>' +
+    '</div>' +
+    '<div style="font-size:11.5px;color:#94a3b8;margin:-.5rem 0 1rem;line-height:1.6">La photo montre le résultat, la vidéo montre le travail. Collez le lien puis choisissez une photo — ou publiez la vidéo seule, sans photo.</div>' +
+
     // Grille photos
     '<div style="font-family:Syne,sans-serif;font-size:11px;font-weight:700;color:#64748b;margin-bottom:8px">PHOTOS PUBLIÉES ('+DB.galerie.length+')</div>' +
     '<div id="galGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px">' +
@@ -2867,11 +3166,16 @@ function renderGalerieTab(div) {
       '<div style="grid-column:1/-1;text-align:center;color:#94a3b8;padding:2rem;font-size:13px">Aucune photo publiée</div>' :
       DB.galerie.map((p,i) =>
         '<div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid #e5e7eb;background:#f9fafb">' +
-        '<img src="'+p.url+'" style="width:100%;height:120px;object-fit:cover;display:block">' +
+        (p.url ?
+          '<img src="'+p.url+'" style="width:100%;height:120px;object-fit:cover;display:block">' :
+          '<div style="height:120px;background:#111827;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px">▶</div>') +
         '<div style="padding:6px 8px">' +
-        '<div style="font-size:10px;font-weight:700;color:#f97316;text-transform:uppercase">'+p.cat+'</div>' +
+        '<div style="font-size:10px;font-weight:700;color:#f97316;text-transform:uppercase">'+(p.video?'▶ ':'')+p.cat+'</div>' +
         '<div style="font-size:11px;color:#374151;margin-top:2px">'+( p.legende||'')+'</div>' +
         '<div style="font-size:10px;color:#94a3b8;margin-top:2px">'+p.magName+' · '+p.date+'</div>' +
+        // Sans ce bouton, une photo déjà publiée ne pouvait plus jamais
+        // recevoir de lien vidéo : il fallait la supprimer et recommencer.
+        '<button onclick="galerieModifierVideo('+i+')" style="margin-top:6px;width:100%;padding:.3rem;border-radius:7px;border:1px solid #e5e7eb;background:#fff;color:#dc2626;font-size:10.5px;font-weight:700;cursor:pointer">'+(p.video?'✎ Modifier la vidéo':'▶ Ajouter une vidéo')+'</button>' +
         '</div>' +
         '<button onclick="galerieDelete('+i+')" style="position:absolute;top:4px;right:4px;background:rgba(239,68,68,.9);color:#fff;border:none;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:12px">×</button>' +
         '</div>'
@@ -2886,6 +3190,7 @@ function galerieAddPhotos(input) {
   const files = Array.from(input.files);
   const cat = document.getElementById('galCat').value;
   const legende = document.getElementById('galLegende').value;
+  const video = (document.getElementById('galVideo')||{value:''}).value.trim();
   const isAdmin = currentUser.role === 'admin';
   const magId = currentUser.magId || 'admin';
   const magName = isAdmin ? 'Admin' : (DB.magasins.find(m=>m.id===magId)||{name:'?'}).name;
@@ -2903,6 +3208,7 @@ function galerieAddPhotos(input) {
         magId: magId,
         magName: magName,
         date: today(),
+        video: video,
         publie: true
       };
       DB.galerie.unshift(photo);
@@ -2935,10 +3241,65 @@ async function sbSaveGalerie(photo) {
     const {error} = await SB.from('galerie').upsert({
       id: photo.id, url: photo.url, cat: photo.cat,
       legende: photo.legende||'', mag_id: photo.magId,
-      mag_name: photo.magName, date_photo: photo.date, publie: true
+      mag_name: photo.magName, date_photo: photo.date,
+      video: photo.video||'', publie: true
     }, {onConflict:'id'});
-    if(error) console.error('sbSaveGalerie:', error.message);
+    if(error) { console.error('sbSaveGalerie:', error.message); notify('Publication non enregistrée : '+error.message, true); }
   } catch(e) {}
+}
+
+// Publier une vidéo sans photo.
+//
+// Le seul point d'entrée de la galerie était « ajouter des photos » : pour
+// montrer un chantier filmé, il fallait d'abord photographier quelque chose.
+function galerieAjouterVideo() {
+  const champ = document.getElementById('galVideo');
+  const lien = champ ? champ.value.trim() : '';
+  if(!lien.startsWith('http')) {
+    notify('Collez d\'abord le lien de la vidéo (il commence par http).', true);
+    return;
+  }
+  if(!DB.galerie) DB.galerie = [];
+  const isAdmin = currentUser.role === 'admin';
+  const magId = currentUser.magId || 'admin';
+  const photo = {
+    id: genId(),
+    url: '',                       // pas d'image : la carte affiche l'affiche vidéo
+    cat: document.getElementById('galCat').value,
+    legende: document.getElementById('galLegende').value,
+    magId: magId,
+    magName: isAdmin ? 'Admin' : (DB.magasins.find(m=>m.id===magId)||{name:'?'}).name,
+    date: today(),
+    video: lien,
+    publie: true
+  };
+  DB.galerie.unshift(photo);
+  sbSaveGalerie(photo);
+  champ.value = '';
+  notify('✅ Vidéo publiée !');
+  renderDash('galerie');
+  renderGaleriePublique();
+}
+
+// Ajouter ou corriger le lien d'une publication déjà en ligne.
+function galerieModifierVideo(i) {
+  const p = DB.galerie[i];
+  if(!p) return;
+  const lien = prompt('Lien de la vidéo (laisser vide pour la retirer) :', p.video||'');
+  if(lien === null) return;
+  const propre = lien.trim();
+  if(propre && !propre.startsWith('http')) {
+    notify('Le lien doit commencer par http.', true);
+    return;
+  }
+  p.video = propre;
+  // Une mise à jour du seul champ vidéo, pas un upsert : réécrire la ligne
+  // renverrait la photo en base64 entière pour trois mots de lien.
+  SB.from('galerie').update({video: propre}).eq('id', p.id)
+    .then(r => { if(r.error) notify('Vidéo non enregistrée : '+r.error.message, true); });
+  notify(propre ? 'Vidéo enregistrée' : 'Vidéo retirée');
+  renderDash('galerie');
+  renderGaleriePublique();
 }
 
 async function sbDeleteGalerie(id) {
@@ -2964,9 +3325,14 @@ function renderGaleriePublique() {
     ).join('') +
     '</div>' +
     '<div id="galPubGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px">' +
-    DB.galerie.map(p =>
-      '<div class="gal-item" data-cat="'+p.cat+'" style="border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer" onclick="galerieOpenPhoto(\''+p.url+'\')">' +
-      '<img src="'+p.url+'" style="width:100%;height:150px;object-fit:cover;display:block" loading="lazy">' +
+    DB.galerie.map((p,i) =>
+      // Une vidéo sans photo n'est pas une image cassée : elle n'a jamais eu
+      // d'image. On montre l'affiche vidéo, et le clic ouvre la vidéo.
+      '<div class="gal-item" data-cat="'+p.cat+'" style="position:relative;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:pointer" onclick="galerieOuvrir('+i+')">' +
+      (p.url ?
+        '<img src="'+p.url+'" style="width:100%;height:150px;object-fit:cover;display:block" loading="lazy">' :
+        '<div style="height:150px;background:#111827;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff"><div style="font-size:40px;line-height:1">▶</div><div style="font-size:10px;letter-spacing:2.5px;font-weight:800;color:#9ca3af;margin-top:6px">VIDÉO</div></div>') +
+      (p.video && p.url ? '<div style="position:absolute;top:8px;right:8px;background:rgba(220,38,38,.92);color:#fff;border-radius:20px;padding:3px 9px;font-size:10px;font-weight:800">▶ VIDÉO</div>' : '') +
       (p.legende ? '<div style="padding:8px;font-size:12px;color:#374151;font-weight:500">'+p.legende+'</div>' : '') +
       '</div>'
     ).join('') +
@@ -2988,6 +3354,20 @@ function filtrerGalerie(cat) {
 
 function galerieOpenPhoto(url) {
   showModal('<div style="text-align:center"><img src="'+url+'" style="max-width:100%;max-height:70vh;border-radius:10px;object-fit:contain"><br><button onclick="closeModal()" class="btn-g" style="margin-top:12px">✕ Fermer</button></div>');
+}
+
+// Ouvre la réalisation : la photo en grand, et le lien vidéo dessous quand
+// il y en a un. Sans photo, la vidéo s'ouvre directement.
+function galerieOuvrir(i) {
+  const p = (DB.galerie||[])[i];
+  if(!p) return;
+  if(!p.url && p.video) { window.open(p.video, '_blank', 'noopener'); return; }
+  showModal(
+    '<div style="text-align:center">' +
+    '<img src="'+p.url+'" style="max-width:100%;max-height:65vh;border-radius:10px;object-fit:contain">' +
+    (p.legende ? '<div style="margin-top:10px;font-size:14px;color:#374151">'+p.legende+'</div>' : '') +
+    (p.video ? '<div style="margin-top:12px"><a href="'+p.video+'" target="_blank" rel="noopener" style="display:inline-block;padding:.6rem 1.3rem;border-radius:10px;background:#dc2626;color:#fff;font-weight:700;text-decoration:none;font-size:.85rem">▶ Voir la vidéo</a></div>' : '') +
+    '<br><button onclick="closeModal()" class="btn-g" style="margin-top:12px">✕ Fermer</button></div>');
 }
 
 function renderStockTab(div, isAdmin) {
