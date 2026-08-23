@@ -202,6 +202,7 @@ ${MAGASINS.map((m) => `  <div class="mag"><b>${m.ville}</b><br>${m.adresse}<br>
     <a href="/delestage-conakry/">Délestage : avoir le courant chez soi<span>Ce que coûtent les coupures, et comment tenir la nuit</span></a>
     <a href="/batterie-lithium-gel-ou-acide/">Quelle batterie choisir<span>Lithium, GEL ou acide : laquelle dure vraiment ici</span></a>
     <a href="/panne-onduleur-batterie/">Mon onduleur bipe, ma batterie ne charge plus<span>Les pannes courantes et ce qu'il faut vérifier</span></a>
+    <a href="/choisir-panneau-solaire/">Bien choisir ses panneaux solaires<span>Grade A ou B, double face, noir ou bleu — ce que l'étiquette ne dit pas</span></a>
     <a href="/grandes-marques-solaire/">Les grandes marques du solaire<span>Panneaux, onduleurs, batteries — qui fabrique quoi, et gare aux copies</span></a>
     <a href="/nos-methodes-de-calcul/">Comment nos calculs sont faits<span>Les normes suivies, et quoi faire si un résultat vous étonne</span></a>
   </div>
@@ -1055,6 +1056,131 @@ de chaque chiffre. Posez-nous la question aussi.</p>
 <div class="liens">
   <a href="/batterie-lithium-gel-ou-acide/">Lithium, GEL ou acide : laquelle dure vraiment<span>Chaque chiffre y est donné avec sa condition de mesure</span></a>
   <a href="/prix-solaire-conakry/">Ce qui fait le prix d'une installation<span>Et comment reconnaître un devis truqué</span></a>
+</div>`,
+});
+
+// ─────────────────── bien choisir ses panneaux ───────────────────
+
+PAGES.push({
+  fichier: 'choisir-panneau-solaire',
+  title: 'Bien choisir ses panneaux solaires en Guinée',
+  description:
+    'Grade A ou grade B, double face ou simple face, noir ou bleu : ce que l\'étiquette ne dit pas, et ce qui change vraiment sous le soleil guinéen.',
+  h1: 'Bien choisir ses panneaux solaires : ce que l\'étiquette ne dit pas',
+  corps: `
+<p class="chapeau">Deux panneaux marqués « 550 W » peuvent produire très différemment sous
+le soleil de Guinée, et vieillir encore plus différemment. Quatre choses décident, et
+aucune n'est écrite en gros sur l'emballage.</p>
+
+<h2>1. Grade A ou grade B : la qualité des cellules</h2>
+<p>À la sortie de l'usine, les cellules sont triées. Celles qui passent tous les contrôles
+sont dites de <b>grade A</b> ; celles qui ont un défaut sont écartées et revendues moins
+cher — c'est ce qu'on appelle le <b>grade B</b>.</p>
+<table>
+  <tr><th></th><th>Grade A</th><th>Grade B</th></tr>
+  <tr><td>Aspect</td><td>Couleur uniforme, aucun éclat</td><td>Nuances, coins ébréchés, micro-fissures</td></tr>
+  <tr><td>Puissance réelle</td><td>Conforme à l'étiquette</td><td>Souvent en dessous</td></tr>
+  <tr><td>Vieillissement</td><td>Perte lente et régulière</td><td>Plus rapide, les fissures s'agrandissent</td></tr>
+  <tr><td>Garantie</td><td>Écrite, 20 à 25 ans</td><td>Souvent aucune</td></tr>
+</table>
+
+<div class="alerte">
+<h3 style="margin-top:0">Pourquoi une seule mauvaise cellule coûte cher</h3>
+<p style="margin-bottom:0">Dans un panneau, les cellules sont branchées à la suite, comme
+les wagons d'un train. Le courant qui traverse l'ensemble est celui que laisse passer la
+<b>plus faible</b>. Une cellule de grade B au milieu de cellules correctes ne coûte pas un
+peu de production : elle plafonne tout le panneau.</p>
+</div>
+
+<div class="encadre">
+<h3 style="margin-top:0">Le piège : « grade A » n'est pas une norme</h3>
+<p>Aucune règle internationale ne définit ce mot, et personne ne contrôle qui l'écrit sur
+un carton. Un vendeur peut l'imprimer sans mentir légalement.</p>
+<p style="margin-bottom:0">Ce qui vaut vraiment : <b>la fiche technique du modèle exact</b>,
+<b>la garantie écrite avec le nom de celui qui l'applique</b>, et un prix cohérent avec le
+marché. Un panneau « grade A » à moitié prix n'est pas de grade A.</p>
+</div>
+
+<h2>2. Face simple ou double face</h2>
+<p>Un panneau simple face ne produit que par l'avant : son dos est une feuille opaque. Un
+panneau double face est en verre des deux côtés, et capte aussi la lumière qui remonte du
+sol.</p>
+<table>
+  <tr><th></th><th>Double face</th><th>Simple face</th></tr>
+  <tr><td>Production</td><td>+5 à 15 % — mais seulement bien posé</td><td>Ce qui est écrit sur l'étiquette</td></tr>
+  <tr><td>Ce qu'il lui faut</td><td>De la hauteur, un sol clair</td><td>Rien de particulier</td></tr>
+  <tr><td>Solidité</td><td>Verre des deux côtés</td><td>Feuille arrière, plus sensible</td></tr>
+  <tr><td>Poids</td><td>Plus lourd</td><td>Plus léger</td></tr>
+</table>
+<div class="alerte">
+<p style="margin:0"><b>Le gain de la double face se perd très facilement.</b> Posé à plat
+contre une tôle sombre, un panneau double face ne rapporte presque rien de plus qu'un
+simple face — vous avez payé un dos vitré pour rien. Il lui faut de l'espace derrière et
+une surface claire en dessous : ciment clair, gravier blanc, tôle claire. C'est la pose qui
+décide, pas le panneau.</p>
+</div>
+
+<h2>3. Noir, bleu, ou plein de traits blancs</h2>
+<p>La couleur n'est pas qu'une question de goût : sous le soleil guinéen, elle change ce
+que le panneau produit.</p>
+<div class="vert">
+<h3 style="margin-top:0">Cellules noires, fond blanc — le meilleur choix ici</h3>
+<p style="margin-bottom:0">Cellules monocristallines, noires et uniformes, sur un fond
+blanc qu'on voit entre elles. Meilleur rendement au mètre carré, et le fond clair renvoie
+une partie de la chaleur. C'est la combinaison qui produit le plus sous un climat chaud.</p>
+</div>
+<div class="encadre">
+<h3 style="margin-top:0">Cellules bleues (polycristallin)</h3>
+<p style="margin-bottom:0">Aspect bleuté et moucheté, technologie plus ancienne. Rendement
+plus faible : il faut plus de surface de toit pour la même puissance. Encore très vendu
+parce que moins cher à produire.</p>
+</div>
+<div class="encadre">
+<h3 style="margin-top:0">Tout noir (full black)</h3>
+<p style="margin-bottom:0">Cellules noires ET fond noir ET cadre noir. Très élégant sur une
+toiture — c'est d'ailleurs son seul avantage. Le fond noir absorbe la chaleur, le panneau
+travaille plus chaud et produit un peu moins. À réserver aux climats frais.</p>
+</div>
+<p><b>Pourquoi le tout noir est le mauvais choix en Guinée :</b> un panneau chaud produit
+moins, environ 0,4 % de perte par degré au-dessus de 25 °C. Sous notre soleil, un module
+monte facilement à 60 °C. Le fond blanc en renvoie une partie et fait travailler le panneau
+quelques degrés plus frais. Le tout noir est plus joli sur une villa européenne ; ici, il
+vous coûte de la production toute l'année.</p>
+
+<h2>4. Les traits fins sur les cellules</h2>
+<p>Ce sont les <b>barres</b> qui ramassent le courant produit par la cellule. À ne pas
+confondre avec le blanc du fond, qui se voit entre les cellules.</p>
+<p>Les anciens panneaux en avaient 3 ou 4, larges. Les récents en ont 9, 12 ou davantage,
+très fines. Plus il y en a, plus le courant a de chemins pour sortir :</p>
+<ul>
+  <li>moins de perte en chaleur dans le panneau lui-même, le trajet du courant est plus
+      court ;</li>
+  <li>une micro-fissure coupe moins de chemins : le panneau continue de produire là où un
+      modèle à 3 barres aurait perdu tout un morceau ;</li>
+  <li>moins d'ombre portée par les barres elles-mêmes, puisqu'elles sont plus fines.</li>
+</ul>
+<p>Beaucoup de traits fins n'est donc pas un défaut d'aspect : <b>c'est le signe d'un
+panneau de conception récente</b>.</p>
+
+<h2>Ce qu'il faut retenir</h2>
+<ul>
+  <li>Cellules <b>noires uniformes</b> plutôt que bleues : plus de watts sur la même
+      surface de toit.</li>
+  <li>Fond <b>blanc</b> plutôt que tout noir : le panneau travaille plus frais, donc il
+      produit plus ici.</li>
+  <li>Beaucoup de <b>barres fines</b> plutôt que trois larges.</li>
+  <li><b>Double face</b> uniquement si vous pouvez le poser en hauteur au-dessus d'une
+      surface claire. Sinon, gardez votre argent.</li>
+  <li>La <b>garantie écrite</b> et la <b>fiche technique</b> valent plus que le mot
+      « grade A » imprimé sur un carton.</li>
+</ul>
+
+${RAPPEL_CONTREFACON}
+
+<div class="liens">
+  <a href="/grandes-marques-solaire/">Les grandes marques du solaire<span>Qui fabrique quoi, et comment ne pas acheter une copie</span></a>
+  <a href="/batterie-lithium-gel-ou-acide/">Lithium, GEL ou acide : laquelle dure vraiment<span>Le même travail, côté batteries</span></a>
+  <a href="/#simulation">Le simulateur d'installation<span>Combien de panneaux pour vos appareils</span></a>
 </div>`,
 });
 
