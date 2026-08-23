@@ -202,7 +202,7 @@ ${MAGASINS.map((m) => `  <div class="mag"><b>${m.ville}</b><br>${m.adresse}<br>
     <a href="/delestage-conakry/">Délestage : avoir le courant chez soi<span>Ce que coûtent les coupures, et comment tenir la nuit</span></a>
     <a href="/batterie-lithium-gel-ou-acide/">Quelle batterie choisir<span>Lithium, GEL ou acide : laquelle dure vraiment ici</span></a>
     <a href="/panne-onduleur-batterie/">Mon onduleur bipe, ma batterie ne charge plus<span>Les pannes courantes et ce qu'il faut vérifier</span></a>
-    <a href="/grandes-marques-solaire/">Les grandes marques mondiales du solaire<span>Deye, Growatt, Huawei, LONGi, CATL — qui fabrique quoi</span></a>
+    <a href="/grandes-marques-solaire/">Grandes marques : gare aux contrefaçons<span>LONGi, Jinko, Trina, Canadian Solar — les quatre noms les plus copiés</span></a>
     <a href="/nos-methodes-de-calcul/">Comment nos calculs sont faits<span>Les normes suivies, et quoi faire si un résultat vous étonne</span></a>
   </div>
   <p style="font-size:.8rem">Les prix ne sont pas affichés : ils dépendent de ce que vous voulez
@@ -277,6 +277,33 @@ l'explication du fonctionnement à quelqu'un de la maison.</p>
 <p>Ce que vous préparez de votre côté : un endroit couvert et <b>aéré</b> pour les
 batteries — pas un cagibi fermé sous tôle, la chaleur y coupe la durée de vie de moitié —
 et un accès au toit ou à la cour pour les panneaux.</p>`;
+
+const CONTREFACON = `
+<div class="alerte">
+<h3 style="margin-top:0">Une grande marque à prix cassé, c'est une contrefaçon</h3>
+<p>Si on vous propose une grande marque mondiale nettement moins cher qu'ailleurs, ce
+n'est pas une bonne affaire : c'est presque toujours une copie. Ces marques-là sont les
+plus imitées au monde, justement parce que leur nom se vend tout seul.</p>
+<p><b>Entre ces deux choix :</b></p>
+<ul>
+  <li>une <b>marque standard, à un prix raisonnable</b>, avec une fiche technique et une
+      garantie que quelqu'un assume ;</li>
+  <li>une <b>grande marque mondiale à prix réduit</b>, sans preuve que le produit est
+      authentique.</li>
+</ul>
+<p style="margin-bottom:0">Le second est de loin le plus risqué. Le premier vous donne ce
+qu'il annonce. Le second vous donne une étiquette — et vous ne le saurez qu'au bout de six
+mois, quand la batterie sera morte ou que le panneau produira la moitié de ce qui est
+écrit dessus.</p>
+</div>`;
+
+/// Le rappel court, a glisser en bas d une page sans l alourdir.
+const RAPPEL_CONTREFACON = `
+<div class="alerte" style="padding:.8rem 1rem">
+<p style="margin:0;font-size:.88rem"><b>⚠ Rappel :</b> une marque standard à prix
+raisonnable vaut mieux qu'une grande marque à prix cassé — la deuxième est presque
+toujours une copie.</p>
+</div>`;
 
 const PAGES = [];
 
@@ -400,6 +427,8 @@ for (const m of MAGASINS) {
 
 <h2>Ce que vous trouvez en magasin</h2>
 ${FAMILLES}
+
+${RAPPEL_CONTREFACON}
 
 <h2>Nous installons chez vous à ${m.ville}</h2>
 ${INSTALLATION}
@@ -754,6 +783,8 @@ entre les deux technologies.</p>
   <a href="/#batteries">Le comparateur de batteries<span>Réglez l'écart de prix vous-même, la conclusion suit le calcul</span></a>
 </div>
 
+${CONTREFACON}
+
 <h2>Comment reconnaître un devis truqué</h2>
 <p>Quelques signaux qui doivent vous faire poser des questions :</p>
 <ul>
@@ -881,6 +912,8 @@ part deux fois plus vite qu'à 25 °C. Elle dégage de l'hydrogène en fin de ch
 local doit être ventilé, ce n'est pas une recommandation de confort. Et c'est elle qui
 demande le plus de panneaux, parce que son rendement est le plus faible.</p>
 
+${RAPPEL_CONTREFACON}
+
 <h2>Nos batteries lithium</h2>
 <div class="vert">
 <p><b>Le lithium dont parle cette page, c'est le nôtre.</b> Les batteries et les onduleurs
@@ -912,75 +945,58 @@ si le lithium cesse d'être le meilleur choix avec vos chiffres, l'outil vous le
 // existe vraiment, et a comprendre qui fait quoi — fabriquer les cellules,
 // assembler la batterie et fabriquer l onduleur sont trois metiers.
 
+// ─────────────── les marques les plus copiees ───────────────
+//
+// La page n est PAS la pour recommander ces marques. Elle est la parce que
+// ce sont les quatre noms les plus copies du marche du panneau solaire :
+// les connaitre, c est savoir reconnaitre le moment ou on essaie de vous en
+// vendre une fausse.
+//
+// Le meme avertissement est repris mot pour mot ailleurs sur le site. Ecrit
+// une fois ici, il ne peut pas se contredire d une page a l autre.
+
 const MARQUES = [
-  {
-    famille: 'Onduleurs et onduleurs hybrides',
-    intro:
-      'La pièce qui transforme le courant continu des panneaux et des batteries en courant utilisable, et qui bascule quand le réseau part.',
-    liste: [
-      ['Huawei', 'Chine', 'L\'un des deux plus gros fabricants mondiaux d\'onduleurs solaires. Gamme FusionSolar, du résidentiel aux grandes centrales.'],
-      ['Sungrow', 'Chine', 'L\'autre géant mondial de l\'onduleur, présent du toit de maison à la centrale au sol.'],
-      ['Deye', 'Chine', 'Devenu une référence de l\'onduleur HYBRIDE — celui qui gère à la fois les panneaux, les batteries et le réseau. Très répandu dans les installations africaines hors réseau ou à réseau instable.'],
-      ['Growatt', 'Chine', 'Très présent sur le résidentiel et l\'hybride, avec une large gamme de petites et moyennes puissances. Une des marques les plus vues en Afrique de l\'Ouest.'],
-      ['SMA', 'Allemagne', 'Le fabricant historique de l\'onduleur solaire, référence de longévité et de documentation technique. Gammes Sunny Boy et Sunny Island.'],
-      ['Fronius', 'Autriche', 'Fabricant européen reconnu pour sa qualité de fabrication et le suivi des installations.'],
-    ],
-  },
-  {
-    famille: 'Panneaux solaires',
-    intro:
-      'Le module qui produit. Quelques fabricants se partagent une grande part de la production mondiale.',
-    liste: [
-      ['LONGi', 'Chine', 'Parmi les tout premiers fabricants mondiaux de modules et de plaquettes de silicium.'],
-      ['JinkoSolar', 'Chine', 'Autre géant du module, présent sur tous les continents.'],
-      ['Trina Solar', 'Chine', 'Fabricant historique de modules, très diffusé.'],
-      ['JA Solar', 'Chine', 'Grand fabricant de cellules et de modules.'],
-      ['Canadian Solar', 'Canada / Chine', 'Fabricant de modules bien implanté à l\'international.'],
-    ],
-  },
-  {
-    famille: 'Cellules et batteries lithium',
-    intro:
-      'Attention à la distinction : certains fabriquent les CELLULES, d\'autres assemblent des batteries à partir de cellules achetées. Ce ne sont pas les mêmes chiffres.',
-    liste: [
-      ['CATL', 'Chine', 'Le plus gros fabricant mondial de cellules de batteries, tous usages confondus.'],
-      ['BYD', 'Chine', 'Fabricant de cellules et de systèmes de stockage complets.'],
-      ['EVE Energy', 'Chine', 'Fabricant de cellules prismatiques LiFePO₄, dont les références servent de base à une grande partie du stockage solaire.'],
-      ['Pylontech', 'Chine', 'Spécialiste des batteries lithium en rack pour le stockage résidentiel.'],
-      ['Victron Energy', 'Pays-Bas', 'Référence de l\'installation hors réseau : onduleurs-chargeurs, régulateurs, batteries et supervision. Documentation technique très complète, souvent citée par les installateurs.'],
-    ],
-  },
+  ['LONGi', 'Chine', 'Parmi les tout premiers fabricants mondiaux de modules et de plaquettes de silicium.'],
+  ['JinkoSolar', 'Chine', 'Autre géant du module solaire, présent sur tous les continents.'],
+  ['Trina Solar', 'Chine', 'Fabricant historique de modules, très largement diffusé.'],
+  ['Canadian Solar', 'Canada / Chine', 'Fabricant de modules bien implanté à l\'international.'],
 ];
 
 PAGES.push({
   fichier: 'grandes-marques-solaire',
-  title: 'Les grandes marques du solaire dans le monde',
+  title: 'Grandes marques solaires : gare aux contrefaçons',
   description:
-    'Deye, Growatt, Huawei, Sungrow, LONGi, CATL, Victron : qui fabrique quoi, et comment reconnaître un matériel dont la fiche technique existe vraiment.',
-  h1: 'Les grandes marques mondiales du solaire : qui fabrique quoi',
+    'LONGi, Jinko, Trina, Canadian Solar : les quatre noms les plus copiés du panneau solaire. Pourquoi un prix cassé sur une grande marque doit vous alerter.',
+  h1: 'Les grandes marques du solaire, et pourquoi elles sont les plus copiées',
   corps: `
-<p class="chapeau">Ces fabricants publient des fiches techniques que le monde entier peut
-vérifier. Aucun magasin guinéen ne figure sur cette page, le nôtre compris : c'est une
-page de repères, pas une page de vente.</p>
+<p class="chapeau">Ce ne sont pas des marques que nous vous recommandons d'acheter. Ce sont
+les quatre noms les plus <b>copiés</b> du marché mondial du panneau solaire. Les connaître
+sert à une seule chose : reconnaître le moment où l'on essaie de vous en vendre une
+fausse.</p>
 
-<h2>À quoi cette page vous sert</h2>
-<p>Deux choses, et rien d'autre.</p>
-<p><b>Reconnaître un matériel qui existe vraiment.</b> Un vendeur sérieux sait de quelle
-cellule et de quel onduleur il parle, et peut vous montrer la fiche. Un appareil sans
-marque, sans référence et sans fiche technique n'a aucun chiffre à vous opposer — ni
-cycles, ni rendement, ni garantie.</p>
-<p><b>Comprendre qui fait quoi.</b> Fabriquer les cellules, assembler la batterie et
-fabriquer l'onduleur sont trois métiers différents. Un vendeur qui mélange les trois ne
-sait pas de quoi il parle — et un assembleur qui annonce les cycles de la cellule nue
-oublie qu'un parc meurt avec sa cellule la plus faible.</p>
+${CONTREFACON}
 
-${MARQUES.map((f) => `
-<h2>${f.famille}</h2>
-<p>${f.intro}</p>
-${f.liste.map(([nom, pays, quoi]) => `<div class="encadre" style="margin:.7rem 0">
+<h2>Les quatre plus copiées</h2>
+<p>Ce sont parmi les plus grands fabricants mondiaux de panneaux. Leur nom se vend tout
+seul — c'est exactement ce qui en fait des cibles.</p>
+${MARQUES.map(([nom, pays, quoi]) => `<div class="encadre" style="margin:.7rem 0">
   <h3 style="margin-top:0">${nom} <span style="font-weight:400;font-size:.8rem;color:#64748b">— ${pays}</span></h3>
   <p style="margin-bottom:0">${quoi}</p>
-</div>`).join('\n')}`).join('\n')}
+</div>`).join('\n')}
+
+<h2>Comment se protéger, concrètement</h2>
+<ul>
+  <li><b>Méfiez-vous du prix trop bas.</b> C'est le premier signal, et le plus fiable. Un
+      fabricant mondial ne brade pas sa production.</li>
+  <li><b>Demandez la fiche technique du modèle exact</b>, avec sa référence. Un vendeur
+      sérieux l'a ; un revendeur de copies change de sujet.</li>
+  <li><b>Vérifiez que la puissance annoncée correspond à la taille du panneau.</b> Une
+      copie annonce souvent une puissance que sa surface ne peut pas produire.</li>
+  <li><b>Demandez qui assure la garantie, et pendant combien de temps.</b> Une garantie de
+      fabricant qu'aucun magasin local n'applique ne vaut rien.</li>
+  <li><b>Préférez un vendeur que vous pouvez retrouver.</b> Un magasin avec une adresse
+      répond de ce qu'il vend ; un étal disparaît.</li>
+</ul>
 
 <h2>La question à poser, quelle que soit la marque</h2>
 <div class="vert">
@@ -994,6 +1010,7 @@ pas — et c'est exactement là que se cachent les écarts.</p>
 de chaque chiffre. Posez-nous la question aussi.</p>
 <div class="liens">
   <a href="/batterie-lithium-gel-ou-acide/">Lithium, GEL ou acide : laquelle dure vraiment<span>Chaque chiffre y est donné avec sa condition de mesure</span></a>
+  <a href="/prix-solaire-conakry/">Ce qui fait le prix d'une installation<span>Et comment reconnaître un devis truqué</span></a>
 </div>`,
 });
 
@@ -1060,7 +1077,7 @@ moto, le poids d'une batterie plomb, la durée de vie d'un parc dans un local ch
   <a href="/#simulation">Le simulateur d'installation<span>Cochez vos appareils, il calcule panneaux, batterie et onduleur</span></a>
   <a href="/#autonomie">Ma batterie tient combien de temps ?<span>Selon ce qui tourne la nuit</span></a>
   <a href="/#batteries">Lithium, GEL ou acide ?<span>Durée, poids, rachats — avec les conditions de mesure</span></a>
-  <a href="/grandes-marques-solaire/">Les grandes marques mondiales<span>Qui fabrique quoi, et comment lire une fiche technique</span></a>
+  <a href="/grandes-marques-solaire/">Grandes marques : gare aux contrefaçons<span>Les quatre noms les plus copiés, et comment ne pas se faire avoir</span></a>
 </div>`,
 });
 
