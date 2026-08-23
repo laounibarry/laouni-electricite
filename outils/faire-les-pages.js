@@ -853,7 +853,7 @@ prix entre lithium et plomb, pour ne pas avoir à nous croire sur parole.</p>
 
 <h2>Ce qu'on peut dire de chacune, honnêtement</h2>
 
-<h3>Lithium (LiFePO₄)</h3>
+<h3>Lithium LiFePO₄ — notre marque</h3>
 <p><b>Pour :</b> on en sort 90 % au lieu de 50 %, elle tient dix à quinze fois plus de
 cycles que le plomb ouvert, elle est cinq à six fois plus légère à capacité utile égale,
 elle se recharge vite, elle ne craint pas de rester à moitié chargée, et elle ne demande
@@ -879,14 +879,23 @@ part deux fois plus vite qu'à 25 °C. Elle dégage de l'hydrogène en fin de ch
 local doit être ventilé, ce n'est pas une recommandation de confort. Et c'est elle qui
 demande le plus de panneaux, parce que son rendement est le plus faible.</p>
 
-<h2>Ce que nous vendons, et ce que nous conseillons</h2>
-<p>Les batteries lithium et les onduleurs sont notre propre marque, et nous le disons
-franchement plutôt que de laisser croire à un conseil désintéressé. C'est aussi pour cela
-que le comparateur vous laisse régler l'écart de prix vous-même : si le lithium cesse
-d'être le meilleur choix avec vos chiffres, l'outil vous le dira.</p>
-<p>Chaque batterie de notre marque porte un code-barres que vous vérifiez sur la page
-d'accueil. Sur un marché où circulent des batteries reconditionnées vendues pour neuves,
-c'est la seule preuve qui vaut quelque chose.</p>
+<h2>Nos batteries lithium</h2>
+<div class="vert">
+<p><b>Le lithium dont parle cette page, c'est le nôtre.</b> Les batteries et les onduleurs
+Laouni sont notre propre marque — nous ne revendons pas ce que nous n'assumons pas, et
+nous le disons franchement plutôt que de laisser croire à un conseil désintéressé.</p>
+<ul style="margin-bottom:0">
+  <li><b>Un code-barres sur chaque batterie</b>, que vous vérifiez vous-même sur la page
+      d'accueil. Sur un marché où circulent des batteries reconditionnées vendues pour
+      neuves, c'est la seule preuve qui vaut quelque chose.</li>
+  <li><b>Trois magasins où nous retrouver</b> — Conakry, Labé, Lelouma. Un vendeur du
+      marché disparaît ; un magasin, non.</li>
+  <li><b>Nous posons aussi</b> : le calcul, le câblage, les protections et la mise en
+      service. La garantie reste entière.</li>
+</ul>
+</div>
+<p>C'est aussi pour cela que le comparateur vous laisse régler l'écart de prix vous-même :
+si le lithium cesse d'être le meilleur choix avec vos chiffres, l'outil vous le dira.</p>
 
 <a class="wa" href="${wa('Bonjour, je voudrais savoir quelle batterie choisir. Voici ce que je veux faire marcher la nuit : ')}" rel="noopener">
   Demander conseil sur WhatsApp

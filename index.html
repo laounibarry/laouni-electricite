@@ -1262,7 +1262,7 @@ img { loading: lazy; }
 var BAT_TECHNOS = [
   // « designation » est le nom tel qu on le dit dans une phrase : le sigle en
   // minuscules donnait « que le acide », une faute qui discredite le calcul.
-  { sigle:'Lithium', nom:'Lithium LiFePO₄', designation:'lithium', resume:'Lithium fer phosphate avec BMS intégré',
+  { sigle:'Lithium', nom:'Lithium LiFePO₄ Laouni', designation:'lithium', resume:'Notre marque — lithium fer phosphate, BMS intégré, code-barres vérifiable',
     // 6000 cycles : le chiffre des cellules prismatiques de qualite A. Les
     // fiches le donnent a decharge complete ; le retenir a 90 % de decharge
     // est donc prudent — on promet moins que la fiche.
@@ -1276,16 +1276,18 @@ var BAT_TECHNOS = [
     condition:'6000 cycles à 100 % de décharge, 0,5 C, 25 °C, fin de vie à 80 % — fiche de CELLULE prismatique de qualité A, mesurée sous presse. Un pack assemblé meurt avec sa cellule la plus faible : comptez un quart de moins. Utilisés ici à 90 % de décharge, gain non crédité',
     conditionAge:'durée de conception à 25 °C. La garantie du contrat, elle, est de 10 ans ou 3 MWh par kWh, à 70 % de capacité restante' },
   { sigle:'GEL', nom:'Plomb GEL', designation:'GEL', resume:'Plomb étanche, électrolyte gélifié, sans entretien',
-    // whkg 38 et non 32 : Victron 12 V/220 Ah pese 66 kg, soit 40 Wh/kg.
+    // whkg 38 et non 32 : releve sur les fiches du marche, un 12 V/220 Ah
+    // pese 66 kg, soit 40 Wh/kg.
     // Annoncer 32 gonflait le poids du parc GEL de 25 %, en notre faveur.
     dod:0.50, rendement:0.85, cycles:1000, calendaire:12, whkg:40, auto:0.03, chargeC:0.20, chaleurCy:1.4, chaleurAge:2.0, entretien:false,
-    condition:'750 (Victron) à 1200 (Ultracell) cycles à 50 % de décharge à 20-25 °C, fin de vie à 80 % — 1000 retenu, le milieu des deux seules fiches publiques',
-    conditionAge:'12 ans en flottement à 20 °C, batterie maintenue chargée et jamais cyclée (Victron)' },
+    condition:'750 à 1200 cycles à 50 % de décharge selon la marque, à 20-25 °C, fin de vie à 80 % — 1000 retenu, le milieu de la fourchette du marché',
+    conditionAge:'12 ans en flottement à 20 °C, batterie maintenue chargée et jamais cyclée — durée de conception des fiches du marché' },
   { sigle:'Acide', nom:'Plomb ouvert (acide)', designation:'plomb ouvert', resume:'Plomb à bouchons, niveau d\'eau à refaire',
-    // whkg 45 et non 35 : une Trojan T-105 fait 1350 Wh pour 28 kg, soit
+    // whkg 45 et non 35 : une batterie de traction 6 V de reference fait
+    // 1350 Wh pour 28 kg, soit
     // 48 Wh/kg. Le plomb ouvert est plus leger que le GEL, pas plus lourd.
     dod:0.50, rendement:0.80, cycles:600, calendaire:8, whkg:45, auto:0.05, chargeC:0.13, chaleurCy:1.4, chaleurAge:2.0, entretien:true,
-    condition:'600 cycles à 50 % de décharge, 25 °C — monobloc 12 V de magasin. Une Trojan T-105 en 6 V en tient le double',
+    condition:'600 cycles à 50 % de décharge, 25 °C — monobloc 12 V du marché. Une batterie de traction 6 V haut de gamme en tient le double, mais ce n\'est pas ce qui se vend ici',
     conditionAge:'8 ans en flottement à 25 °C, sans décharge profonde et avec le niveau d\'eau tenu à jour' }
 ];
 
@@ -1560,6 +1562,24 @@ function batCalc() {
       pts(BAT_POUR[b.t.sigle], true) + '<div style="height:6px"></div>' + pts(BAT_CONTRE[b.t.sigle], false) +
       '</div>';
   }).join('');
+
+  // La marque, a l endroit ou la decision se prend : APRES le calcul, pas
+  // avant. Mise en tete elle aurait fait passer tout ce qui precede pour un
+  // argumentaire ; ici, elle est ce que le calcul vient de designer.
+  html += '<div style="background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:16px;padding:17px;margin:16px 0">' +
+    '<div style="font-family:Syne,sans-serif;color:#f97316;font-size:11.5px;font-weight:800;letter-spacing:1.4px;margin-bottom:8px">NOS BATTERIES LITHIUM</div>' +
+    '<div style="color:#fff;font-size:13.5px;line-height:1.6;margin-bottom:11px">Le lithium de ce comparateur, c\'est le nôtre. Les batteries et les onduleurs Laouni sont notre propre marque — nous ne revendons pas ce que nous n\'assumons pas.</div>' +
+    [
+      'Chaque batterie porte un code-barres que vous vérifiez vous-même sur ce site. Sur un marché où circulent des batteries reconditionnées vendues pour neuves, c\'est la seule preuve qui vaut.',
+      'Trois magasins où nous retrouver : Conakry, Labé, Lelouma. Un vendeur du marché disparaît ; un magasin, non.',
+      'Nous posons aussi. Le calcul, le câblage, les protections et la mise en service — et la garantie reste entière.'
+    ].map(function(t){
+      return '<div style="display:flex;gap:8px;margin-bottom:8px;line-height:1.55">' +
+        '<span style="color:#f97316;font-weight:900">✓</span>' +
+        '<span style="color:#cbd5e1;font-size:12.5px">' + t + '</span></div>';
+    }).join('') +
+    '<div style="color:#94a3b8;font-size:12px;line-height:1.55">C\'est aussi pourquoi le rapport de prix se règle plus haut : si le lithium cesse d\'être le meilleur choix avec vos chiffres, cette page vous le dira.</div>' +
+    '</div>';
 
   var li = l[0];
   html += '<a href="https://wa.me/224610111015?text=' +
