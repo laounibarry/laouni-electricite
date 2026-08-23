@@ -6747,15 +6747,55 @@ function renderProduitsPublic() {
   }).join('');
 }
 
+// Les trois photos d'un produit, celles qui existent.
+//
+// Elles etaient deja chargees avec le catalogue — select('*') les ramene
+// toutes — et seule la premiere etait affichee. Le magasin en publiait trois
+// et le visiteur n'en voyait jamais qu'une.
+//
+// Le compteur « 1/3 » est indispensable : trois photos du meme appareil sous
+// trois angles se ressemblent, et sans repere on croit que rien ne bouge.
+function prodPhotos(p) {
+  return [p.photo, p.photo2, p.photo3].filter(x => x && x.length > 10);
+}
+
+function prodPhotosHtml(p) {
+  const l = prodPhotos(p);
+  if(!l.length) return '';
+  if(l.length === 1)
+    return '<img src="'+l[0]+'" style="width:100%;max-height:220px;object-fit:contain;background:#fff;border-radius:8px;margin-bottom:14px">';
+  return '<div style="position:relative;margin-bottom:14px">' +
+    l.map(function(u,i){
+      return '<img id="pp'+i+'" src="'+u+'" style="width:100%;max-height:220px;object-fit:contain;background:#fff;border-radius:8px;display:'+(i?'none':'block')+'">';
+    }).join('') +
+    '<button onclick="prodPhotoAller(-1,'+l.length+')" style="position:absolute;left:6px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.45);color:#fff;border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1">‹</button>' +
+    '<button onclick="prodPhotoAller(1,'+l.length+')" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.45);color:#fff;border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1">›</button>' +
+    '<div id="ppCompteur" style="position:absolute;left:8px;top:8px;background:rgba(0,0,0,.55);color:#fff;border-radius:20px;padding:3px 9px;font-size:11.5px;font-weight:800">1/'+l.length+'</div>' +
+    '</div>';
+}
+
+var PROD_PHOTO = 0;
+
+function prodPhotoAller(sens, total) {
+  var av = document.getElementById('pp'+PROD_PHOTO);
+  if(av) av.style.display = 'none';
+  PROD_PHOTO = (PROD_PHOTO + sens + total) % total;
+  var ap = document.getElementById('pp'+PROD_PHOTO);
+  if(ap) ap.style.display = 'block';
+  var c = document.getElementById('ppCompteur');
+  if(c) c.textContent = (PROD_PHOTO + 1) + '/' + total;
+}
+
 function ouvrirProduit(pid) {
   const p = getProdById(pid);
   if(!p) return;
+  PROD_PHOTO = 0;
   showModal(`
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:10px">
     <div><h3 style="font-family:Syne,sans-serif;font-size:20px;font-weight:800;margin-bottom:3px">${p.nom}</h3><p style="color:#94a3b8;font-size:12px">${p.ref} · ${p.cat}</p></div>
     <button class="btn-sm" onclick="closeModal()">✕</button>
     </div>
-    ${p.photo?`<img src="${p.photo}" style="width:100%;max-height:220px;object-fit:cover;border-radius:8px;margin-bottom:14px">`:''}
+    ${prodPhotosHtml(p)}
     ${p.video?`<div style="margin-bottom:14px"><iframe width="100%" height="200" src="https://www.youtube.com/embed/${getYtId(p.video)}" frameborder="0" allowfullscreen style="border-radius:8px"></iframe></div>`:''}
     ${p.desc?`<p style="color:#94a3b8;font-size:13px;line-height:1.7;margin-bottom:14px">${p.desc}</p>`:''}
     <div class="g2" style="margin-bottom:14px">
