@@ -968,10 +968,10 @@ const MARQUES = [
     intro:
       'Parmi les plus grands fabricants mondiaux de modules. Leur nom se vend tout seul : c\'est exactement ce qui en fait des cibles.',
     liste: [
-      ['LONGi', 'Chine', 'Parmi les tout premiers fabricants mondiaux de modules et de plaquettes de silicium.', 'https://www.longi.com'],
-      ['JinkoSolar', 'Chine', 'Autre géant du module solaire, présent sur tous les continents.', 'https://www.jinkosolar.com'],
-      ['Trina Solar', 'Chine', 'Fabricant historique de modules, très largement diffusé.', 'https://www.trinasolar.com'],
-      ['Canadian Solar', 'Canada / Chine', 'Fabricant de modules bien implanté à l\'international.', 'https://www.canadiansolar.com'],
+      ['LONGi', 'Chine', 'Parmi les tout premiers fabricants mondiaux de modules et de plaquettes de silicium.', 'https://www.longi.com', 'https://www.photovoltaik-shop.com/en/solar-panels/longi-solarmodule.html', 'Photovoltaik-Shop', 'Allemagne', 'euros'],
+      ['JinkoSolar', 'Chine', 'Autre géant du module solaire, présent sur tous les continents.', 'https://www.jinkosolar.com', 'https://www.photovoltaik-shop.com/en/solar-panels/jinko-solarmodule.html', 'Photovoltaik-Shop', 'Allemagne', 'euros'],
+      ['Trina Solar', 'Chine', 'Fabricant historique de modules, très largement diffusé.', 'https://www.trinasolar.com', 'https://www.photovoltaik-shop.com/en/solar-panels/trina-solarmodule.html', 'Photovoltaik-Shop', 'Allemagne', 'euros'],
+      ['Canadian Solar', 'Canada / Chine', 'Fabricant de modules bien implanté à l\'international.', 'https://www.canadiansolar.com', 'https://solar-haus.de/pv-module/canadian-solar/', 'Solar-Haus', 'Allemagne', 'euros'],
     ],
   },
   {
@@ -979,12 +979,12 @@ const MARQUES = [
     intro:
       'La pièce qui transforme le courant continu des panneaux et des batteries en courant utilisable, et qui bascule quand le réseau part.',
     liste: [
-      ['Huawei', 'Chine', 'L\'un des deux plus gros fabricants mondiaux d\'onduleurs solaires. Gamme FusionSolar, du résidentiel aux grandes centrales.', 'https://solar.huawei.com'],
-      ['Sungrow', 'Chine', 'L\'autre géant mondial de l\'onduleur, présent du toit de maison à la centrale au sol.', 'https://en.sungrowpower.com'],
-      ['Deye', 'Chine', 'Devenu une référence de l\'onduleur HYBRIDE — celui qui gère à la fois les panneaux, les batteries et le réseau. Très répandu dans les installations africaines hors réseau ou à réseau instable.', 'https://www.deyeinverter.com'],
-      ['Growatt', 'Chine', 'Très présent sur le résidentiel et l\'hybride, avec une large gamme de petites et moyennes puissances. Une des marques les plus vues en Afrique de l\'Ouest.', 'https://www.growatt.com'],
-      ['SMA', 'Allemagne', 'Le fabricant historique de l\'onduleur solaire, référence de longévité et de documentation technique. Gammes Sunny Boy et Sunny Island.', 'https://www.sma.de'],
-      ['Fronius', 'Autriche', 'Fabricant européen reconnu pour sa qualité de fabrication et le suivi des installations.', 'https://www.fronius.com'],
+      ['Huawei', 'Chine', 'L\'un des deux plus gros fabricants mondiaux d\'onduleurs solaires. Gamme FusionSolar, du résidentiel aux grandes centrales.', 'https://solar.huawei.com', 'https://www.alma-solarshop.fr/282-onduleur-huawei', 'Alma Solar', 'France', 'euros'],
+      ['Sungrow', 'Chine', 'L\'autre géant mondial de l\'onduleur, présent du toit de maison à la centrale au sol.', 'https://en.sungrowpower.com', 'https://www.alma-solarshop.fr/304-onduleur-sungrow', 'Alma Solar', 'France', 'euros'],
+      ['Deye', 'Chine', 'Devenu une référence de l\'onduleur HYBRIDE — celui qui gère à la fois les panneaux, les batteries et le réseau. Très répandu dans les installations africaines hors réseau ou à réseau instable.', 'https://www.deyeinverter.com', 'https://panpower.eu/en/brand/55-deye', 'PanPower', 'Pologne', 'euros'],
+      ['Growatt', 'Chine', 'Très présent sur le résidentiel et l\'hybride, avec une large gamme de petites et moyennes puissances. Une des marques les plus vues en Afrique de l\'Ouest.', 'https://www.growatt.com', 'https://www.offgridtec.com/en/brands/growatt/pv-inverter.html', 'Offgridtec', 'Allemagne', 'euros'],
+      ['SMA', 'Allemagne', 'Le fabricant historique de l\'onduleur solaire, référence de longévité et de documentation technique. Gammes Sunny Boy et Sunny Island.', 'https://www.sma.de', 'https://www.europe-solarstore.com/solar-inverters/sma.html', 'Europe Solar Store', 'Lituanie', 'euros'],
+      ['Fronius', 'Autriche', 'Fabricant européen reconnu pour sa qualité de fabrication et le suivi des installations.', 'https://www.fronius.com', 'https://www.europe-solarstore.com/solar-inverters/fronius.html', 'Europe Solar Store', 'Lituanie', 'euros'],
     ],
   },
   {
@@ -992,11 +992,11 @@ const MARQUES = [
     intro:
       'Attention à la distinction : certains fabriquent les CELLULES, d\'autres assemblent des batteries à partir de cellules achetées. Ce ne sont pas les mêmes chiffres.',
     liste: [
-      ['CATL', 'Chine', 'Le plus gros fabricant mondial de cellules de batteries, tous usages confondus.', 'https://www.catl.com'],
-      ['BYD', 'Chine', 'Fabricant de cellules et de systèmes de stockage complets.', 'https://www.bydbatterybox.com'],
-      ['EVE Energy', 'Chine', 'Fabricant de cellules prismatiques LiFePO₄, dont les références servent de base à une grande partie du stockage solaire.', 'https://www.evebattery.com'],
-      ['Pylontech', 'Chine', 'Spécialiste des batteries lithium en rack pour le stockage résidentiel.', 'https://www.pylontech.com.cn'],
-      ['Victron Energy', 'Pays-Bas', 'Référence de l\'installation hors réseau : onduleurs-chargeurs, régulateurs, batteries et supervision. Documentation technique très complète, souvent citée par les installateurs.', 'https://www.victronenergy.com'],
+      ['CATL', 'Chine', 'Le plus gros fabricant mondial de cellules de batteries, tous usages confondus.', 'https://www.catl.com', 'https://www.docanpower.com/catl-1', 'Docan Power', 'Chine', 'dollars'],
+      ['BYD', 'Chine', 'Fabricant de cellules et de systèmes de stockage complets.', 'https://www.bydbatterybox.com', 'https://www.europe-solarstore.com/byd.html', 'Europe Solar Store', 'Lituanie', 'euros'],
+      ['EVE Energy', 'Chine', 'Fabricant de cellules prismatiques LiFePO₄, dont les références servent de base à une grande partie du stockage solaire.', 'https://www.evebattery.com', 'https://www.nkon.nl/en/catalogsearch/result/?q=EVE+LiFePO4', 'Nkon', 'Pays-Bas', 'euros'],
+      ['Pylontech', 'Chine', 'Spécialiste des batteries lithium en rack pour le stockage résidentiel.', 'https://www.pylontech.com.cn', 'https://www.offgridtec.com/en/brands/pylon-technology.html', 'Offgridtec', 'Allemagne', 'euros'],
+      ['Victron Energy', 'Pays-Bas', 'Référence de l\'installation hors réseau : onduleurs-chargeurs, régulateurs, batteries et supervision. Documentation technique très complète, souvent citée par les installateurs.', 'https://www.victronenergy.com', 'https://www.offgridtec.com/en/brands/victron-energy.html', 'Offgridtec', 'Allemagne', 'euros'],
     ],
   },
 ];
@@ -1016,13 +1016,29 @@ figure, le nôtre compris.</p>
 
 ${CONTREFACON}
 
+<div class="vert">
+<h3 style="margin-top:0">Chaque marque porte deux liens</h3>
+<p><b>↗ Le site du fabricant.</b> C'est là que vit la fiche technique du modèle exact. Un
+vendeur sérieux peut vous la montrer ; un revendeur de copies change de sujet.</p>
+<p><b>🏷 Une boutique qui affiche ses prix</b>, en euros ou en dollars, sans avoir à créer
+de compte. Vous voyez ce que coûte le matériel authentique, et depuis quel pays.</p>
+<p><b>À quoi ça sert :</b> si un vrai onduleur de cette marque vaut ce prix-là en Europe,
+celui qu'on vous propose à moitié prix à Conakry n'est pas le même produit. C'est la preuve
+la plus simple qui existe.</p>
+<p style="margin-bottom:0"><b>Ce que ces prix ne sont PAS :</b> un prix guinéen. Ils
+sortent d'Allemagne, de France, de Pologne ou des Pays-Bas, souvent hors taxe, et sans le
+transport, la douane, la pose, ni la garantie appliquée sur place. Un prix rendu à Conakry
+est forcément plus élevé — et un prix beaucoup plus <b>bas</b> devrait vous inquiéter.</p>
+</div>
+
 ${MARQUES.map((f) => `
 <h2>${f.famille}</h2>
 <p>${f.intro}</p>
-${f.liste.map(([nom, pays, quoi, site]) => `<div class="encadre" style="margin:.7rem 0">
+${f.liste.map(([nom, pays, quoi, site, vUrl, vNom, vPays, vDevise]) => `<div class="encadre" style="margin:.7rem 0">
   <h3 style="margin-top:0">${nom} <span style="font-weight:400;font-size:.8rem;color:#64748b">— ${pays}</span></h3>
   <p>${quoi}</p>
   <a href="${site}" target="_blank" rel="noopener nofollow" style="display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:700;color:#ea580c;text-decoration:none;border:1px solid #e2e8f0;background:#f8fafc;border-radius:9px;padding:.4rem .7rem">↗ ${site.replace(/^https?:\/\//, '').replace('www.', '')}</a>
+  <a href="${vUrl}" target="_blank" rel="noopener nofollow" style="display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:700;color:#15803d;text-decoration:none;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:9px;padding:.4rem .7rem;margin-left:.4rem">🏷 Voir les prix en ${vDevise} — ${vNom}, ${vPays}</a>
 </div>`).join('\n')}`).join('\n')}
 
 <h2>Trois métiers, à ne pas confondre</h2>
