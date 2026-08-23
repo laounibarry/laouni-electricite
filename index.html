@@ -134,33 +134,74 @@ window.addEventListener('appinstalled', function() {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "LocalBusiness",
-      "@id": "https://www.laouni-electricitemoderne.com/#business",
-      "name": "Laouni Electricité Moderne",
-      "description": "Spécialiste N°1 de l'énergie solaire en Guinée. Onduleurs hybrides MPPT, batteries lithium, panneaux solaires certifiés et authentifiés.",
+      "@type": "Organization",
+      "@id": "https://www.laouni-electricitemoderne.com/#entreprise",
+      "name": "Laouni Électricité Moderne",
+      "description": "Spécialiste de l'énergie solaire en Guinée : onduleurs hybrides MPPT, batteries lithium, panneaux solaires. Trois magasins à Conakry, Labé et Lelouma.",
       "url": "https://www.laouni-electricitemoderne.com/",
       "telephone": "+224610111015",
       "email": "contact@laouni-electricite.com",
       "logo": "https://www.laouni-electricitemoderne.com/logo.png",
       "image": "https://www.laouni-electricitemoderne.com/og-image.png",
-      "priceRange": "GNF",
+      "areaServed": { "@type": "Country", "name": "Guinée" },
+      "sameAs": ["https://wa.me/224610111015"]
+    },
+    {
+      "@type": "ElectronicsStore",
+      "@id": "https://www.laouni-electricitemoderne.com/#magasin-conakry",
+      "name": "Laouni Électricité Moderne — Conakry",
+      "parentOrganization": { "@id": "https://www.laouni-electricitemoderne.com/#entreprise" },
+      "description": "Onduleurs hybrides, batteries lithium et GEL, panneaux solaires, câbles et appareillage. Vente et installation à Conakry.",
+      "url": "https://www.laouni-electricitemoderne.com/",
+      "telephone": "+224629415967",
+      "image": "https://www.laouni-electricitemoderne.com/og-image.png",
+      "priceRange": "$$",
       "currenciesAccepted": "GNF",
-      "paymentAccepted": "Cash, Mobile Money",
-      "areaServed": {
-        "@type": "Country",
-        "name": "Guinée"
-      },
+      "paymentAccepted": "Espèces, Mobile Money",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Conakry",
+        "streetAddress": "Quartier Kaloum",
         "addressLocality": "Conakry",
+        "addressRegion": "Conakry",
         "addressCountry": "GN"
       },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 9.6412,
-        "longitude": -13.5784
+      "geo": { "@type": "GeoCoordinates", "latitude": 9.6412, "longitude": -13.5784 },
+      "hasMap": "https://maps.google.com/?q=Kaloum+Conakry",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+          "opens": "08:00",
+          "closes": "19:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Sunday",
+          "opens": "10:00",
+          "closes": "15:00"
+        }
+      ]
+    },
+    {
+      "@type": "ElectronicsStore",
+      "@id": "https://www.laouni-electricitemoderne.com/#magasin-labe",
+      "name": "Laouni Électricité Moderne — Labé",
+      "parentOrganization": { "@id": "https://www.laouni-electricitemoderne.com/#entreprise" },
+      "description": "Onduleurs hybrides, batteries lithium et GEL, panneaux solaires. Vente et installation à Labé et au Fouta-Djalon.",
+      "url": "https://www.laouni-electricitemoderne.com/",
+      "telephone": "+224610111015",
+      "image": "https://www.laouni-electricitemoderne.com/og-image.png",
+      "priceRange": "$$",
+      "currenciesAccepted": "GNF",
+      "paymentAccepted": "Espèces, Mobile Money",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Centre-ville",
+        "addressLocality": "Labé",
+        "addressRegion": "Labé",
+        "addressCountry": "GN"
       },
+      "hasMap": "https://maps.google.com/?q=Labe+Guinee",
       "openingHoursSpecification": [
         {
           "@type": "OpeningHoursSpecification",
@@ -168,9 +209,35 @@ window.addEventListener('appinstalled', function() {
           "opens": "08:00",
           "closes": "18:00"
         }
-      ],
-      "sameAs": [
-        "https://wa.me/224610111015"
+      ]
+    },
+    {
+      "@type": "ElectronicsStore",
+      "@id": "https://www.laouni-electricitemoderne.com/#magasin-lelouma",
+      "name": "Laouni Électricité Moderne — Lelouma",
+      "parentOrganization": { "@id": "https://www.laouni-electricitemoderne.com/#entreprise" },
+      "description": "Onduleurs hybrides, batteries lithium et GEL, panneaux solaires. Vente et installation à Lelouma.",
+      "url": "https://www.laouni-electricitemoderne.com/",
+      "telephone": "+224621861912",
+      "image": "https://www.laouni-electricitemoderne.com/og-image.png",
+      "priceRange": "$$",
+      "currenciesAccepted": "GNF",
+      "paymentAccepted": "Espèces, Mobile Money",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Lelouma",
+        "addressLocality": "Lelouma",
+        "addressRegion": "Labé",
+        "addressCountry": "GN"
+      },
+      "hasMap": "https://maps.google.com/?q=Lelouma+Guinee",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+          "opens": "08:00",
+          "closes": "18:00"
+        }
       ]
     },
     {
