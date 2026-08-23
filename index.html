@@ -1542,24 +1542,43 @@ window.addEventListener('DOMContentLoaded', function() {
       <button class="gtab" onclick="afficherGuide('detecteur',this)">🚶 Détecteur</button>
     </div>
     <div id="guide-maison">
+      <!-- La regle que personne n applique, et qui change tout le raisonnement
+           en aval d un onduleur autonome. Corrigee le 23/08/2026 apres un
+           audit : les valeurs precedentes etaient dangereuses. -->
+      <div style="background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.35);border-radius:12px;padding:14px;margin-bottom:14px">
+        <div style="font-weight:800;font-size:.92rem;color:#DC2626;margin-bottom:6px">En aval d&#39;un onduleur, la courbe D ne sert à rien</div>
+        <div style="font-size:.82rem;line-height:1.7;color:#7F1D1D">
+          Un onduleur autonome ne sait pas fournir le courant de court-circuit du réseau : il se limite à
+          2 ou 3 fois son courant nominal — un 5,5 kW sort environ 60 A en défaut.
+          Or un disjoncteur 20 A courbe D déclenche magnétiquement entre 200 et 400 A, un courbe C entre
+          100 et 200 A. <b>Ce déclenchement n&#39;arrivera jamais, quelle que soit la longueur du câble.</b><br><br>
+          Ce qui protège les personnes, c&#39;est le <b>différentiel 30 mA type A sur chaque départ</b>.
+          Le disjoncteur ne protège que le câble, par son thermique : la règle devient
+          courant d&#39;emploi ≤ calibre ≤ courant admissible corrigé, sans exception.<br><br>
+          La courbe D et le calcul de longueur maximale gardent tout leur sens en aval d&#39;un
+          groupe électrogène ou du réseau EDG.<br><br>
+          <b>Les sections ci-dessous sont corrigées pour 35 °C</b>, la température réelle d&#39;un couloir
+          en Guinée. Les tables de la norme sont données à 30 °C, et presque personne ne corrige.
+        </div>
+      </div>
       <div style="overflow-x:auto">
       <table class="guide-table">
         <thead><tr><th>Circuit / Appareil</th><th>Disjoncteur</th><th>Section câble cuivre</th><th>Norme / Remarque</th></tr></thead>
         <tbody>
           <tr><td>💡 Éclairage / Interrupteurs</td><td><span class="dj-b dj-blue">10A</span></td><td><span class="cable-b">1.5 mm²</span></td><td class="remarque-td">NF C 15-100 — Max 8 points lumineux par circuit</td></tr>
-          <tr><td>🔌 Prises de courant (8 prises)</td><td><span class="dj-b dj-blue">16A</span></td><td><span class="cable-b">1.5 mm²</span></td><td class="remarque-td">NF C 15-100 — 8 prises max</td></tr>
+          <tr><td>🔌 Prises de courant (8 prises)</td><td><span class="dj-b dj-blue">16A</span></td><td><span class="cable-b">2.5 mm²</span></td><td class="remarque-td">NF C 15-100 — 8 prises max. En 1.5 mm² il faut descendre à 10A : à 35 °C ce câble ne tient que 14,6 A</td></tr>
           <tr><td>🔌 Prises de courant (12 prises)</td><td><span class="dj-b dj-orange">20A</span></td><td><span class="cable-b">2.5 mm²</span></td><td class="remarque-td">NF C 15-100 — 12 prises max</td></tr>
-          <tr><td>❄️ Climatiseur ≤ 3500W</td><td><span class="dj-b dj-blue">16A courbe D</span></td><td><span class="cable-b">2.5 mm²</span></td><td class="remarque-td">Circuit dédié obligatoire</td></tr>
-          <tr><td>❄️ Climatiseur 3500W-4600W</td><td><span class="dj-b dj-orange">20A courbe D</span></td><td><span class="cable-b">2.5 mm²</span></td><td class="remarque-td">Circuit dédié + différentiel 30mA type A</td></tr>
+          <tr><td>❄️ Climatiseur ≤ 3500W</td><td><span class="dj-b dj-blue">16A courbe C</span></td><td><span class="cable-b">2.5 mm²</span></td><td class="remarque-td">Circuit dédié obligatoire. Courbe C, pas D — voir l&#39;avertissement au-dessus</td></tr>
+          <tr><td>❄️ Climatiseur 3500W-4600W</td><td><span class="dj-b dj-orange">20A courbe C</span></td><td><span class="cable-b">4 mm²</span></td><td class="remarque-td">Circuit dédié + différentiel 30mA type A. À 4600 W le courant atteint 20 A : 2.5 mm² n&#39;a aucune marge à 35 °C</td></tr>
           <tr><td>🧊 Réfrigérateur / Congélateur</td><td><span class="dj-b dj-orange">20A</span></td><td><span class="cable-b">2.5 mm²</span></td><td class="remarque-td">Circuit dédié recommandé</td></tr>
           <tr><td>🫧 Lave-linge / Lave-vaisselle</td><td><span class="dj-b dj-orange">20A</span></td><td><span class="cable-b">2.5 mm²</span></td><td class="remarque-td">Circuit dédié obligatoire + différentiel 30mA</td></tr>
           <tr><td>🍳 Four électrique / Cuisinière</td><td><span class="dj-b dj-red">32A</span></td><td><span class="cable-b">6 mm²</span></td><td class="remarque-td">Circuit dédié obligatoire</td></tr>
           <tr><td>🚿 Chauffe-eau électrique</td><td><span class="dj-b dj-red">32A</span></td><td><span class="cable-b">6 mm²</span></td><td class="remarque-td">Circuit dédié + différentiel 30mA type A</td></tr>
-          <tr><td>💧 Pompe à eau ≤ 2200W</td><td><span class="dj-b dj-orange">20A courbe D</span></td><td><span class="cable-b">2.5 mm²</span></td><td class="remarque-td">Circuit dédié + courbe D</td></tr>
-          <tr><td>💧 Pompe à eau 2200W-4000W</td><td><span class="dj-b dj-red">25A courbe D</span></td><td><span class="cable-b">4 mm²</span></td><td class="remarque-td">Circuit dédié + différentiel 30mA</td></tr>
-          <tr><td>🖥️ Ordinateur / TV / Multimédia</td><td><span class="dj-b dj-blue">16A</span></td><td><span class="cable-b">1.5 mm²</span></td><td class="remarque-td">Parasurtenseur recommandé</td></tr>
+          <tr><td>💧 Pompe à eau ≤ 2200W</td><td><span class="dj-b dj-orange">20A courbe C</span></td><td><span class="cable-b">2.5 mm²</span></td><td class="remarque-td">Circuit dédié. La courbe D ne se justifie qu&#39;en aval d&#39;un groupe ou du réseau, jamais sur onduleur</td></tr>
+          <tr><td>💧 Pompe à eau 2200W-4000W</td><td><span class="dj-b dj-red">25A courbe C</span></td><td><span class="cable-b">4 mm²</span></td><td class="remarque-td">Circuit dédié + différentiel 30mA type A</td></tr>
+          <tr><td>🖥️ Ordinateur / TV / Multimédia</td><td><span class="dj-b dj-blue">16A</span></td><td><span class="cable-b">2.5 mm²</span></td><td class="remarque-td">Parasurtenseur recommandé. 1.5 mm² imposerait 10A</td></tr>
           <tr style="background:rgba(245,158,11,.04)"><td>🗃️ Coffret électrique 36 départs</td><td><span class="dj-b dj-red">63A</span></td><td><span class="cable-b">16 mm²</span></td><td class="remarque-td">Disjoncteur général</td></tr>
-          <tr><td>🔒 Disjoncteur différentiel général</td><td><span class="dj-b dj-blue">30 mA type AC</span></td><td><span class="cable-b">—</span></td><td class="remarque-td">OBLIGATOIRE — Protection électrocution</td></tr>
+          <tr><td>🔒 Disjoncteur différentiel général</td><td><span class="dj-b dj-red">30 mA type A</span></td><td><span class="cable-b">—</span></td><td class="remarque-td">OBLIGATOIRE. JAMAIS de type AC derrière un onduleur : il sature sur la composante continue du défaut et ne déclenche plus du tout</td></tr>
           <tr><td>⚡ Parafoudre tableau</td><td><span class="dj-b dj-blue">—</span></td><td><span class="cable-b">6 mm²</span></td><td class="remarque-td">Fortement recommandé en Guinée</td></tr>
         </tbody>
       </table>
@@ -1577,7 +1596,7 @@ window.addEventListener('DOMContentLoaded', function() {
         <div class="ond-card"><div class="ond-power">3.6 kW</div><div class="ond-spec"><span class="ond-spec-label">Disj. AC</span><span class="dj-b dj-orange">20A</span></div><div class="ond-spec"><span class="ond-spec-label">Disj. DC</span><span class="dj-b dj-orange">63A DC</span></div><div class="ond-spec"><span class="ond-spec-label">Câble AC</span><span class="cable-b">4 mm²</span></div><div class="ond-spec"><span class="ond-spec-label">Câble batterie</span><span class="cable-b">25 mm²</span></div></div>
         <div class="ond-card"><div class="ond-power">5.5 kW</div><div class="ond-spec"><span class="ond-spec-label">Disj. AC</span><span class="dj-b dj-red">32A</span></div><div class="ond-spec"><span class="ond-spec-label">Disj. DC</span><span class="dj-b dj-red">80A DC</span></div><div class="ond-spec"><span class="ond-spec-label">Câble AC</span><span class="cable-b">6 mm²</span></div><div class="ond-spec"><span class="ond-spec-label">Câble batterie</span><span class="cable-b">35 mm²</span></div></div>
         <div class="ond-card" style="border-color:rgba(139,92,246,.25)"><div class="ond-power" style="color:#A78BFA">6.2 kW ⚡</div><div class="ond-spec"><span class="ond-spec-label">Disj. AC</span><span class="dj-b dj-red">32A</span></div><div class="ond-spec"><span class="ond-spec-label">Disj. DC</span><span class="dj-b dj-red">100A DC</span></div><div class="ond-spec"><span class="ond-spec-label">Câble AC</span><span class="cable-b">6 mm²</span></div><div class="ond-spec"><span class="ond-spec-label">Câble batterie</span><span class="cable-b">35 mm²</span></div><div style="margin-top:.5rem;font-size:.7rem;color:#A78BFA;background:rgba(139,92,246,.1);padding:.3rem .5rem;border-radius:5px">Max 2 en parallèle = 12.4kW</div></div>
-        <div class="ond-card" style="border-color:rgba(239,68,68,.25)"><div class="ond-power" style="color:#F87171">11 kW ⚡</div><div class="ond-spec"><span class="ond-spec-label">Disj. AC</span><span class="dj-b dj-red">63A</span></div><div class="ond-spec"><span class="ond-spec-label">Disj. DC</span><span class="dj-b dj-red">125A DC</span></div><div class="ond-spec"><span class="ond-spec-label">Câble AC</span><span class="cable-b">10 mm²</span></div><div class="ond-spec"><span class="ond-spec-label">Câble batterie</span><span class="cable-b">70 mm²</span></div><div style="margin-top:.5rem;font-size:.7rem;color:#F87171;background:rgba(239,68,68,.1);padding:.3rem .5rem;border-radius:5px">Max 3 en parallèle = 33kW</div></div>
+        <div class="ond-card" style="border-color:rgba(239,68,68,.25)"><div class="ond-power" style="color:#F87171">11 kW ⚡</div><div class="ond-spec"><span class="ond-spec-label">Disj. AC</span><span class="dj-b dj-red">63A</span></div><div class="ond-spec"><span class="ond-spec-label">Disj. DC</span><span class="dj-b dj-red">125A DC</span></div><div class="ond-spec"><span class="ond-spec-label">Câble AC</span><span class="cable-b">16 mm²</span></div><div class="ond-spec"><span class="ond-spec-label">Câble batterie</span><span class="cable-b">70 mm²</span></div><div style="margin-top:.5rem;font-size:.7rem;color:#F87171;background:rgba(239,68,68,.1);padding:.3rem .5rem;border-radius:5px">Max 3 en parallèle = 33kW · 10 mm² ne tient que 47 A sous conduit à 35 °C : le câble ne serait pas protégé</div></div>
       </div>
     </div>
     <div id="guide-batterie" style="display:none">
