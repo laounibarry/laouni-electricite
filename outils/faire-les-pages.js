@@ -202,7 +202,7 @@ ${MAGASINS.map((m) => `  <div class="mag"><b>${m.ville}</b><br>${m.adresse}<br>
     <a href="/delestage-conakry/">Délestage : avoir le courant chez soi<span>Ce que coûtent les coupures, et comment tenir la nuit</span></a>
     <a href="/batterie-lithium-gel-ou-acide/">Quelle batterie choisir<span>Lithium, GEL ou acide : laquelle dure vraiment ici</span></a>
     <a href="/panne-onduleur-batterie/">Mon onduleur bipe, ma batterie ne charge plus<span>Les pannes courantes et ce qu'il faut vérifier</span></a>
-    <a href="/grandes-marques-solaire/">Grandes marques : gare aux contrefaçons<span>LONGi, Jinko, Trina, Canadian Solar — les quatre noms les plus copiés</span></a>
+    <a href="/grandes-marques-solaire/">Les grandes marques du solaire<span>Panneaux, onduleurs, batteries — qui fabrique quoi, et gare aux copies</span></a>
     <a href="/nos-methodes-de-calcul/">Comment nos calculs sont faits<span>Les normes suivies, et quoi faire si un résultat vous étonne</span></a>
   </div>
   <p style="font-size:.8rem">Les prix ne sont pas affichés : ils dépendent de ce que vous voulez
@@ -955,34 +955,78 @@ si le lithium cesse d'être le meilleur choix avec vos chiffres, l'outil vous le
 // Le meme avertissement est repris mot pour mot ailleurs sur le site. Ecrit
 // une fois ici, il ne peut pas se contredire d une page a l autre.
 
+// Trois metiers, trois listes. Ce ne sont pas les memes fabricants, et un
+// vendeur qui melange les trois ne sait pas de quoi il parle.
+//
+// Cote PANNEAUX, seuls les quatre les plus imites sont retenus : une liste
+// plus longue diluerait l avertissement sur la contrefacon.
 const MARQUES = [
-  ['LONGi', 'Chine', 'Parmi les tout premiers fabricants mondiaux de modules et de plaquettes de silicium.'],
-  ['JinkoSolar', 'Chine', 'Autre géant du module solaire, présent sur tous les continents.'],
-  ['Trina Solar', 'Chine', 'Fabricant historique de modules, très largement diffusé.'],
-  ['Canadian Solar', 'Canada / Chine', 'Fabricant de modules bien implanté à l\'international.'],
+  {
+    famille: 'Panneaux solaires — les quatre plus copiés',
+    intro:
+      'Parmi les plus grands fabricants mondiaux de modules. Leur nom se vend tout seul : c\'est exactement ce qui en fait des cibles.',
+    liste: [
+      ['LONGi', 'Chine', 'Parmi les tout premiers fabricants mondiaux de modules et de plaquettes de silicium.'],
+      ['JinkoSolar', 'Chine', 'Autre géant du module solaire, présent sur tous les continents.'],
+      ['Trina Solar', 'Chine', 'Fabricant historique de modules, très largement diffusé.'],
+      ['Canadian Solar', 'Canada / Chine', 'Fabricant de modules bien implanté à l\'international.'],
+    ],
+  },
+  {
+    famille: 'Onduleurs et onduleurs hybrides',
+    intro:
+      'La pièce qui transforme le courant continu des panneaux et des batteries en courant utilisable, et qui bascule quand le réseau part.',
+    liste: [
+      ['Huawei', 'Chine', 'L\'un des deux plus gros fabricants mondiaux d\'onduleurs solaires. Gamme FusionSolar, du résidentiel aux grandes centrales.'],
+      ['Sungrow', 'Chine', 'L\'autre géant mondial de l\'onduleur, présent du toit de maison à la centrale au sol.'],
+      ['Deye', 'Chine', 'Devenu une référence de l\'onduleur HYBRIDE — celui qui gère à la fois les panneaux, les batteries et le réseau. Très répandu dans les installations africaines hors réseau ou à réseau instable.'],
+      ['Growatt', 'Chine', 'Très présent sur le résidentiel et l\'hybride, avec une large gamme de petites et moyennes puissances. Une des marques les plus vues en Afrique de l\'Ouest.'],
+      ['SMA', 'Allemagne', 'Le fabricant historique de l\'onduleur solaire, référence de longévité et de documentation technique. Gammes Sunny Boy et Sunny Island.'],
+      ['Fronius', 'Autriche', 'Fabricant européen reconnu pour sa qualité de fabrication et le suivi des installations.'],
+    ],
+  },
+  {
+    famille: 'Cellules et batteries lithium',
+    intro:
+      'Attention à la distinction : certains fabriquent les CELLULES, d\'autres assemblent des batteries à partir de cellules achetées. Ce ne sont pas les mêmes chiffres.',
+    liste: [
+      ['CATL', 'Chine', 'Le plus gros fabricant mondial de cellules de batteries, tous usages confondus.'],
+      ['BYD', 'Chine', 'Fabricant de cellules et de systèmes de stockage complets.'],
+      ['EVE Energy', 'Chine', 'Fabricant de cellules prismatiques LiFePO₄, dont les références servent de base à une grande partie du stockage solaire.'],
+      ['Pylontech', 'Chine', 'Spécialiste des batteries lithium en rack pour le stockage résidentiel.'],
+      ['Victron Energy', 'Pays-Bas', 'Référence de l\'installation hors réseau : onduleurs-chargeurs, régulateurs, batteries et supervision. Documentation technique très complète, souvent citée par les installateurs.'],
+    ],
+  },
 ];
 
 PAGES.push({
   fichier: 'grandes-marques-solaire',
-  title: 'Grandes marques solaires : gare aux contrefaçons',
+  title: 'Grandes marques du solaire : qui fabrique quoi',
   description:
-    'LONGi, Jinko, Trina, Canadian Solar : les quatre noms les plus copiés du panneau solaire. Pourquoi un prix cassé sur une grande marque doit vous alerter.',
-  h1: 'Les grandes marques du solaire, et pourquoi elles sont les plus copiées',
+    'LONGi, Jinko, Deye, Growatt, Huawei, CATL, Victron : qui fabrique quoi. Et pourquoi un prix cassé sur une grande marque doit vous alerter.',
+  h1: 'Les grandes marques du solaire : qui fabrique quoi, et gare aux copies',
   corps: `
-<p class="chapeau">Ce ne sont pas des marques que nous vous recommandons d'acheter. Ce sont
-les quatre noms les plus <b>copiés</b> du marché mondial du panneau solaire. Les connaître
-sert à une seule chose : reconnaître le moment où l'on essaie de vous en vendre une
-fausse.</p>
+<p class="chapeau">Les fabricants mondiaux de référence, par métier : panneaux, onduleurs,
+cellules et batteries. Ce sont aussi les noms les plus <b>copiés</b> du marché — les
+connaître sert à reconnaître un matériel dont la fiche technique existe vraiment, et à
+repérer le moment où l'on essaie de vous en vendre une fausse. Aucun magasin guinéen n'y
+figure, le nôtre compris.</p>
 
 ${CONTREFACON}
 
-<h2>Les quatre plus copiées</h2>
-<p>Ce sont parmi les plus grands fabricants mondiaux de panneaux. Leur nom se vend tout
-seul — c'est exactement ce qui en fait des cibles.</p>
-${MARQUES.map(([nom, pays, quoi]) => `<div class="encadre" style="margin:.7rem 0">
+${MARQUES.map((f) => `
+<h2>${f.famille}</h2>
+<p>${f.intro}</p>
+${f.liste.map(([nom, pays, quoi]) => `<div class="encadre" style="margin:.7rem 0">
   <h3 style="margin-top:0">${nom} <span style="font-weight:400;font-size:.8rem;color:#64748b">— ${pays}</span></h3>
   <p style="margin-bottom:0">${quoi}</p>
-</div>`).join('\n')}
+</div>`).join('\n')}`).join('\n')}
+
+<h2>Trois métiers, à ne pas confondre</h2>
+<p>Fabriquer les cellules, assembler la batterie et fabriquer l'onduleur sont trois
+métiers différents. Un vendeur qui les mélange ne sait pas de quoi il parle — et un
+assembleur qui annonce les cycles de la cellule nue oublie qu'un parc meurt avec sa
+cellule la plus faible.</p>
 
 <h2>Comment se protéger, concrètement</h2>
 <ul>
@@ -1077,7 +1121,7 @@ moto, le poids d'une batterie plomb, la durée de vie d'un parc dans un local ch
   <a href="/#simulation">Le simulateur d'installation<span>Cochez vos appareils, il calcule panneaux, batterie et onduleur</span></a>
   <a href="/#autonomie">Ma batterie tient combien de temps ?<span>Selon ce qui tourne la nuit</span></a>
   <a href="/#batteries">Lithium, GEL ou acide ?<span>Durée, poids, rachats — avec les conditions de mesure</span></a>
-  <a href="/grandes-marques-solaire/">Grandes marques : gare aux contrefaçons<span>Les quatre noms les plus copiés, et comment ne pas se faire avoir</span></a>
+  <a href="/grandes-marques-solaire/">Les grandes marques du solaire<span>Qui fabrique quoi, et comment ne pas acheter une copie</span></a>
 </div>`,
 });
 
