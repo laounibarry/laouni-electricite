@@ -3165,11 +3165,40 @@ async function doLogin() {
   var libelle = btn ? btn.textContent : null;
   if (btn) { btn.disabled = true; btn.textContent = 'Vérification…'; }
 
+  // UN SEUL MOT DE PASSE POUR LE SITE ET POUR L APPLICATION.
+  //
+  // Le site appelait une fonction maison, verifier_acces, qui lisait un mot
+  // de passe range dans une table a part. L application, elle, passe par le
+  // compte Supabase. C etaient deux serrures differentes sur la meme porte :
+  // changer le mot de passe dans l application ne changeait rien sur le
+  // site, et personne ne comprenait pourquoi.
+  //
+  // Le site passe maintenant par le meme compte que l application. Un seul
+  // mot de passe, un seul endroit ou le changer — et le site obtient au
+  // passage une vraie session identifiee au lieu d ecrire avec la cle
+  // publique, ce qui permettra de fermer les ecritures.
   var rep = null;
   try {
-    var res = await SB.rpc('verifier_acces', { p_code: id, p_mot_de_passe: pw });
-    rep = (res.data && res.data[0]) || null;
-    if (res.error) throw res.error;
+    var res = await SB.auth.signInWithPassword({
+      email: id.toLowerCase() + '@laouni.interne',
+      password: pw
+    });
+    if (res.error) {
+      // Mot de passe faux : ce n est pas une panne de reseau, il faut le
+      // dire autrement, sinon le gerant reessaie pendant dix minutes.
+      if (btn) { btn.disabled = false; btn.textContent = libelle; }
+      window._logSecurity('ECHEC_LOGIN', 'Tentative échouée: ' + id);
+      notify(LANG === 'fr' ? '❌ Identifiants incorrects.' : '❌ Incorrect credentials.', true);
+      return;
+    }
+    // Le role se lit sur l identifiant, exactement comme dans
+    // l application : « admin » est administrateur, tout autre code est un
+    // magasin. Les deux ne doivent jamais diverger.
+    rep = {
+      ok: true,
+      role: id.toLowerCase() === 'admin' ? 'admin' : 'gerant',
+      magasin_id: null
+    };
   } catch (e) {
     if (btn) { btn.disabled = false; btn.textContent = libelle; }
     notify('Connexion au serveur impossible. Vérifiez votre réseau.', true);
@@ -3233,6 +3262,10 @@ function confirmerLogout() {
   closeModal();
   var userName = currentUser ? currentUser.name : '?';
   logAction('DECONNEXION', 'Deconnexion', userName, null);
+  // Fermer aussi la session Supabase, sinon le navigateur la garde ouverte :
+  // on cachait l ecran vendeur sans couper l acces, et rouvrir le site
+  // reconnectait tout seul.
+  try { SB.auth.signOut(); } catch (e) {}
   window._securityLevel = 'public';
   window._resetLoginRateLimit();
   currentUser = null;
