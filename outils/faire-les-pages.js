@@ -205,6 +205,7 @@ ${MAGASINS.map((m) => `  <div class="mag"><b>${m.ville}</b><br>${m.adresse}<br>
     <a href="/comment-nos-produits-sont-fabriques/">Comment nos produits sont fabriqués<span>Les huit essais que passe chaque batterie avant de sortir</span></a>
     <a href="/choisir-panneau-solaire/">Bien choisir ses panneaux solaires<span>Grade A ou B, double face, noir ou bleu — ce que l'étiquette ne dit pas</span></a>
     <a href="/grandes-marques-solaire/">Les grandes marques du solaire<span>Panneaux, onduleurs, batteries — qui fabrique quoi, et gare aux copies</span></a>
+    <a href="/confidentialite/">Politique de confidentialité<span>Ce que nous enregistrons, pourquoi, et comment le faire effacer</span></a>
     <a href="/nos-methodes-de-calcul/">Comment nos calculs sont faits<span>Les normes suivies, et quoi faire si un résultat vous étonne</span></a>
   </div>
   <p style="font-size:.8rem">Les prix ne sont pas affichés : ils dépendent de ce que vous voulez
@@ -1325,6 +1326,125 @@ ${RAPPEL_CONTREFACON}
 });
 
 // ─────────────────── comment ces calculs sont faits ───────────────────
+
+PAGES.push({
+  fichier: 'confidentialite',
+  title: 'Politique de confidentialité — Laouni Électricité Moderne',
+  description:
+    'Quelles données notre application et notre site enregistrent, pourquoi, combien de temps, et comment demander leur suppression.',
+  h1: 'Politique de confidentialité',
+  corps: `
+<p class="chapeau">Cette page dit exactement ce que notre application Android et ce site
+enregistrent. Elle est écrite à partir du code lui-même, pas d'un modèle recopié. Dernière
+mise à jour : 24 août 2026.</p>
+
+<h2>Qui nous sommes</h2>
+<p><b>Laouni Électricité Moderne</b> — vente et installation de matériel solaire.
+Magasins à Conakry, Labé et Lelouma, République de Guinée.<br>
+Pour toute question sur vos données : <b>+224 610 111 015</b> (WhatsApp ou appel),
+ou <a href="mailto:laounithiaghe@gmail.com">laounithiaghe@gmail.com</a>.</p>
+
+<h2>Ce que nous n'enregistrons pas</h2>
+<p>Disons-le d'abord, parce que c'est ce qui compte le plus.</p>
+<ul>
+  <li>Nous ne demandons <b>aucun compte</b> pour consulter le catalogue, simuler une
+      installation, comparer des batteries ou vérifier un produit.</li>
+  <li>Nous n'enregistrons <b>ni votre position</b>, ni vos contacts, ni la liste des
+      applications de votre téléphone.</li>
+  <li>Nous ne plaçons <b>aucun mouchard publicitaire</b> et nous ne vendons ni ne louons
+      vos données à personne.</li>
+  <li>Nos écrans de calcul — le simulateur, les comparateurs, l'autonomie — fonctionnent
+      <b>entièrement dans votre téléphone</b>. Ce que vous y saisissez ne part nulle part.</li>
+</ul>
+
+<h2>Ce que nous enregistrons, et pourquoi</h2>
+
+<h3>Vos recherches dans le catalogue</h3>
+<p>Quand vous cherchez un produit, le mot cherché et le nombre de résultats sont envoyés à
+notre base. <b>Aucun identifiant n'est joint</b> : nous voyons qu'on a cherché « onduleur
+5kw », pas qui l'a cherché.</p>
+<p><b>Pourquoi :</b> une recherche sans résultat nous dit ce qu'on nous demande et que nous
+n'avons pas. C'est ce que le responsable regarde avant sa prochaine commande.</p>
+
+<h3>Les vérifications d'authenticité</h3>
+<p>Quand vous scannez un code-barres, ce code et le résultat (produit reconnu ou inconnu)
+sont enregistrés. <b>Aucun identifiant n'est joint.</b></p>
+<p><b>Pourquoi :</b> repérer les copies qui circulent, et savoir où elles apparaissent.</p>
+
+<h3>Le chat en direct</h3>
+<p>Si vous écrivez à un magasin : le nom que vous donnez, votre message, le magasin choisi,
+et un numéro de conversation gardé sur votre téléphone pour que la réponse vous revienne.
+<b>Ce numéro n'est relié à aucune identité</b> et disparaît si vous désinstallez
+l'application.</p>
+<p><b>Pourquoi :</b> vous répondre. C'est tout.</p>
+
+<h3>Les demandes de devis et de contact</h3>
+<p>Le nom, le téléphone, l'adresse e-mail et le message que vous nous laissez volontairement.
+Rien n'est pris sans que vous l'ayez tapé.</p>
+<p><b>Pourquoi :</b> vous rappeler avec un prix. Un devis ne peut pas se faire sans un moyen
+de vous joindre.</p>
+
+<h3>Les ventes en magasin</h3>
+<p>Quand vous achetez, le vendeur enregistre le produit, la date et — si vous le donnez — votre
+nom. Le nom sert à retrouver l'achat en cas de garantie ou de service après-vente.
+<b>Vous pouvez acheter sans le donner :</b> dites-le simplement au vendeur.</p>
+
+<h3>L'espace du personnel</h3>
+<p>Réservé aux employés des trois magasins, protégé par un code et un mot de passe. Les
+photos et vidéos de l'atelier et des installations y sont publiées par le personnel, jamais
+par les visiteurs.</p>
+
+<h2>Les autorisations demandées par l'application</h2>
+<table>
+<tr><th>Autorisation</th><th>À quoi elle sert</th></tr>
+<tr><td><b>Appareil photo</b></td><td>Scanner le code-barres d'un produit pour vérifier
+qu'il est authentique. L'image n'est ni enregistrée ni envoyée : seul le code lu l'est.
+Vous pouvez aussi taper le code à la main et refuser l'appareil photo.</td></tr>
+<tr><td><b>Internet</b></td><td>Afficher le catalogue et les magasins.</td></tr>
+</table>
+<p>Pour choisir une photo, l'application passe par le sélecteur de fichiers du système : elle
+ne reçoit alors accès qu'à <b>la seule image que vous avez choisie</b>, et ne demande donc
+aucune autorisation sur votre galerie.</p>
+
+<h2>Où vont ces données</h2>
+<p>Elles sont hébergées chez <b>Supabase</b>, notre prestataire technique, sur des serveurs
+situés en Europe. Les échanges entre votre téléphone et ces serveurs sont chiffrés (HTTPS).
+Supabase les héberge pour notre compte et n'en fait aucun autre usage.</p>
+<p>Nous ne partageons vos données avec <b>aucun autre tiers</b> : ni annonceur, ni courtier,
+ni réseau social.</p>
+<p>Lorsque vous nous écrivez sur WhatsApp ou nous appelez depuis l'application, c'est votre
+téléphone qui ouvre WhatsApp ou l'application d'appel. Ces échanges suivent alors les règles
+de ces services, pas les nôtres.</p>
+
+<h2>Combien de temps</h2>
+<ul>
+  <li><b>Recherches et vérifications</b> (sans identifiant) : conservées pour le suivi
+      commercial.</li>
+  <li><b>Messages de chat</b> : 12 mois, puis supprimés.</li>
+  <li><b>Demandes de devis</b> : 3 ans, le temps de la relation commerciale.</li>
+  <li><b>Ventes</b> : conservées pour la garantie et nos obligations comptables.</li>
+</ul>
+
+<h2>Demander une copie ou une suppression</h2>
+<p>Vous pouvez à tout moment nous demander ce que nous avons sur vous, le faire corriger, ou
+le faire effacer. C'est gratuit.</p>
+<p><b>Écrivez « MES DONNÉES » au +224 610 111 015</b> sur WhatsApp, ou envoyez un message à
+laounithiaghe@gmail.com. Nous répondons sous 30 jours.</p>
+<p>Précisez le nom et le numéro de téléphone que vous nous aviez donnés, pour qu'on retrouve
+vos informations. Certaines données de vente doivent être conservées pour la comptabilité,
+même après une demande de suppression : nous vous le dirons clairement le cas échéant.</p>
+<p>Vous pouvez aussi <b>désinstaller l'application</b> : tout ce qu'elle garde sur votre
+téléphone — le catalogue enregistré, le numéro de conversation — disparaît avec elle.</p>
+
+<h2>Les enfants</h2>
+<p>Cette application s'adresse à des clients et à des professionnels. Elle ne vise pas les
+enfants et nous ne collectons pas sciemment de données les concernant.</p>
+
+<h2>Si cette page change</h2>
+<p>La date en haut de page indique la dernière mise à jour. Un changement important sera
+annoncé dans l'application.</p>
+`,
+});
 
 PAGES.push({
   fichier: 'nos-methodes-de-calcul',
