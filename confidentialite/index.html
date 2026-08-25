@@ -77,7 +77,7 @@ footer .in{max-width:820px;margin:0 auto}
 
 <p class="chapeau">Cette page dit exactement ce que notre application Android et ce site
 enregistrent. Elle est écrite à partir du code lui-même, pas d'un modèle recopié. Dernière
-mise à jour : 24 août 2026.</p>
+mise à jour : 25 août 2026.</p>
 
 <h2>Qui nous sommes</h2>
 <p><b>Laouni Électricité Moderne</b> — vente et installation de matériel solaire.
@@ -90,8 +90,11 @@ ou <a href="mailto:laounithiaghe@gmail.com">laounithiaghe@gmail.com</a>.</p>
 <ul>
   <li>Nous ne demandons <b>aucun compte</b> pour consulter le catalogue, simuler une
       installation, comparer des batteries ou vérifier un produit.</li>
-  <li>Nous n'enregistrons <b>ni votre position</b>, ni vos contacts, ni la liste des
-      applications de votre téléphone.</li>
+  <li>Nous n'enregistrons <b>jamais votre position</b> : ni vos coordonnées GPS, ni votre
+      adresse, ni vos déplacements. Une seule chose peut être notée, et seulement si vous
+      l'acceptez : le <b>nom de votre préfecture</b> — voir plus bas.</li>
+  <li>Nous n'enregistrons <b>ni vos contacts</b>, ni la liste des applications de votre
+      téléphone.</li>
   <li>Nous ne plaçons <b>aucun mouchard publicitaire</b> et nous ne vendons ni ne louons
       vos données à personne.</li>
   <li>Nos écrans de calcul — le simulateur, les comparateurs, l'autonomie — fonctionnent
@@ -106,6 +109,29 @@ notre base. <b>Aucun identifiant n'est joint</b> : nous voyons qu'on a cherché 
 5kw », pas qui l'a cherché.</p>
 <p><b>Pourquoi :</b> une recherche sans résultat nous dit ce qu'on nous demande et que nous
 n'avons pas. C'est ce que le responsable regarde avant sa prochaine commande.</p>
+
+<h3>Votre préfecture — seulement si vous l'acceptez</h3>
+<p>La première fois que vous ouvrez l'onglet Produits, l'application vous pose une question :
+acceptez-vous de nous dire depuis quelle préfecture vous nous cherchez ? Vous répondez oui ou
+non. <b>Si vous ne répondez rien, ou si vous répondez non, rien n'est relevé</b>, et l'écran
+continue de fonctionner normalement.</p>
+<p>Si vous acceptez, alors <b>uniquement au moment où vous cherchez un produit</b> :</p>
+<ul>
+  <li>votre téléphone lit sa position et en déduit, <b>sans rien envoyer à personne</b>, la
+      plus proche des 33 préfectures de Guinée ;</li>
+  <li>pour la sous-préfecture, la position est transmise au <b>service de cartographie déjà
+      présent sur votre téléphone</b> (le même qui vous calcule un itinéraire), qui renvoie un
+      nom de localité. Nous ne recevons que ce nom ;</li>
+  <li>ce sont ces deux noms qui nous arrivent — « Popodara », « Labé ». <b>Jamais les
+      coordonnées</b>, qui ne quittent pas votre téléphone et ne sont conservées nulle part ;</li>
+  <li>si vous n'êtes pas en Guinée, <b>rien n'est noté du tout</b>.</li>
+</ul>
+<p><b>Pourquoi :</b> pour savoir où ouvrir le prochain magasin. Quand beaucoup de gens d'une
+même préfecture cherchent du matériel que nous avons, et qu'il n'y a pas de boutique chez eux,
+cela nous dit où aller.</p>
+<p><b>Comment revenir en arrière :</b> onglet <b>Plus</b>, ligne « Partager ma préfecture ».
+Un seul geste, à tout moment. Dès que vous coupez, ce que le téléphone avait retenu est
+effacé.</p>
 
 <h3>Les vérifications d'authenticité</h3>
 <p>Quand vous scannez un code-barres, ce code et le résultat (produit reconnu ou inconnu)
@@ -142,6 +168,14 @@ par les visiteurs.</p>
 qu'il est authentique. L'image n'est ni enregistrée ni envoyée : seul le code lu l'est.
 Vous pouvez aussi taper le code à la main et refuser l'appareil photo.</td></tr>
 <tr><td><b>Internet</b></td><td>Afficher le catalogue et les magasins.</td></tr>
+<tr><td><b>Localisation approximative</b></td><td>Deux usages, tous deux facultatifs. Pour un
+client : connaître le nom de sa préfecture lorsqu'il cherche un produit, et seulement s'il a
+répondu oui à la question posée dans l'onglet Produits. Pour le gérant d'un magasin : relever
+une fois la position de sa boutique, afin que les visiteurs puissent s'y rendre.
+Pour un client, <b>l'application demande la précision la plus basse</b> — celle des
+antennes-relais, pas celle de la rue, car un nom de préfecture n'a pas besoin de mieux. Le
+relevé précis est réservé au gérant qui pointe sa propre boutique. Vous pouvez refuser : tout
+le reste continue de fonctionner.</td></tr>
 </table>
 <p>Pour choisir une photo, l'application passe par le sélecteur de fichiers du système : elle
 ne reçoit alors accès qu'à <b>la seule image que vous avez choisie</b>, et ne demande donc
